@@ -28,5 +28,24 @@
    	}
    }
    ```
-
+5. 如果要语音填充*表单*，请实现以下方法，入参格式如下
    
+   ```javascript
+   function soundFillForm(json){
+       /* {
+              cmdDesc:undefined,
+              cmdKey:undefined,
+              command:{code:2001},
+              form:{
+                  code:3002,
+                  data:[
+                      { key:'肝',value:'未触及'},
+                      { key:'脾',value:'未触及'}
+                  ]
+               }
+           } */
+       // 业务填充表单代码
+   }
+   ```
+   
+      
