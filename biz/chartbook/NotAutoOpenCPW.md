@@ -1,6 +1,6 @@
 ## 【诊疗与病历】是否自动打开【临床路径】修改
 
-1. 下载[websys.DHCChartStyle.xml](websys.DHCChartStyle.xml)文件，导入DHC-APP名字空间下的Studio.
+1. 下载<a href='websys.DHCChartStyle.xml' download="websys.DHCChartStyle.xml">websys.DHCChartStyle.xml</a>文件，导入DHC-APP名字空间下的Studio.
 
 2. 写配置父表
 
