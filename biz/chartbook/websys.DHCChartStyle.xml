@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2016.2 (Build 736_0_16871U)" ts="2020-03-02 16:56:24">
+<Class name="websys.DHCChartStyle">
+<IncludeCode>websys</IncludeCode>
+<Super>%RegisteredObject</Super>
+<TimeChanged>65028,38519.969192</TimeChanged>
+<TimeCreated>64387,61398.742369</TimeCreated>
+
+<Method name="GetPatOEUrl">
+<Description>
+##Class(websys.DHCChartStyle).GetPatOEUrl()	</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+	Set EpisodeID=$G(%request.Data("EpisodeID",1))
+	Set UserId = $G(%session.Data("LOGON.USERID"))
+	Set DoctorType = ##class(web.SSUser).GetDefaultCareProviderType(UserId)
+	If (DoctorType'="DOCTOR"){
+		Quit "oeorder.oplistcustom.new.csp"
+	}
+	Set tmprtn = ##class(web.DHCCPW.MR.Interface).GetInPathWayName(EpisodeID)
+	if tmprtn=""{
+		Quit "oeorder.oplistcustom.new.csp"
+	}else{ //入径
+		Quit "dhccpw.mr.clinpathway.csp"
+	}
+	
+	; Quit "dhcipbillpatfeeinfo.csp?Wanghc="_EpisodeID //oeorder.oplistcustom.new.csp
+]]></Implementation>
+</Method>
+
+<Method name="GetAllergyStyle">
+<Description>
+过敏记录  websys.DHCChartStyle.GetAllergyStyle
+s val=##class(websys.DHCChartStyle).GetAllergyStyle($G(%request.Data("PatientID",1)),$G(%request.Data("EpisodeID",1)),$G(%request.Data("mradm",1)))
+s val=##class(websys.DHCChartStyle).GetAllergyStyle("",9,"")</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>PatientID="",EpisodeID="",mradm=""</FormalSpec>
+<Implementation><![CDATA[
+	;Set ^Wanghc("menu","GetAllergyStyle")=PatientID_","_EpisodeID
+	Set:(EpisodeID>0) PatientID = +^PAADM(EpisodeID)
+	Set count = 0
+	// d ##class(%ResultSet).RunQuery("web.DHCPAAllergy","Allergies",PatientID)
+	s rs = ##class(%ResultSet).%New("web.DHCPAAllergy:Allergies")
+	s sc = rs.Execute(PatientID)
+	While (rs.Next()){
+		set count = count+1
+	}
+	do rs.Close()
+	set rs=""
+	//set count=5
+	if (count>0){
+		Set obj = ##class(websys.dto.Menu).%New()
+		Set obj.className="x-tab-strip-red"
+		Set obj.count=count
+		Set val=##class(ext.util.JsonObject).ObjToJson(obj)
+		Quit val
+	}
+	Quit 1
+]]></Implementation>
+</Method>
+
+<Method name="GetVerifyStyle">
+<Description>
+审核实习医嘱 websys.DHCChartStyle.GetVerifyStyle
+s val=##Class(websys.DHCChartStyle).GetVerifyStyle($G(%request.Data("PatientID",1)),$G(%request.Data("EpisodeID",1)),$G(%request.Data("mradm",1)))</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>PatientID="",EpisodeID="",mradm=""</FormalSpec>
+<Implementation><![CDATA[
+	Set count = 0
+	s rs = ##class(%ResultSet).%New("web.DHCOEOrdItem:FindUnActiveOrderItems")
+	s sc = rs.Execute(EpisodeID)
+	While (rs.Next()){
+		set count = count+1
+	}
+	do rs.Close()
+	set rs=""
+	Set obj = ##class(websys.dto.Menu).%New()
+	if (count>0){
+		Set obj.className="x-tab-strip-red"
+		Set obj.count=count
+		Set val=##class(ext.util.JsonObject).ObjToJson(obj)
+		Quit val
+	}else{
+		Set obj.className="x-tab-strip-gray"
+		Set obj.disabled =1
+		//Set obj.count=count		
+		Set val=##class(ext.util.JsonObject).ObjToJson(obj)
+		Quit val
+	}
+	Quit 0
+]]></Implementation>
+</Method>
+
+<Method name="IsPathWayRecord">
+<Description>
+病人入径则显示医政组--医嘱录入 
+s val=##class(websys.DHCChartStyle).IsPathWayRecord()
+医嘱录入(入径)
+dhc.side.oe.oerecord.cpw
+dhccpw.mr.clinpathway.csp
+条件表达式 s val=##class(websys.DHCChartStyle).IsPathWayRecord()</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+	Set EpisodeID=$G(%request.Data("EpisodeID",1))
+	Set val=1
+	Set tmprtn = ##class(web.DHCCPW.MR.Interface).GetInPathWayName(EpisodeID)
+	if tmprtn=""{
+		set val=0
+	}
+	Quit val
+]]></Implementation>
+</Method>
+
+<Method name="IsDoctorRecord">
+<Description>
+病人[没有]入径则显示医生站--医嘱录入
+s val=##class(websys.DHCChartStyle).IsDoctorRecord()</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+	Set EpisodeID=$G(%request.Data("EpisodeID",1))
+	Set val=1
+	Set tmprtn = ##class(web.DHCCPW.MR.Interface).GetInPathWayName(EpisodeID)
+	if tmprtn'=""{
+		set val=0
+	}
+	Quit val
+]]></Implementation>
+</Method>
+
+<Method name="IsCPWStatusToDOC">
+<Description>
+临床路径菜单判断，如果入径则自动打开菜单</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+	Set EpisodeID=$G(%request.Data("EpisodeID",1))
+	Set val=1
+	Set tmprtn = ##class(DHCMA.CPW.CPS.InterfaceSrv).GetCPWStatusToDOC(EpisodeID)
+	if tmprtn { // 宁夏医科大不自动打开临床路径,增加NotAutoOpenCPW配置，20200812
+		Set obj = ##class(websys.dto.Menu).%New()
+		Set autoOpen=1
+		if $$$GetConfig("websys","NotAutoOpenCPW")=1 Set autoOpen=0
+		Set obj.autoOpen = autoOpen
+		Set val=##class(ext.util.JsonObject).ObjToJson(obj)
+		Quit val
+	}
+	Quit val
+]]></Implementation>
+</Method>
+
+<UDLText name="T">
+<Content><![CDATA[
+/*对外取目录状态的方法：
+w ##Class(EMRservice.BIEMRService).GetCategoryStatus(6,100,112,3)
+第一个参数 科室ID
+第二个参数 安全组ID
+第三个参数 就诊号
+第四个参数 配置目录分类ID
+返回值：
+ {"Visible":"1","Sequence":"2"}
+*/
+]]></Content>
+</UDLText>
+
+<Method name="GetEMRCategoryStatus">
+<Description>
+s val=##class(websys.DHCChartStyle).GetEMRCategoryStatus(1)
+判断病历相关菜单,是否显示,顺序方法
+@param CategoryiD编目Id
+@param EMRType 病历类型 0：流水病历，1：留观病历，2：抢救病历</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>CategoryID="",EMRType=""</FormalSpec>
+<Implementation><![CDATA[
+	//s val=##class(websys.DHCChartStyle).GetEMRCategoryStatus(21,0)
+	
+	Set EpisodeID=$G(%request.Data("EpisodeID",1))
+	Set val=1,autoOpen=0
+	;Set PatientID = +^PAADM(EpisodeID)
+	Set CTLocID = %session.Data("LOGON.CTLOCID")
+	Set GroupID = %session.Data("LOGON.GROUPID")
+	;Set ^Wanghc("menu","EprInRecord",CategoryID)=CTLocID_","_GroupID_","_EpisodeID_","_CategoryID
+	Set emrJson=##Class(EMRservice.BIEMRService).GetCategoryStatus(CTLocID,GroupID,EpisodeID,CategoryID)
+	;Set ^Wanghc("menu","EprInRecord",CategoryID,CTLocID,GroupID," "_EpisodeID)=emrJson
+	Set emrJsonObj = ##class(ext.util.JsonObject).FromJSON(emrJson)
+	Set Visible = emrJsonObj.GetValue("Visible")
+	Set Sequence = emrJsonObj.GetValue("Sequence")
+	Set Num = emrJsonObj.GetValue("Num")
+	/*if (CategoryID=18)||(CategoryID=19)||(CategoryID=20) {
+		Set obj = ##class(websys.dto.Menu).%New()
+		Set obj.sort=CategoryID
+		Set val=##class(ext.util.JsonObject).ObjToJson(obj)
+		Quit val
+	}*/
+	if (Visible=0){
+		s val=0
+	}else{
+		if (EMRType'=""){
+			if ##class(websys.Conversions).IsValidMethodName("web.DHCEMPatChange","GetStayStatus"){
+				//ret=-1表示流水病人
+				s ret=##class(web.DHCEMPatChange).GetStayStatus(EpisodeID)
+				// 如果是流水病人则隐藏留观与抢救病历
+				//i (EMRType=0) set val=1 流水病历一直打开
+				i (EMRType=1)&&(ret=-1) set val=0
+				i (EMRType=2)&&(ret=-1) set val=0
+				if (EMRType=0) && (ret=-1) set autoOpen=1  //如果是流水病人则要回写病历，此时固定打开门诊病历
+				;Set PatStayMenuStatus = ##class(web.DHCEMInterfaceCom).GetPatStayStatusForMenu(EpisodeID,EMRType)
+				;if (PatStayMenuStatus="N"){
+				;	Set val=0
+				;}
+			}
+		}
+		if val=1{
+			
+			Set obj = ##class(websys.dto.Menu).%New()
+			Set obj.sort=Sequence
+			set obj.autoOpen=autoOpen
+			if (Num>0) Set obj.count = Num
+			Set val=##class(ext.util.JsonObject).ObjToJson(obj)
+		}
+	}
+	Quit val
+]]></Implementation>
+</Method>
+
+<Method name="GetPHEStyle">
+<Description>
+公共卫生事件--病人 疑似未处理,感染未上报时 变红 websys.DHCChartStyle.GetPHEStyle()</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>PatientID,EpisodeID,mradm</FormalSpec>
+<Implementation><![CDATA[
+	Set count = 0
+	Set myrtn = ##Class(DHCHAI.CUS.IconProfile).CheckIcon(EpisodeID,0)
+	if myrtn'=""{
+		Set tmpJsonObj = ##class(ext.util.JsonObject).%New()
+		Do tmpJsonObj.Clear()
+		Do tmpJsonObj.Put("className","x-tab-strip-red") //.Put("count",1)
+		Quit tmpJsonObj.Json()
+	}
+	Quit ""
+]]></Implementation>
+</Method>
+
+<Method name="grantMenu">
+<Description>
+d ##class(websys.DHCChartStyle).grantMenu(56864,56878,"住院医师")</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>stMenuId,endMenuId,groupDesc</FormalSpec>
+<Implementation><![CDATA[
+	Set ssGroupID = ##class(web.SSGroup).GetIdFromCodeOrDescription(groupDesc)
+	Set eprGroupID= ##class(epr.GroupSettings).GetIdFromGroupId(ssGroupID)
+	set objEprGroupSetting=##class(epr.GroupSettings).%OpenId(eprGroupID)
+	set security=objEprGroupSetting.MenuSecurity
+	set:security="" security=$zbitstr(50000,0)
+	set:$zbitlen(security)<endMenuId security=$zbitor(security,$zbitstr(endMenuId,0))
+	for i=stMenuId:1:endMenuId{
+		set security=$zbitset(security,i,1)
+	}
+	Set objEprGroupSetting.MenuSecurity=security
+	Set sc = objEprGroupSetting.%Save()
+	i $$$ISOK( sc) w "grant menu success"
+	e  w "grant menu fail"
+]]></Implementation>
+</Method>
+
+<Method name="InitMenu">
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,Image) values ('病历文书','dhc.side.emr','SideMenu',1,'../images/uiimages/AppDep.png'))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,Image) values ('诊疗操作','dhc.side.oe','SideMenu',1,'../images/uiimages/blood_bag.png'))
+ set oeId=%ROWID
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,Image) values ('辅助查询','dhc.side.find','SideMenu',1,'../images/uiimages/search.png'))
+ set findId=%ROWID
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,LinkComponent) values ('医嘱处理','dhc.side.oe.oemanage','SideMenu',:oeId,54468))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,LinkComponent) values ('诊断录入','dhc.side.oe.diagrecord','SideMenu',:oeId,54468))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,LinkComponent) values ('医嘱录入','dhc.side.oe.oerecord','SideMenu',:oeId,54468))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,LinkComponent) values ('中草药录入','dhc.side.oe.herbrecord','SideMenu',:oeId,54468))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,LinkComponent) values ('过敏记录','dhc.side.oe.allergy','SideMenu',:oeId,54468))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,LinkComponent) values ('公共卫生事件','dhc.side.oe.pubhealth','SideMenu',:oeId,54468))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf,LinkComponent) values ('审核实习医嘱','dhc.side.oe.studoeaudit','SideMenu',:oeId,54468))
+ 
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf) values ('检验结果','dhc.side.find.lablist','SideMenu',:findId))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf) values ('检查报告','dhc.side.find.rislist','SideMenu',:findId))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf) values ('病理报告','dhc.side.find.pislist','SideMenu',:findId))
+ &sql(insert into websys.menu(Caption,Name,Type,SubMenuOf) values ('就诊列表','dhc.side.find.admlist','SideMenu',:findId))
+]]></Implementation>
+</Method>
+
+<Method name="ImportMenuByEMRCate">
+<Description>
+w ##class(websys.DHCChartStyle).ImportMenuByEMRCate()</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+	Set stMenuId=0,endMenuId=0
+	Set parentMenu = "dhc.side.emr"
+	Set parentMenuId = ##class(websys.Menu).GetIdFromCodeOrDescription(parentMenu)
+	Set seq=""
+	for {
+		// select ID,CategoryName from emrmeta.emrtemplatecategOry WHERE CategoryType="Category"
+		Set seq=$o(^DHCEMRM.EMRTemplateCategoryI("IdxParentCateogryIDAndSeq"," 0",seq))
+		Quit:seq=""
+		Set cateId=""
+		for{
+			Set cateId=$o(^DHCEMRM.EMRTemplateCategoryI("IdxParentCateogryIDAndSeq"," 0",seq,cateId))
+			Quit:cateId=""
+			Set menuCaption = $lg(^DHCEMRM.EMRTemplateCategoryD(cateId),2)
+			Set menuCode = "dhc.side.emr.cate"_cateId
+			Set menuId = $O(^websys.MenuI("UniqueNameIndex",$zu(28,menuCode,7,32768),""))
+			if (menuId>0){
+				Set MenuObj = ##class(websys.Menu).%OpenId(menuId)
+			}else{
+				Set MenuObj = ##class(websys.Menu).%New()
+			}
+			if (MenuObj) {
+				 Set MenuObj.Caption = menuCaption
+				 Set MenuObj.Name = menuCode
+				 Do MenuObj.SubMenuOfSetObjectId(parentMenuId)
+				 Set MenuObj.ConditionalExpression = "s val=##class(websys.DHCChartStyle).GetEMRCategoryStatus("_cateId_")"
+				 Set MenuObj.Target = "EMR"
+				 Set MenuObj.LinkUrl="emr.ip.main.csp"
+				 Set MenuObj.ValueExpression = """"_"&CategoryID="_cateId_""""
+				 Set MenuObj.Image="" // "../images/uiimages/updatediag.png"
+				 Set MenuObj.IsXhrRefresh=1
+				 Set MenuObj.JavascriptFunction=""
+				 Do MenuObj.%Save()
+			}
+			Set menuId=MenuObj.%Id()
+			if (stMenuId=0) s stMenuId=menuId
+			if (endMenuId=0) s endMenuId=menuId
+			if menuId<stMenuId s stMenuId=menuId
+			if menuId>endMenuId s endMenuId=menuId
+		}
+	}
+	Do ..grantMenu(stMenuId,endMenuId,"住院医师")
+	Quit 1
+]]></Implementation>
+</Method>
+</Class>
+</Export>

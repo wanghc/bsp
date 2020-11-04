@@ -5,4 +5,6 @@ base system platform
 1. [消息平台动作代码及调用说明](https://wanghc.github.io/bsp/message/)
 2. [XML打印功能说明](https://wanghc.github.io/bsp/xmlprint/)
 3. [语音导航开发说明](https://wanghc.github.io/bsp/sound/sound.html)
-4. [Chrome中间件开发说明]
+4. [Chrome中间件开发说明]()
+5. [医为浏览器说明](https://wanghc.github.io/bsp/mwbrowser/)
+6. [业务功能](https://wanghc.github.io/bsp/biz/)
