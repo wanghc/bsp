@@ -1,15 +1,24 @@
 # xmlprint
-## xmlprint打印功能控件引用 ##
-#### 1. iMedical系统中在IE下使用DHCOPPrint.cab打印请使用以下类方法引用控件 ####
+## XML打印功能控件引用 ##
+
+### 第一步.引用插件(`三选一`)
+
+#### 	1. iMedical系统CSP中，在IE下使用`DHCOPPrint.cab`打印请使用以下类方法引用控件 ####
 ```vb
 d ##class(web.DHCBillPrint).InvBillPrintCLSID()
 ```
-#### 2. iMedical系统中在IE/Chrome下使用LODOP打印时请使用以下类方法引用相关 ####
+#### <span name="t2" id="2">	2</span>. iMedical系统CSP中，在`IE`/`Chrome`下使用`LODOP`打印时请使用以下类方法引用相关 ####
 ```vb
-d ##class(web.DHCXMLPConfig).LODOPInit()
+d ##class(web.DHCXMLPConfig).LODOPInit()  //IE下引用LODOP，Chrome下引用CLODOP
+    或
+// 2020-09-18 增加参数NeedCLodop
+d ##class(web.DHCXMLPConfig).LODOPInit("1")   //强制使用CLodop,可用效解决打印img时iMedical超时问题
 ```
-#### 3. 组件中引入使用隐藏的`CUSTOM`元素，在`Custom Expression`中写入以上相应的语句即可。 ####
-#### 4. 脚本代码示例  ####
+#### 	3. 组件中引入，使用隐藏的`CUSTOM`元素，在`Custom Expression`中写入<a href="#t2">以上</a>相应的语句即可。 ####
+### 第二步JS代码修改
+
+####  	LODOP打印脚本代码示例  ####
+
 ```javascript
 DHCP_GetXMLConfig("encryptItemId","xmlFlagName");  // 加载名为xmlFlagName的模板
 var LODOP = getLodop();
@@ -17,12 +26,12 @@ var LODOP = getLodop();
   inpara => name_$c(2)_zhangsha^patno_$c(2)_000009
   inlist => DrugName^Price^DrugUnit^Qty^PaySum_$c(2)_DrugName2^Price2^DrugUnit2^Qty2^PaySum2
   jsonArr => [{type:"invoice",PrtDevice:"pdfprinter"},{type:"line",sx:1,sy:1,ex:100,ey:100},{type:"text",name:"patno",value:"0009",x:10,y:10,isqrcode:true,lineHeigth:5}]
-  reportNote => 打印任务名
+  reportNote => 打印任务名称，可区别本次打印任务
   options => printListByText:true表示按label打印列表，LetterSpacing:-2控制字符间空隙
 */
 DHC_PrintByLodop(LODOP,inpara,inlist,jsonArr,reportNote,{printListByText:true})
 ```
-* 推荐使用`DHCOPPrint.cab`打印
+* 推荐使用`CLODOP`打印
 
 # 更新日志 #
 
@@ -34,8 +43,8 @@ DHC_PrintByLodop(LODOP,inpara,inlist,jsonArr,reportNote,{printListByText:true})
 d ##class(web.DHCXMLPConfig).LODOPInit("1")
  ```
  或使用JS引用
-```javascript
-// 强制初始化为CLodop
+```html
+<!--强制初始化为CLodop-->
 <script type="text/javascript" src="../scripts_lib/lodop/LodopFuncs.js?needCLodop=1" charset="UTF-8"></script>
 ```
 ## 2020-09-10 ##
