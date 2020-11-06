@@ -1,7 +1,6 @@
-# xmlprint
-## XML打印功能控件引用 ##
+## XML打印功能及更新说明 ##
 
-### 第一步.引用插件(`三选一`)
+### 第一步. 引用插件(`三选一`)
 
 #### 	1. iMedical系统CSP中，在IE下使用`DHCOPPrint.cab`打印请使用以下类方法引用控件 ####
 ```vb
@@ -15,7 +14,7 @@ d ##class(web.DHCXMLPConfig).LODOPInit()  // IE下引用LODOP，Chrome下引用C
 d ##class(web.DHCXMLPConfig).LODOPInit("1")   //强制使用CLodop,可用效解决打印img时iMedical超时问题
 ```
 #### 	3. 组件中引入，使用隐藏的`CUSTOM`元素，在`Custom Expression`中写入<a href="#t2">以上</a>相应的语句即可。 ####
-### 第二步JS代码修改
+### 第二步. JS代码修改
 
 ####  	LODOP打印脚本代码示例  ####
 
