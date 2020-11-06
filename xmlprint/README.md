@@ -7,10 +7,10 @@
 ```vb
 d ##class(web.DHCBillPrint).InvBillPrintCLSID()
 ```
-#### <span name="t2" id="2">	2</span>. iMedical系统CSP中，在`IE`/`Chrome`下使用`LODOP`打印时请使用以下类方法引用相关 ####
-```vb
-d ##class(web.DHCXMLPConfig).LODOPInit()  //IE下引用LODOP，Chrome下引用CLODOP
-    或
+#### <span name="t2" id="t2">	2</span>. iMedical系统CSP中，在`IE`/`Chrome`下使用`LODOP`打印时请使用以下类方法引用相关 ####
+```c#
+d ##class(web.DHCXMLPConfig).LODOPInit()  // IE下引用LODOP，Chrome下引用CLODOP
+或
 // 2020-09-18 增加参数NeedCLodop
 d ##class(web.DHCXMLPConfig).LODOPInit("1")   //强制使用CLodop,可用效解决打印img时iMedical超时问题
 ```
