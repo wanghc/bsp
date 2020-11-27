@@ -35,5 +35,5 @@ d ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | 检验报告取消审核 | 1004 | EpisodeID   | 医疗单元、主管医生 | `检验`                                         |
 |                  |      |             |                    |                                                |
 |                  |      |             |                    |                                                |
-|                  |      |             |                    |                                                |
+|                  |      |             |                    | :sparkles:                                     |
 

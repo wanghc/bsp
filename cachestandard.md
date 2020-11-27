@@ -1,4 +1,4 @@
-## Cache代码编码规范 ##
+## Cache代码编码规范
 
 该文档目的在于规范Cache数据库的程序开发，以方便开发人员编写程序
 
@@ -39,8 +39,9 @@
   >常用后缀举例：ExecFlag，MsgCount，DrugSum，PatInfoStr , PatInfoJson，PatInfoXml，PatInfoObj，PatInfoStream，OEORIStatus
 
 + 固定含义词根列表
+
   | 变量意义     | 规定词根          | 变量举例            |
-  | ------------ | ----------------- | ------------------- |
+  | ------------ | ----------------- | ------------|
   | 患者记录     | PAPER,PAPMI       | PAPERName           |
   | 就诊记录     | PAADM,ADM,Episode | curEpisodeID        |
   | 病人医嘱记录 | OEORI             | OEORISttDate        |
@@ -66,6 +67,7 @@
 + 当名称由多个单词组成时，名称首字母可以大写，且使用驼峰式命名法
 + 表达出所属产品组以及是哪种类形的抽象
 + 例如：
+
   | 名称                    | 描述                         | 说明                       |
   | ----------------------- | ---------------------------- | -------------------------- |
   | BSP.SYS.BL.IPList       | 系统模块的业务层IPList类     | 用于IPList维护的业务代码   |
