@@ -34,6 +34,10 @@ DHC_PrintByLodop(LODOP,inpara,inlist,jsonArr,reportNote,{printListByText:true})
 
 # 更新日志 #
 
+## 2020-11-17
+
++ XML设计器支持二维码版本定义功能，解决二维码大小不一问题
+
 ## 2020-09-18 ##
 
  * 提供强制引用CLodop打印功能，解决某些IE使用LODOP打印后，系统超时问题
@@ -46,7 +50,10 @@ d ##class(web.DHCXMLPConfig).LODOPInit("1")
 <!--强制初始化为CLodop-->
 <script type="text/javascript" src="../scripts_lib/lodop/LodopFuncs.js?needCLodop=1" charset="UTF-8"></script>
 ```
+
+
 ## 2020-09-10 ##
+
 #### LODOP打印方法 ####
 ## 2019-09-06 ##
 ##### 版本1,0,0,83 #####
