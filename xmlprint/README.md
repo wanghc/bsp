@@ -91,6 +91,9 @@ d ##class(web.DHCXMLPConfig).LODOPInit("1")
 ## 2017-04-06 ##
 ##### 版本1,0,0,56 #####
 * 支持服务器图片打印，会自动把服务器图片下到本地C:\imedical\xmlprint\cache\目录下。打印方法为ToPrintHDLP。
+* 只有**ToPrintHDLP**方法支持打印服务器图片，其它方法只能打印本地图片
+* xml打印基于vb开发，支持图片格式为gif,jpg,jpeg,icon,cur,不支持png
+* 打印服务器图片时，路径及图片名称中**不要包含汉字**，可能导致某些图片不能下载成功
 
 ## 2017-2-10 ##
 * xml设计器中可与类方法关联
