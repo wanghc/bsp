@@ -19,11 +19,16 @@
    <add key="appVersion" value="iMedical8.4" />
    <add key="systemflash" value="false" />
    <add key="ClientSettingsProvider.ServiceUri" value="" />
+   <add key="webgl" value="false"/>    <!-- 20210122增加 -->
    ```
 
 2. 双击DHCWebBrowser49.exe进入对应界面
 
 ## 更新说明
+
+### 2021-01-22(1.0.0.7)
+
+* 支持webgl配置支持开启`true`或关闭`false`:sparkles:
 
 ### 2021-01-14(1.0.0.6)
 
