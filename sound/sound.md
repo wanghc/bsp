@@ -9,9 +9,16 @@
 2. 在业务界面CSP中写入以下语句，关联界面场景
 
    ```html
-   <EXTHEALTH:HEAD SoundScenes="HISLogon"></EXTHEALTH:HEAD>
+   <EXTHEALTH:HEAD SoundScenes="HISLogon"></EXTHEALTH:HEAD>		
    ```
-
+   ```c#
+   // 使用类方法引用声音场景
+   /// @param SoundScenes 场景代码
+   /// @param Enable      1表示代码层面启用语音，0关闭
+   /// @param AppName     系统代码如HIS,NUREPR, 默认HIS
+   d ##class(websys.Sound).Init("HISLogon",1)
+   ```
+   
 3. 到【语音HIS配置】界面 > 维护场景命名
 
    ![alt 场景命名维护](sound_scense_cmd.png)
@@ -28,6 +35,7 @@
    	}
    }
    ```
+   
 5. 如果要语音填充*表单*，请实现以下方法，入参格式如下
    
    ```javascript
@@ -48,4 +56,20 @@
    }
    ```
    
-      
+6. 发送信息
+
+   ```js
+   // 使用第2步关联声音场景后，会在界面加载完成后得到soundWS全局websocket对象，可以像下面这样发送消息给声音服务
+   function sendSoundMsg(msg){
+       if (soundWS.readyState===1){
+   		soundWS.send(msg);
+   	}else{
+   		soundMsgTimer = setTimeout(function(){sendSoundMsg(msg)},300);
+   		//连接语音服务中...
+   	}
+   }
+   ```
+
+   
+
+   
