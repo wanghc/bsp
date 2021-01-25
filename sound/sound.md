@@ -9,9 +9,11 @@
 2. 在业务界面CSP中写入以下语句，关联界面场景
 
    ```html
+   <!--第一种引入办法 CSP中引入声音场景 -->
    <EXTHEALTH:HEAD SoundScenes="HISLogon"></EXTHEALTH:HEAD>		
    ```
    ```c#
+   // 第二种引入办法
    // 使用类方法引用声音场景
    /// @param SoundScenes 场景代码
    /// @param Enable      1表示代码层面启用语音，0关闭
