@@ -34,6 +34,10 @@ DHC_PrintByLodop(LODOP,inpara,inlist,jsonArr,reportNote,{printListByText:true})
 
 # 更新日志 #
 
+## 2021-01-26
+
+* XML设计器支持文本/图片/二维码/条形码/线条配置是否重复打印 :sparkler:
+
 ## 2020-11-17
 
 + XML设计器支持二维码版本定义功能，解决二维码大小不一问题
