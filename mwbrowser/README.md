@@ -9,10 +9,12 @@
 1. [下载文件](https://hisui.cn/tool/gen/mediwaybrowser/download),解压后修改DHCWebBrowser49.exe.config
 
    ```xml
-   <add key="webServerIP" value="xx.xx.xx.xx" />
+   <!--<add key="webServerIP" value="xx.xx.xx.xx" />
    <add key="appPath" value="/imedical/web/form.htm" />
    <add key="port" value="80" />
-   <add key="https" value="0" />
+   <add key="https" value="0" />-->
+   <!-- 2021-04-03增加homePath -->
+   <add key="homePath" value="https://127.0.0.1:80/imedical/web/form.html"/>
    <add key="cache" value="true" />
    <add key="autoDeleteCache" value="true" />    
    <add key="log" value="false" />
@@ -25,6 +27,22 @@
 2. 双击DHCWebBrowser49.exe进入对应界面
 
 ## 更新说明
+
+### 2021-04-03(1.0.11)
+
++ 增加homePath配置,方便配置首页
+
+### 2021-03-24(1.0.10)
++ 弹出菜单最大化后，点击页签时，界面还原大小问题 :sparkles:
+
+### 2021-03-18(1.0.9)
++ 切换到framework4.0（宝安人民） :sparkles:
++ 版本取3位，忽略第二位 :sparkles:
++ 删除缓存时报错加保护
+
+### 2021-03-15(1.0.0.8)
++ 新窗口自动顶层显示 :sparkles:
++ 解决弹出菜单重复打开时不能置顶问题
 
 ### 2021-01-22(1.0.0.7)
 
