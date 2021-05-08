@@ -6,9 +6,9 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
 
 1. 引用插件`（二选一）`
 
-   + iMedical系统的`CSP`中引入，在`IE`/`Chrome`下使用`LODOP`打印时请使用以下类方法引用相关
+   + iMedical系统的`CSP`中引入，在`IE`/`Chrome`下使用LODOP打印时请使用以下类方法引用相关
 
-     ```java
+     ```c#
      d ##class(web.DHCXMLPConfig).LODOPInit()    // IE下引用LODOP,Chrome下引用CLODOP
      或
      // 2020-09-18 增加参数NeedCLodop,默认"0"
@@ -61,10 +61,10 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
    
    - 推荐使用`CLODOP`打印
 
-### 使用CAB打印
+### 使用CAB打印XML
 
 1. 引入插件（二选一）
-   - iMedical系统的`CSP`中引入，在IE下使用`DHCOPPrint.cab`打印请使用以下类方法引用控件
+   - iMedical系统的`CSP`中引入，在IE下使用`DHCOPPrint.CAB`打印请使用以下类方法引用控件
    
      ```c#
      d ##class(web.DHCBillPrint).InvBillPrintCLSID()
@@ -108,31 +108,32 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
 #### 2020-09-18
 
 * 提供强制引用CLodop打印功能，解决某些IE使用LODOP打印后，系统超时问题
- ```java
-// 强制初始化为CLodop
-d ##class(web.DHCXMLPConfig).LODOPInit("1")
- ```
 
-或使用JS引用
+  ```c#
+  // 强制初始化为CLodop
+  d ##class(web.DHCXMLPConfig).LODOPInit("1")
+  ```
 
-```html
-<!--强制初始化为CLodop-->
-<script type="text/javascript" src="../scripts_lib/lodop/LodopFuncs.js?needCLodop=1" charset="UTF-8"></script>
-```
+  或使用JS引用
+
+  ```html
+  <!--强制初始化为CLodop-->
+  <script type="text/javascript" src="../scripts_lib/lodop/LodopFuncs.js?needCLodop=1" charset="UTF-8"></script>
+  ```
 
 
-## 2020-09-10 ##
+#### 2020-09-10
+- LODOP打印方法
 
-#### LODOP打印方法 ####
-## 2019-09-06 ##
+#### 2019-09-06
 ##### 版本1,0,0,83 #####
 * 控件打印支持指定纸张名字。如指定A5纸打印，即可配置`invoice`节点中属性`PrtPage="A5"`
 
-## 2019-07-24 ##
+#### 2019-07-24
 ##### 版本1,0,0,82 #####
 * 修复txtdata节点中`printvalue`,`defaultvalue`,`fontsize`,`fontbold`,`fontname`属性不存在时，打印不异常问题
 
-## 2019-07-09 ##
+#### 2019-07-09 ##
 ##### 版本1,0,0,81 #####
 * 为`txtdata`增加`width`与`height`属性,如果内容超出时自动换行打印，不配置默认自由长度打印。
 * 图片没定义宽高默认图片大小
@@ -140,40 +141,40 @@ d ##class(web.DHCXMLPConfig).LODOPInit("1")
 * 服务器图片打印不再缓存图片，每次都取服务器图片
 * 增加多处错误提示
 
-## 2018-10-11 ##
+#### 2018-10-11 ##
 * xml设计器增加即打即停配置. `LandscapeOrientation`属性值增加Z值，表示即打即停，且纸张设置选为手动设置纸张大小，`height`表示底边留白高度。此属性只支持lodop打印
 * xml设计器增加条码打印. `txtdatapara`增加属性`barcodetype`,此属性只支持`lodop`打印
 * 实现`DHC_PrintBYLodop`方法，打印xml及数据
 
-## 2017-11-30 ##
+#### 2017-11-30 ##
 ##### 版本1,0,0,65 #####
 * 基于QRmaker.ocx控件打印二维码，提升扫码率
 
-## 2017-06-12 ##
+#### 2017-06-12 ##
 ##### 版本1,0,0,64 #####
 * 在`ListData`节点增加`BackSlashWidth`属性，定义list输出结束后打印反斜线宽度。用于处方结束处
 
-## 2017-06-08 ##
+#### 2017-06-08 ##
 ##### 版本1,0,0,63 #####
 * 在`PICdatapara`节点上增加`width`与`height`属性，可实现图片缩放功能
 
-## 2017-04-06 ##
+#### 2017-04-06 ##
 ##### 版本1,0,0,56 #####
 * 支持服务器图片打印，会自动把服务器图片下到本地C:\imedical\xmlprint\cache\目录下。打印方法为ToPrintHDLP。
 * 只有**ToPrintHDLP**方法支持打印服务器图片，其它方法只能打印本地图片
 * xml打印基于vb开发，支持图片格式为gif,jpg,jpeg,icon,cur,不支持png
 * 打印服务器图片时，路径及图片名称中**不要包含汉字**，可能导致某些图片不能下载成功
 
-## 2017-2-10 ##
+#### 2017-2-10 ##
 * xml设计器中可与类方法关联
 * xml设计器中可与query关联
 
-## 2016-10-26 ##
+#### 2016-10-26 ##
 * 提交第二版xml设计器
 
-## 说明 ##
+### 说明
 * 注意所有属性不能省略，老的xml打印没有保护
-* xml打印基于vb开发，支持图片格式为gif,jpg,jpeg,icon,cur,不支持png
+* CAB打印基于vb开发，支持图片格式为gif,jpg,jpeg,icon,cur,不支持png
 * PrtPaperSet=HAND 表示纸张大小手工设置，纸张大小走height与width数值
 * PrtPaperSet=WIN 表示纸张大小走PrtPage配置的纸张大小
 * PrtDevice打印机名配置
