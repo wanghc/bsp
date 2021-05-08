@@ -1,55 +1,120 @@
-## XML打印功能及更新说明 ##
+## XML打印功能及更新说明
 
-### 第一步. 引用插件(`三选一`)
+xml打印功能包含XML设计器与XML打印二部分，设计器设计好xml模板后，可以使用DHCOPPrint.CAB与LODOP来打印xml模板，以下介绍二种打印功能
 
-#### 	1. iMedical系统CSP中，在IE下使用`DHCOPPrint.cab`打印请使用以下类方法引用控件 ####
-```vb
-d ##class(web.DHCBillPrint).InvBillPrintCLSID()
-```
-#### <span name="t2" id="t2">	2</span>. iMedical系统CSP中，在`IE`/`Chrome`下使用`LODOP`打印时请使用以下类方法引用相关 ####
-```c#
-d ##class(web.DHCXMLPConfig).LODOPInit()  // IE下引用LODOP，Chrome下引用CLODOP
-或
-// 2020-09-18 增加参数NeedCLodop
-d ##class(web.DHCXMLPConfig).LODOPInit("1")   //强制使用CLodop,可用效解决打印img时iMedical超时问题
-```
-#### 	3. 组件中引入，使用隐藏的`CUSTOM`元素，在`Custom Expression`中写入<a href="#t2">以上</a>相应的语句即可。 ####
-### 第二步. JS代码修改
+### 使用LODOP打印XML
 
-####  	LODOP打印脚本代码示例  ####
+1. 引用插件`（二选一）`
 
-```javascript
-DHCP_GetXMLConfig("encryptItemId","xmlFlagName");  // 加载名为xmlFlagName的模板
-var LODOP = getLodop();
-/*
-  inpara => name_$c(2)_zhangsha^patno_$c(2)_000009
-  inlist => DrugName^Price^DrugUnit^Qty^PaySum_$c(2)_DrugName2^Price2^DrugUnit2^Qty2^PaySum2
-  jsonArr => [{type:"invoice",PrtDevice:"pdfprinter"},{type:"line",sx:1,sy:1,ex:100,ey:100},{type:"text",name:"patno",value:"0009",x:10,y:10,isqrcode:true,lineHeigth:5}]
-  reportNote => 打印任务名称，可区别本次打印任务
-  options => printListByText:true表示按label打印列表，LetterSpacing:-2控制字符间空隙
-*/
-DHC_PrintByLodop(LODOP,inpara,inlist,jsonArr,reportNote,{printListByText:true})
-```
-* 推荐使用`CLODOP`打印
+   + iMedical系统的`CSP`中引入，在`IE`/`Chrome`下使用`LODOP`打印时请使用以下类方法引用相关
 
-# 更新日志 #
+     ```c#
+     d ##class(web.DHCXMLPConfig).LODOPInit()    // IE下引用LODOP,Chrome下引用CLODOP
+     或
+     // 2020-09-18 增加参数NeedCLodop,默认"0"
+     d ##class(web.DHCXMLPConfig).LODOPInit("1")   // 强制使用CLodop,可用效解决打印img导致iMedical超时问题
+     ```
 
-## 2021-01-26
+   + iMedical系统的`组件`中引入，使用隐藏的`CUSTOM`元素，在`Custom Expression`中写入<a href="#t1">以上</a>相应的语句即可。
+
+2. JS脚本代码示例
+
+   ```javascript
+   DHCP_GetXMLConfig("encryptItemId","xmlFlagName");  //xmlFlagName为XML模板, 用于加载XML内容
+   var LODOP = getLodop();
+   /*
+    @description 使用LODOP打印XML
+    @param {LODOP} LODOP 控件对象
+    @param {String} inpara 元素对应的打印值
+    @param {String} inlist 列表对应的打印值
+    @param {Array} jsonArr [可选] 动态追加打印内容
+    @param {String} reportNote [可选] 打印任务名称，可区别本次打印任务
+    @param {Object} options [可选] 打印配置信息
+   */
+   DHC_PrintByLodop(LODOP,inpara,inlist,jsonArr,reportNote,{printListByText:true});
+   ```
+   
+   + <details>
+         <summary>入参详细内容</summary>
+         <pre><ul><li>@param {LODOP} LODOP 控件对象</li>
+     <li>@param {String} inpara 元素对应的打印值
+     name_$c(2)_zhangsha^
+     patno_$c(2)_000009^
+     img1_$c(2)_data:image/png;base64,iVAAA...AA^
+     img2_$c(2)_http://172.0.0.1/imedical/web/images/xx/xx.gif^
+     img3_$c(2)_c:\\xx.gif
+     </li>
+     <li>@param {String} inlist 列表对应的打印值
+     DrugName1^Price1^DrugUnit1^Qty1^PaySum1_$c(2)
+     _DrugName2^Price2^DrugUnit2^Qty2^PaySum2_$c(2)
+     _DrugName3^Price3^DrugUnit3^Qty3^PaySum3
+     </li>
+     <li>@param {Array} jsonArr [可选] 动态追加打印内容
+        [{type:"invoice",PrtDevice:"pdfprinter"},{type:"line",sx:1,sy:1,ex:100,ey:100},{type:"text",name:"patno",value:"0009",x:10,y:10,isqrcode:true,lineHeigth:5}]
+     </li>
+     <li>@param {String} reportNote [可选] 打印任务名称，可区别本次打印任务</li>
+     <li>@param {Object} options [可选] 打印配置信息
+           printListByText:true  true按label打印列表。false按html-table方式打印。默认false，一般应使用true
+           LetterSpacing:0       控制字符间空隙。0正常空隙，-2紧凑或其它数值。默认0
+           preview:0             0打印,1预览。默认0</li></ul></pre>
+     </details>
+   
+   - 推荐使用`CLODOP`打印
+
+### 使用CAB打印
+
+1. 引入插件（二选一）
+   - iMedical系统的`CSP`中引入，在IE下使用`DHCOPPrint.cab`打印请使用以下类方法引用控件
+   
+     ```c#
+     d ##class(web.DHCBillPrint).InvBillPrintCLSID()
+     ```
+   
+   - iMedical系统的`组件`中引入，使用隐藏的`CUSTOM`元素，在`Custom Expression`中写入<a href="#t1">以上</a>相应的语句即可。
+
+2. JS脚本代码示例
+
+   ```js
+   DHCP_GetXMLConfig("encryptItemId","xmlFlagName");  //xmlFlagName为XML模板, 用于加载XML内容
+   var PObj = document.getElementById("ClsBillPrint");
+   /*
+     @description 使用LODOP打印XML
+     @param {HTMLObject} PObj 控件对象
+     @param {String} inpara 元素对应的打印值。和lodop的差区在不能支持img-base64打印
+     @param {String} inlist 列表对应的打印值
+     @param {Array} jsonArr [可选] 动态追加打印内容
+     @param {Float} invHeight [可选] 票据的高度。CAB中判断打印换页是：发现元素位置top超过height就会换页打印，如果发现一个元素超过一页后，后面所有元素都会分页打印。通过invHeight可以解决。2018-09-20 增加invHeight 分页处理。默认空
+   */
+   DHCP_XMLPrint(PObj, inpara, inlist, jsonArr,invHeight);
+   ```
+
+
+
+
+### 更新日志 ###
+
+#### 2021-04-19
+
+- 【列表项】可以定义成图片，条形码，二维码及其相关配置 :sparkler:
+
+#### 2021-01-26
 
 * XML设计器支持文本/图片/二维码/条形码/线条配置是否重复打印 :sparkler:
 
-## 2020-11-17
+#### 2020-11-17
 
 + XML设计器支持二维码版本定义功能，解决二维码大小不一问题
 
-## 2020-09-18 ##
+#### 2020-09-18
 
- * 提供强制引用CLodop打印功能，解决某些IE使用LODOP打印后，系统超时问题
+* 提供强制引用CLodop打印功能，解决某些IE使用LODOP打印后，系统超时问题
  ```java
 // 强制初始化为CLodop
 d ##class(web.DHCXMLPConfig).LODOPInit("1")
  ```
- 或使用JS引用
+
+或使用JS引用
+
 ```html
 <!--强制初始化为CLodop-->
 <script type="text/javascript" src="../scripts_lib/lodop/LodopFuncs.js?needCLodop=1" charset="UTF-8"></script>
