@@ -1,6 +1,6 @@
 ## XML打印功能及更新说明
 
-xml打印功能包含XML设计器与XML打印二部分，设计器设计好xml模板后，可以使用DHCOPPrint.CAB与LODOP来打印xml模板，以下介绍二种打印功能
+XML打印功能包含XML设计器与XML打印二部分，设计器设计好模板后，可以使用DHCOPPrint.CAB或LODOP来打印模板，以下介绍二种打印功能
 
 ### 使用LODOP打印XML
 
@@ -8,7 +8,7 @@ xml打印功能包含XML设计器与XML打印二部分，设计器设计好xml�
 
    + iMedical系统的`CSP`中引入，在`IE`/`Chrome`下使用`LODOP`打印时请使用以下类方法引用相关
 
-     ```c#
+     ```java
      d ##class(web.DHCXMLPConfig).LODOPInit()    // IE下引用LODOP,Chrome下引用CLODOP
      或
      // 2020-09-18 增加参数NeedCLodop,默认"0"
