@@ -45,6 +45,22 @@
 
 ## 更新说明
 
+### 2021-07-13(1.0.15)
+
+- 字体模糊问题处理 :sparkles: 
+- - 对比IE与医为浏览器字体清晰度差距很大（龙岩二院）
+
+> 主要修改代码，Windows 10 自 1703 开始引入第二代的多屏 DPI 机制（PerMonitor V2）。win7上使用Per-Monitor DPI（true/pm）感知，true-系统DPI感知级别，否则普通的DPI感知。
+
+```xml
+<asmv3:application>
+<asmv3:windowsSettings xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">
+<dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/pm</dpiAware>
+<dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">permonitorv2,permonitor</dpiAwareness>
+</asmv3:windowsSettings>
+</asmv3:application>
+```
+
 ### 2021-06-10(1.0.14)
 
 - 在弹出窗口，使用润乾/帆软/blob下载Excel等文件后弹出窗口自动关闭问题 :bug:
