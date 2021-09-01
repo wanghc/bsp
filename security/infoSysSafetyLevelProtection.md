@@ -10,11 +10,13 @@
 ```html
 如：
 <csp:method name=OnPreHTTP arguments="" returntype=%Boolean>
-	if ##class(websys.Conversions).IsValidClassName("websys.Filter") d ##class(websys.Filter).InjectionFilter()
+	 if ##class(websys.Conversions).IsValidClassName("websys.Filter") d ##class(websys.Filter).InjectionFilter()
+     if ##Class(websys.SessionEvents).SessionExpired() q 1  // 登录后才能查看，否则弹出登录界面
+     q 1
     ...
 </csp:method>
 ```
-
+> 测试办法，在某个界面输入框中写入：`'><sVg/OnLoAd=prompt(1)>` 看是否弹出界面
 
 
 + 前端处理html/js注入
@@ -58,4 +60,13 @@ desc = htmlEncode(desc); //会把html代码转成
 if (%request.GetCgiEnv("HTTP_REFERER")["ibm.com"){ Q 0 }
 if (%request.GetCgiEnv("HTTP_REFERER")["hcl.com"){ Q 0 }
 ```
+
+## 5. 登录提示
+
+1. demo -- 翻译菜单 -- 字典翻译，在界面中找到`用户不存在`，翻译成`用户或密码错误`
+
+
+## 6. 越权访问
+
+   
 
