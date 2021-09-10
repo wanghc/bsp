@@ -9,19 +9,34 @@
 1. [下载文件](https://hisui.cn/tool/gen/mediwaybrowser/download),解压后修改DHCWebBrowser49.exe.config
 
    ```xml
-   <!--<add key="webServerIP" value="xx.xx.xx.xx" />
-   <add key="appPath" value="/imedical/web/form.htm" />
-   <add key="port" value="80" />
-   <add key="https" value="0" />-->
-   <!-- 2021-04-03增加homePath -->
-   <add key="homePath" value="https://127.0.0.1:80/imedical/web/form.html"/>
-   <add key="cache" value="true" />
-   <add key="autoDeleteCache" value="true" />    
-   <add key="log" value="false" />
-   <add key="appVersion" value="iMedical8.4" />
-   <add key="systemflash" value="false" />
-   <add key="ClientSettingsProvider.ServiceUri" value="" />
-   <add key="webgl" value="false"/>    <!-- 20210122增加 -->
+   <!--如果没有负载均衡时，一定要配置-->
+   <configSections>
+       <section name="pageLinksSection" type="DHCWebBrowser.PageLinksSection,DHCWebBrowser49"/>
+   </configSections>
+   <pageLinksSection>
+       <pageLinks>
+           <!-- 这行是注释说明：以下地址会显示到右键的【打开其它服务】菜单中 -->
+           <!-- 如果没有负载均衡服务时，一定要把【所有HIS-ECP服务路径】配置到这,以便浏览器实现负载均衡，且homePathIsLoadBalance配置成false -->
+           <add name="服务器1" url="http://x.x.x.x:1443/imedical/web/form.htm"/>
+           <add name="服务器2" url="http://x.x.x.x:1443/imedical/web/form.htm"/>
+           <add name="服务器3" url="http://x.x.x.x:1443/imedical/web/form.htm"/>
+       </pageLinks> 
+   </pageLinksSection>
+   <!--服务器配置结束 -->
+   <appSettings>
+       <!-- 首页路径 -->
+       <add key="homePath" value="https://127.0.0.1:80/imedical/web/form.html"/>
+       <!--homePath是否为负载均衡服务的首页路径. false时浏览器自身实现负载-->
+       <add key="homePathIsLoadBalance" value="true"/>  
+       <add key="cache" value="true" />
+       <add key="autoDeleteCache" value="true" /> 
+       <add key="log" value="false" />
+       <add key="systemflash" value="false" />
+       <add key="ClientSettingsProvider.ServiceUri" value="" />
+       <add key="webgl" value="false"/>    <!-- 20210122增加 -->
+       <add key="ValidOpenWindowName" value="false" /> <!--20210824 校验打开目标iframe窗口 重庆人民-->
+       <add key="loadingTime" value="2000"/> <!--20210903 首页过渡动画时长，单位毫秒-->
+   </appSettings>
    ```
 
 2. 双击DHCWebBrowser49.exe进入对应界面
@@ -44,6 +59,90 @@
 > 还报错再安装MSVBCRT.AIO.2019.10.19.xxx.exe
 
 ## 更新说明
+### 2021-09-06(1.0.19)
+
+- 增加动画过渡后，首页光标不自动到用户框中问题 :sparkles:
+
+  ```csharp
+  chromeBrowser.Focus();
+  ```
+
+  2021-09-02(1.0.19)
+
+- 增加第一次打开医为浏览器时的过渡动画 :sparkles:
+
+  ```xml
+  <!--首页过渡动画时长，单位毫秒-->
+  <add key="loadingTime" value="2000"/>
+  ```
+- 增加常用网址配置（需求号：2047288）
+
+  ```xml
+  <pageLinksSection>
+      <pageLinks>
+          <!-- 这行是注释说明：以下地址会显示到右键的【打开其它服务】菜单中 -->
+          <!-- 如果没有负载均衡服务时，一定要把【所有HIS-ECP服务路径】配置到这,以便浏览器实现负载均衡，且homePathIsLoadBalance配置成false -->
+          <add name="服务器1" url="http://x.x.x.x:1443/imedical/web/form.htm"/>
+          <add name="服务器2" url="http://x.x.x.x:1443/imedical/web/form.htm"/>
+          <add name="服务器3" url="http://x.x.x.x:1443/imedical/web/form.htm"/>
+      </pageLinks>
+  </pageLinksSection>
+  ```
+
+- 增加负载首页功能。在没有负载的项目上，自动更新医为浏览器会固定一个首页，会把请求集中到一台服务器上，实现负载。
+
+  ```xml
+  <!--homePath是否为负载均衡服务的首页路径,false时浏览器自身实现负载-->
+  <add key="homePathIsLoadBalance" value="false"/>  
+  ```
+
+  ```vb
+  if(Int16.TryParse(arr[3],out Int16 result)){
+  	var index = result % pageLinks.Count;
+  	List<String> list = new List<string>( pageLinks.Keys);
+      return pageLinks[list[index]];
+  }
+  ```
+### 2021-08-27(1.0.18)
+
+- alert，confirm样式/文字保持与IE一致。需求号:2086409
+- 浏览器窗口的标题栏内容格式调整，浏览器名及版本放到最后面。需求号：2121917
+
+### 2021-08-24(1.0.17)
+
+- 有时window.open(url, windowName, [windowFeatures])不能在指定窗口打开url问题修复
+
+- - 重庆人民发现收费安全组下，头菜单使用一段时间后，不能在主框架打开界面，会错误的弹出新界面。 
+  > 代码修改如下
+  ```csharp
+  svar myframe = browser.GetFrame(targetFrameName);
+  if (myframe != null)
+  {
+  	myframe.LoadUrl(targetUrl);
+      //...
+  }
+  ```
+### 2021-07-17 (1.0.16)
+
+- window.confirm方法弹出的对话窗口关闭叉按钮不能点击问题
+
+- - 天津第一中心
+
+  > 代码修改如下
+
+  ```csharp
+  var dr = MessageBox.Show(messageText, "确认信息", MessageBoxButtons.OKCancel);  // YesNo修改成OKCancel
+  if (dr == DialogResult.OK){  // Yes修改成OK
+      // ...
+  }
+  ```
+- 缩放功能bug。配置定义缩放值为1.44后, 在登录后某个界面缩放，得到值a，再进任意界面，整个系统缩放又回到1.44。
+
+  > 代码修改如下：
+
+  ```c#
+  CurPercent = Convert.ToDouble(ConfigurationManager.AppSettings["defaultZoomPercent"]); // 实时取缩放值
+  ```
 
 ### 2021-07-13(1.0.15)
 
