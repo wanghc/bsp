@@ -1,6 +1,6 @@
 
 <style>
-table th:first-of-type {
+table td:first-of-type {
     word-break:keep-all;
 }
 </style>
