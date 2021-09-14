@@ -1,3 +1,10 @@
+
+<style>
+table th:first-of-type {
+    word-break:keep-all;
+}
+</style>
+
 ## 消息平台 ##
 ### 1. 发送消息接口 ###
 ```vb
@@ -18,11 +25,13 @@ d ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 |ToLocRowId     | 接收消息的科室 Id | 可以为空。<br>格式"1^2^3" 发给科室所有医护人员<br> "1^2^3\|ToNurse"发给科室所有护士<br>"1^2^3\|ToDoctor"发给科室所有医生<br>"1^2^3\|Logon"发给有此科室登录权限的所有用户<br>"1^2^3\|OnlyFlag"仅作一个标识告诉我们这个消息 是想发给哪个科室的人的，<br>具体哪些人还需要在前面ToUserRowId参数传<br>此参数主要是为了解决一个发给A科的所有人的消息（比 如会诊），<br>但是某人拥有AB两科的权限，在登录B科时 不查看 A科消息 |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
+
 |*返回值* |*说明*|*备注*|
+| --- | -- | -- |
 |数字|大于0表示成功||
 |-100^ErrorMsg|表示失败|如:-100^动作类型不存在|
 
-消息动作类型
+##### 消息动作类型 #####
 
 | 消息类型         | 代码 | 入参        | 接受对象           | 备注                                           |
 | ---------------- | ---- | ----------- | ------------------ | ---------------------------------------------- |
@@ -34,9 +43,9 @@ d ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 
 
 
-OtherInfoJson说明
+##### OtherInfoJson说明 #####
 
-| 键         | 示例值                   | 说明                      |
+| *键*         | *示例值*                   | *说明*                      |
 | -----------| ----------------------- | --------------------------------------------- |
 | linkParam | EpisodeId=1&ReportId=002 | 链接参数，与动作类型配置的Link合成URL，便于修改csp路径。<br>如: 把危机值1000类型对应的处理链接维护为criticalvalue.trans.csp则消息明细对应的处理URL为criticalvalue.trans.csp?EpisodeId=1&ReportId=002   |
 | link      | criticalvalue.trans.csp?EpisodeId=1&ReportId=002 | 业务处理或查看明细URL，级别高过动作类型配置的link |
@@ -60,7 +69,9 @@ w ##class(websys.DHCMessageInterface).ExecAll(MsgDetailsId, ExecUserDr, ExecDate
 | ExecUserDr     | 处理用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
 | ExecDate  | 处理日期  | 默认当前日期.   +$h |
 | ExecTime  | 处理时间  | 默认当前日期.  $p($h, ","2) |
+
 |*返回值* |*说明*|*备注*|
+| --- | -- | -- |
 |数字|大于0表示成功||
 |-100^ErrorMsg|表示失败|如:-100^ID错误|
 
@@ -102,11 +113,13 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 | ExecDate  | 处理日期  | 默认当前日期.   +$h |
 | ExecTime  | 处理时间  | 默认当前日期.  $p($h, ","2) |
 | OtherParams | 其它扩展参数 | 用于后续参数扩展，扩展多个用^分隔 默认空 注意此参数在8.4之后才有 |
+
 |*返回值* |*说明*|*备注*|
+| --- | -- | -- |
 |数字|大于0表示成功||
 |-100^ErrorMsg|表示失败|如:-100^ID错误|
 
-OtherParams以^分隔每个位置说明
+##### OtherParams以^分隔每个位置说明 #####
 
 | *按^分隔位置* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
@@ -150,7 +163,9 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 | ExecUserDr     | 处理用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
 | ExecDate  | 处理日期  | 默认当前日期.   +$h |
 | ExecTime  | 处理时间  | 默认当前日期.  $p($h, ","2) |
+
 |*返回值* |*说明*|*备注*|
+| --- | -- | -- |
 |数字|大于0表示成功||
 |-100^ErrorMsg|表示失败|如:-100^ID错误|
 
@@ -177,11 +192,11 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 
 #### 3.2 消息动作类型 ####
 
-| *字段*      | *说明 *                                                 |
+| *字段*      | *说明*                                                 |
 | ----------------- | ------------------------------------------------------------ |
 | 类型代码    | 唯一值，发送消息时使用代码来区分消息类型，当新增消息类型时请联系我们给统一编排消息类型代码 |
 | 类型名称    | 用于显示 |
-| 接收对象    | 此消息类型的<a href="#接收对象">接收对象</a>，有些消息的接收人无法用常见接收对象描述，那么此字段可为空，具体接收人可以在发送消息时通过参数传入 <br>消息最终接收人由`接收对象`、`高级接收对象`、`抄送人`、`接口参数`共同决定取并集 |
+| 接收对象    | 此消息类型的<a href="#31-接收对象">接收对象</a>，有些消息的接收人无法用常见接收对象描述，那么此字段可为空，具体接收人可以在发送消息时通过参数传入 <br>消息最终接收人由`接收对象`、`高级接收对象`、`抄送人`、`接口参数`共同决定取并集 |
 | 发送方式    | 此消息类型可以通过哪种发送方式提醒用户，一般只实现了信息系统 |
 | 消息重要性    | 区分消息的重要程度，非常重要和紧急消息在未处理时会自动弹出，其中非常重要消息在读过一次后不再弹出 |
 | 有效天数    | 消息多久之后自动变为已处理，同时消息发送接口上也有有效天数字段，参数优先级高于配置 |
@@ -201,7 +216,7 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 | 允许回复  | 此消息类型是否允许回复 |
 
 
-读消息回调方法
+##### 读消息回调方法 #####
 用户在消息列表中，点击一条未读消息时会将其记为已读，此时消息平台会去调用此消息类型维护的读后回调方法
 在DHC-APP命名空间下   类名和方法名自取
 ```vb
@@ -222,7 +237,7 @@ w ##class(FullClassName).MethodName(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,R
 #### 3.3 高级接收对象配置 ####
 `8.4`版本扩展了高级接收对象配置，简单上使用时可以配置一些固定的科室、安全组作为接收对象，而不用再在程序里写死，复杂上使用是可以根据医院、就诊类型、科室、发送时段、发送方式配置不同的接收对象。
 
-| *字段*      | *说明 *                                                 |
+| *字段*      | *说明*                                                 |
 | ----------------- | ------------------------------------------------------------ |
 | 代码    | 此配置绑定到哪个消息类型代码上去 |
 | 医院    | 为空或者某具体院区 |
