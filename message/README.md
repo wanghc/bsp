@@ -89,6 +89,8 @@ w ##class(websys.DHCMessageInterface).ExecAll(MsgDetailsId, ExecUserDr, ExecDate
 ```vb
 w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ExecUserDr, ExecDate, ExecTime,OtherParams)
 ```
+
+
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | ToUserId   | 用户ID    | 为空处理所有人消息，不为空只处理此人消息 |
@@ -132,9 +134,12 @@ OtherParams以^分隔每个位置说明
 #### 2.3 消息撤销接口Cancel ####
 用于撤销已发送的消息  
 撤销判断逻辑：读即处理消息，有一人读过则不可撤销，其它有一人处理过则不可撤销
+
 ```vb
 w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ExecUserDr, ExecDate, ExecTime)
 ```
+
+
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | ToUserId   | 用户ID    | 无用参数（为方便，此方法参数设计和Exec一致） |
@@ -202,6 +207,8 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 ```vb
 w ##class(FullClassName).MethodName(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,ReadDate,ReadTime)
 ```
+
+
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
