@@ -28,7 +28,7 @@ d ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
-|数字|大于0表示成功||
+|大于0|成功||
 |-100^ErrorMsg|表示失败|如:-100^动作类型不存在|
 
 ##### 消息动作类型 #####
@@ -72,8 +72,13 @@ w ##class(websys.DHCMessageInterface).ExecAll(MsgDetailsId, ExecUserDr, ExecDate
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
-|数字|大于0表示成功||
-|-100^ErrorMsg|表示失败|如:-100^ID错误|
+|大于0|成功||
+|-102|消息已执行过||
+|-103|消息内容Id为空||
+|-104|执行人为空||
+|-105|消息明细Id不在明细表中||
+|-106|消息明细Id不能为空||
+|-108^ErrorMsg|其它错误||
 
 示例
 ```html
@@ -116,8 +121,12 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
-|数字|大于0表示成功||
-|-100^ErrorMsg|表示失败|如:-100^ID错误|
+|大于0|成功||
+|-3|未找到消息||
+|-102|消息已执行过||
+|-103|消息内容Id为空||
+|-107|执行人为空||
+|-108^ErrorMsg|其它错误||
 
 ##### OtherParams以^分隔每个位置说明 #####
 
