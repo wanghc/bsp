@@ -60,6 +60,10 @@
 
 ## 更新说明
 
+## 2021-11-08（1.0.24）
+
+- 右键增加打印功能（需求号：2223722）:sparkles:
+
 ### 2021-10-29（1.0.23）
 
 - 解决22版修改后，润乾不能PDF打印问题
@@ -68,6 +72,7 @@
   //增加blob支持
   String customProtocol = ",http,https,ftp,ftps,mwbrowser,chrome-devtools,chrome,ws,wss,file,blob,".ToLower(); 
   ```
+- 解决ValidOpenWindowName为true时，经常闪退问题（重庆中医）
 
 ### 2021-10-15(1.0.22)
 
