@@ -59,6 +59,63 @@
 > 还报错再安装MSVBCRT.AIO.2019.10.19.xxx.exe
 
 ## 更新说明
+
+## 2021-11-08（1.0.24）
+
+- 右键增加打印功能（需求号：2223722）:sparkles:
+
+### 2021-10-29（1.0.23）
+
+- 解决22版修改后，润乾不能PDF打印问题
+
+  ```csharp
+  //增加blob支持
+  String customProtocol = ",http,https,ftp,ftps,mwbrowser,chrome-devtools,chrome,ws,wss,file,blob,".ToLower(); 
+  ```
+- 解决ValidOpenWindowName为true时，经常闪退问题（重庆中医）
+
+### 2021-10-15(1.0.22)
+
+- 浏览器标题显示成`title`内容
+
+### 2021-10-10(1.0.21)
+
+- 路径状态为Aborted时不提示错误界面
+
+### 2021-10-09(1.0.21)
+
+- 增加首页不可访问等错误界面
+- 自定义协议生效
+
+### 2021-09-30 (1.0.21)
+
+- 增加是否显示右键菜单配置
+
+  ```xml
+  <!--显示右键功能,不配置节点时为显示。false时不显示右键菜单，用于自助机-->
+  <add key="showRightMenu" value="true"/>
+  ```
+
+  
+
+### 2021-09-19（1.0.20）
+
+- 增加F11全屏功能
+- 增加js方法，`cefbound.toggleFullScreen()`切换全屏功能
+
+- 打开浏览器时全屏配置
+
+  ```xml
+  <!--true全屏打开,false非全屏打开-->
+  <add key="openFullScreen" value="true"/>
+  ```
+
+### 2021-09-10(1.0.19)
+
+- 直接修改exe名称导致程序报错问题处理 :sparkles:
+
+  
+
 ### 2021-09-06(1.0.19)
 
 - 增加动画过渡后，首页光标不自动到用户框中问题 :sparkles:
