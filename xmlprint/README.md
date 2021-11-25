@@ -92,6 +92,25 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
 
 ### 更新日志 ###
 
+#### 2021-11-25
+
+- 增加获得打印PDF文件后的base64内容功能
+
+  ```js
+  // 通过虚拟打印机打印pdf,然后再获得pdf文件的base64内容
+  // 第5入参{String}类型, 为打印机任务名。如果虚拟打印机设置文档名与任务名一致时,也为pdf文件名
+  // 第6入参为{Obejct}类型, 
+  //     PrtDevice: {String} 强制使用包含Zan名称的第一台打印机打印,优先级高于XML模板中打印机配置
+  //     onCreatePDFBase64: {function} 为得到base64内容的回调方法
+  DHC_PrintByLodop(getLodop(),itmInfo,listInfo,ajson,"pdf1234",
+        {printListByText:true,tdnowrap:false,PrtDevice:"Zan",onCreatePDFBase64:function(pdfbase64){
+  		console.log(pdfbase64);
+  	}
+  });
+  ```
+
+  
+
 #### 2021-05-23
 
 - 修复点击列表中图片/条码/二维码后，再点击非列表元素会导致有些输入框不能输入 :bug:
