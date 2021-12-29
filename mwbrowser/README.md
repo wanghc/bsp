@@ -6,7 +6,7 @@
 2. 支持多用户登录
 3. 支持网站配置
 ## 使用说明
-1. [下载文件](https://hisui.cn/tool/gen/mediwaybrowser/download),解压后修改DHCWebBrowser49.exe.config
+1. [下载文件](http://bsp.hisui.cn/static/DHCWebBrowser.zip),解压后修改DHCWebBrowser49.exe.config
 
    ```xml
    <!--如果没有负载均衡时，一定要配置-->
@@ -48,16 +48,19 @@
 >
 > IE - Internet选项 - 连接页签 - 局域网设置 -  去掉【自动检测设置】的勾
 
-### 安装后运行报错
+### 安装后运行报错或无响应解决办法
 
 > 解决办法: 
 >
-> 安装vc_redist_2013.xxx.exe，
+> 1. 安装vc_redist_2013.xxx.exe
+>2. 还报错再安装vc_redist_2015_xxx.exe
+> 3. 还报错再安装MSVBCRT.AIO.2019.10.19.xxx.exe
 >
-> 还报错再安装vc_redist_2015_xxx.exe，
+> [下载X64安装包](http://bsp.hisui.cn/static/MedBrowser_vc_redist_x64.rar)(http://bsp.hisui.cn/static/MedBrowser_vc_redist_x64.rar)
 >
-> 还报错再安装MSVBCRT.AIO.2019.10.19.xxx.exe
-
+> [下载X86安装包](http://bsp.hisui.cn/static/MedBrowser_vc_redist_x86.rar)(http://bsp.hisui.cn/static/MedBrowser_vc_redist_x86.rar)
+> 
+> [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
 
 ### 2021-12-13（1.0.25）
