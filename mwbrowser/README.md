@@ -62,6 +62,11 @@
 > 
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
+### 2021-03-24（1.0.26）
+
+- 打开三方跨域界面后，在弹出界面缩放功能无效问题处理
+- - Portal 弹出 HIS界面后，在HIS界面不能使用浏览器缩放功能(重庆中医)  :bug:
+- 按F12打开焦点所在窗口的调试器。~~以前一直是主窗口~~ :bug:
 
 ### 2021-12-13（1.0.25）
 
