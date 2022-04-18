@@ -62,6 +62,12 @@
 > 
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
+
+## 2022-04-18（1.0.27）
+
+- 复制他人的【医为浏览器的快捷方式】到本地后，访问床位图时，导致字体变小问题处理 :bug:
+- - ```settings.LocalesDirPath = System.Windows.Forms.Application.StartupPath+"\\locales";```
+
 ### 2021-03-24（1.0.26）
 
 - 打开三方跨域界面后，在弹出界面缩放功能无效问题处理
