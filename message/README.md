@@ -273,7 +273,6 @@ w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrd
 
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
-| ToUserId   | 用户ID    | 为空处理所有人消息，不为空只处理此人消息 |
 | ActionType   | 消息类型代码    | 发送消息时传的动作代码 |
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
 | OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
