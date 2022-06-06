@@ -113,7 +113,7 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 | ActionType   | 消息类型代码    | 发送消息时传的动作代码 |
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
 | OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
-| ObjectId   | 业务ID    | 发送消息时OtherInfoJson的BizObjId属性值，再不传BizObjId时，此参数为OtherInfoJson包含的字符串 |
+| ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
 | ExecUserDr     | 处理用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
 | ExecDate  | 处理日期  | 默认当前日期.   +$h |
 | ExecTime  | 处理时间  | 默认当前日期.  $p($h, ","2) |
@@ -168,7 +168,7 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 | ActionType   | 消息类型代码    | 发送消息时传的动作代码 |
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
 | OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
-| ObjectId   | 业务ID    | 发送消息时OtherInfoJson的BizObjId属性值，再不传BizObjId时，此参数为OtherInfoJson包含的字符串 |
+| ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
 | ExecUserDr     | 处理用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
 | ExecDate  | 处理日期  | 默认当前日期.   +$h |
 | ExecTime  | 处理时间  | 默认当前日期.  $p($h, ","2) |
@@ -177,6 +177,8 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 | --- | -- | -- |
 |数字|大于0表示成功||
 |-100^ErrorMsg|表示失败|如:-100^ID错误|
+
+
 
 
 ### 3. 配置说明 ###
@@ -260,4 +262,46 @@ w ##class(FullClassName).MethodName(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,R
 | 目标角色	    | 消息是想发送给哪个角色的，用户需要登录哪个角色才可以看到(需要消息类型处的`需登录科室`勾上)<br>`自动判断`如科室医生就是某科室，用户就是任意角色，安全组就是某安全组<br>`就诊科室`患者就诊科室 <br>`下医嘱科室`下医嘱科室<br>`任意角色`任意角色，即登录任何角色都可看到<br>`其它`通过指定具体科室安全组 |
 
 
+### 4. 其它接口 ###
 
+#### 4.1 获取消息内容ID接口 ####
+
+根据消息类型、就诊、医嘱、业务ID（或`OtherInfonJson`部分值）条件取最后一条消息内容表ID，也可以根据结果是否大于0判断是否发送过消息
+```vb
+w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrdItemId, ObjectId)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ToUserId   | 用户ID    | 为空处理所有人消息，不为空只处理此人消息 |
+| ActionType   | 消息类型代码    | 发送消息时传的动作代码 |
+| EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
+| OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
+| ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+|大于0|消息内容ID||
+|-1|消息类型代码为空||
+|-2|消息类型不存在||
+|空|未找到消息||
+
+#### 4.2 获取消息明细ID接口 ####
+
+根据消息类型、就诊、医嘱、业务ID（或`OtherInfonJson`部分值）条件获取此消息最新一条消息记录，然后获取到发给此用户的消息明细记录ID
+```vb
+w ##class(websys.DHCMessageInterface).FindDetialsId(ToUserId,ActionType, EpisodeId, OEOrdItemId, ObjectId)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ToUserId   | 用户ID    | 用户ID |
+| ActionType   | 消息类型代码    | 发送消息时传的动作代码 |
+| EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
+| OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
+| ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+|大于0|消息明细记录ID||
+|0|未获取到|未获取到消息内容记录或者此记录没有发给此用户|
