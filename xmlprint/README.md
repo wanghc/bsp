@@ -63,7 +63,7 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
            <tr><td>pdfDownload:false</td><td>得到打印后的PDF文件并下载下来</td></tr>
            <tr><td>onCreatePDFBase64:undefined</td><td>值为函数时，会把把PDF文件转成base64字符串，以入参方式传给函数</td></tr>
            <tr><td>PrtDevice:undefined</td><td>强制设置打印机名称</td></tr>
-     	  <tr><td>columnTitle:"ColTitle1^ColTitle2^ColTitle3^ColTitle4"</td></tr>
+     	  <tr><td>columnTitle:undefined</td><td>用于每页重打。如："ColTitle1^ColTitle2^ColTitle3^ColTitle4"</td></tr>
      	  <tr><td>pageShowColunmTitle:false</td><td>是否每页显示表头。默认不显示</td></tr>
      	  <tr><td>pageTableStartPostion:"ONEPAGE"</td><td>第一页启始位置一样。为数字时表示启始位置yrow值单位mm。默认ONEPAGE</td></tr>
      	  <tr><td>rowContentFit: false</td><td>默认false 行内容是否自动换行。替换listHtmlTableWordWrapFlag</td></tr>
