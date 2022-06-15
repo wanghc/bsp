@@ -54,9 +54,22 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
      </li>
      <li>@param {String} reportNote [可选] 打印任务名称，可区别本次打印任务</li>
      <li>@param {Object} options [可选] 打印配置信息
-           printListByText:true  true按label打印列表。false按html-table方式打印。默认false，一般应使用true
-           LetterSpacing:0       控制字符间空隙。0正常空隙，-2紧凑或其它数值。默认0
-           preview:0             0打印,1预览。默认0</li></ul></pre>
+           <table>
+           <tr><td>printListByText:true</td><td>true按label打印列表。false按html-table方式打印。默认false，一般应使用true</td></tr>
+           <tr><td>LetterSpacing:0</td><td>控制字符间空隙。0正常空隙，-2紧凑或其它数值。默认0</td></tr>
+           <tr><td>preview:0</td><td>0打印,1预览。默认0</td></tr>
+           <tr><td>tableBorder:0</td><td>默认是0, 数字表示线宽。替换listHtmlTableBorder</td></tr>
+           <tr><td>tdnowrap:true</td><td>true时列宽固定800mm。false时为二列间宽度，内容可自动换行</td></tr>
+           <tr><td>pdfDownload:false</td><td>得到打印后的PDF文件并下载下来</td></tr>
+           <tr><td>onCreatePDFBase64:undefined</td><td>值为函数时，会把把PDF文件转成base64字符串，以入参方式传给函数</td></tr>
+           <tr><td>PrtDevice:undefined</td><td>强制设置打印机名称</td></tr>
+     	  <tr><td>columnTitle:"ColTitle1^ColTitle2^ColTitle3^ColTitle4"</td></tr>
+     	  <tr><td>pageShowColunmTitle:false</td><td>是否每页显示表头。默认不显示</td></tr>
+     	  <tr><td>pageTableStartPostion:"ONEPAGE"</td><td>第一页启始位置一样。为数字时表示启始位置yrow值单位mm。默认ONEPAGE</td></tr>
+     	  <tr><td>rowContentFit: false</td><td>默认false 行内容是否自动换行。替换listHtmlTableWordWrapFlag</td></tr>
+     	  <tr><td>rowHeightExpand: false</td><td>默认false 是否推动表格后面元素位置</td></tr>
+     	  </table>
+     </li></ul></pre>
      </details>
    
    - 推荐使用`CLODOP`打印
