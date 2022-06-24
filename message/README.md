@@ -20,7 +20,7 @@ d ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | FromUserRowId  | 发送消息的用户Id  | 如果获取不到HIS用户Id, 可以传入"^姓名"                       |
 | EpisodeId      | 病人就诊Id        | 如获取不到可以为空。                                         |
 | OrdItemId      | 医嘱Id            | 如获取不到可以为空                                           |
-| ToUserRowId    | 接收消息的用户Id  | 可以为空。为空走配置.                                        |
+| ToUserRowId    | 接收消息的用户Id  | 多个以^分隔，可以为空 (SS_User.SSUSR_RowId)                                 |
 | OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
 |ToLocRowId     | 接收消息的科室 Id | 可以为空。<br>格式"1^2^3" 发给科室所有医护人员<br> "1^2^3\|ToNurse"发给科室所有护士<br>"1^2^3\|ToDoctor"发给科室所有医生<br>"1^2^3\|Logon"发给有此科室登录权限的所有用户<br>"1^2^3\|OnlyFlag"仅作一个标识告诉我们这个消息 是想发给哪个科室的人的，<br>具体哪些人还需要在前面ToUserRowId参数传<br>此参数主要是为了解决一个发给A科的所有人的消息（比 如会诊），<br>但是某人拥有AB两科的权限，在登录B科时 不查看 A科消息 |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
@@ -30,6 +30,8 @@ d ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | --- | -- | -- |
 |大于0|成功||
 |-100^ErrorMsg|表示失败|如:-100^动作类型不存在|
+
+*** 消息实际接收人由`消息类型接收对象配置`、`消息类型高级接收对象配置`、`消息类型抄送人配置`、`ToUserRowId参数`、`ToLocRowId参数`共同决定，取并集 ***
 
 ##### 消息动作类型 #####
 
