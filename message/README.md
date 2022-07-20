@@ -178,6 +178,10 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
 |数字|大于0表示成功||
+|0|消息状态不可撤回||
+|-2|消息状态不可撤回||
+|-3|未找到消息||
+|-107|撤销人为空||
 |-100^ErrorMsg|表示失败|如:-100^ID错误|
 
 
