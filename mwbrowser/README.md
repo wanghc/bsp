@@ -63,6 +63,16 @@
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
 
+## 2022-08-29(1.0.35)
+
+- 解决当弹出式界面出现服务故障时导致整个系统跳转到错误提示界面问题处理。输血菜单。
+- 错误提示界面只提示服务连接问题。2902366
+- 试着解决ERR_CACHE_READ_FAILURE问题，增加enable-simple-cache-backend配置
+
+## 2022-07-27(1.0.34)
+
+- 增加浏览器标题是否显示医为浏览器信息配置  :sparkles: 需求号：2823327
+
 ## 2022-07-26(1.0.33)
 
 - 有时下载blob文件时，导致弹出窗口关闭问题 :bug: 需求号：2719129
