@@ -201,6 +201,7 @@ table td:first-of-type {
 #### 2.10 是否需要弹出危急值界面 ####
 
 适应于根据就诊判断是否需要弹出危急值。 `个别项目实现`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).GetCVPopupUrl(EpisodeID)
 ```
@@ -232,6 +233,7 @@ table td:first-of-type {
 | 对象 | 获取成功 | `BSP.SYS.COM.ProxyObject`对象 |
 
 成功返回的是`BSP.SYS.COM.ProxyObject`对象，具体属性
+
 |*属性名* |*说明*|*备注*|
 | --- | -- | -- |
 | reportID | 危急值id |  |
@@ -264,6 +266,7 @@ table td:first-of-type {
 | recDT | 接收日期时间 | 系统配置日期格式 HH:mm:ss （2020-04-22增加） |
 
 处理医嘱trOrdItemList的元素说明
+
 |*属性名* |*说明*|*备注*|
 | --- | -- | -- |
 | ordItemId | 医嘱id |  | 
@@ -316,6 +319,7 @@ table td:first-of-type {
 | DateFrom   | 开始日期    |  |
 | DateTo   | 结束日期    |  |
 | UseType  | 用途    | NURSE-TODO 护士待处理(不同项目护士待处理条件不一样，接口内部去判断)<br>NURSE-DONE 护士已处理(不同项目护士待处理条件不一样，接口内部去判断) <br>（2020-04-22增加）|
+
 
 |*输出列* |*说明*|*备注*|
 | --- | -- | -- |
@@ -522,6 +526,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 | 对象 | 获取成功 | `BSP.SYS.COM.ProxyObject`对象 |
 
 成功返回的是`BSP.SYS.COM.ProxyObject`对象，具体属性
+
 |*属性名* |*说明*|*备注*|
 | --- | -- | -- |
 | success | 成功与否 | 1成功 0失败 | 
@@ -560,6 +565,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 | transArray | 处理记录数组 | 危急值的接收、转发、处理、记录，数组(BSP.SYS.COM.ProxyArray)对象 | 
 
 处理记录transArray的元素说明
+
 |*属性名* |*说明*|*备注*|
 | --- | -- | -- |
 | trUserName | 操作人姓名 |  | 
