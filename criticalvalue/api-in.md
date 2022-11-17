@@ -309,7 +309,7 @@ table td:first-of-type {
 
 适应于根据就诊ID获取危急值列表。
 ```vb
-##class(%ResultSet).RunQuery("web.DHCCVCommon","CVReportFromAdm",Adm,Status,DateFrom,DateTo,UseType)
+##class(%ResultSet).RunQuery("web.DHCAntService","QryCVByAdm",Adm,Status,DateFrom,DateTo,UseType)
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
