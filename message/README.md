@@ -43,6 +43,8 @@ d ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | 感染 | 1001 | EpisodeID | 主管医生 | `医政` |
 | [查看更新类型](MSGActionType) |  |  |  |  |
 
+*** 消息动作类型尽可能保证在不同项目中对同一业务使用相同消息类型，避免消息类型的误用 ***
+
 
 
 ##### OtherInfoJson说明 #####
