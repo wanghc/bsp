@@ -8,7 +8,7 @@ table td:first-of-type {
 ## 消息平台 ##
 ### 1. 发送消息接口 ###
 ```vb
-d ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowId, EpisodeId, OrdItemId, 
+w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowId, EpisodeId, OrdItemId, 
         ToUserRowId, OtherInfoJson, ToLocRowId, EffectiveDays , CreateLoc)
 ```
 
