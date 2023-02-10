@@ -310,7 +310,7 @@ table td:first-of-type {
 
 适应于根据就诊ID获取危急值列表。
 ```vb
-##class(%ResultSet).RunQuery("web.DHCAntService","QryCVByAdm",Adm,Status,DateFrom,DateTo,UseType)
+##class(%ResultSet).RunQuery("web.DHCAntService","QryCVByAdm",Adm,Status,DateFrom,DateTo,UseType,ReportType)
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
@@ -583,7 +583,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 
 
-#### 2.23 危急值阅读####
+#### 2.23 危急值阅读 ####
 
 适应于提供危急值首次阅读接口给第三方（PDA等）。  
 
@@ -604,7 +604,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 | 1 | 成功 |  |
 
 
-#### 2.24 危急值接收####
+#### 2.24 危急值接收 ####
 
 适应于提供危急值接收接口给第三方（PDA等）。  
 
