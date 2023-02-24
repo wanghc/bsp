@@ -68,6 +68,7 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
      	  <tr><td>pageTableStartPostion:"ONEPAGE"</td><td>第一页启始位置一样。为数字时表示启始位置yrow值单位mm。默认ONEPAGE</td></tr>
      	  <tr><td>rowContentFit: false</td><td>默认false 行内容是否自动换行。替换listHtmlTableWordWrapFlag</td></tr>
      	  <tr><td>rowHeightExpand: false</td><td>默认false 是否推动表格后面元素位置</td></tr>
+     	  <tr><td>listAfterCallback:function</td><td>默认null,当表格打印完成后，回调此函数</td></tr>
      	  </table>
      </li></ul></pre>
      </details>
@@ -104,6 +105,39 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
 
 
 ### 更新日志 ###
+
+### 2023-02-24
+
+- DHC_PrintByLodop打印方法增加listAfterCallback回调方法, 在打印列表结束后调用
+
+  ```json
+  // 回调方法入参为
+  {
+      PrinterObj:LODOP,  /*当前打印对象*/
+      tableTop: parseInt(tableTop), /*表格的top位置*/
+      tableLeft: parseInt(tableLeft), /*表格的left位置*/
+      rowHeight:rowHeight, /*每一行的行高多少*/
+      y: parseInt(tableTop) + ((currPageRowNo + 1) * rowHeight), /*行的起始y位置*/
+      x: tableLeft, /*行的起始x位置*/
+      currPageRowNo: currPageRowNo, /**当前行号*/
+      pageRows:xmlPageRows, /*一页打印多少行数据*/
+      backSlashWidth:xmlBackSlashWidth /*表格反斜线宽度*/
+  }
+  ```
+
+- 使用示例
+
+```js
+var otherCfg = {};			
+otherCfg.printListByText = true;
+otherCfg.listAfterCallback = function(cfg){
+    // 表格打印完后，打印粗短斜线/
+	cfg.PrinterObj.ADD_PRINT_LINE(cfg.y + "mm", "80mm", (parseInt(cfg.y)+10)+"mm", "60mm", 0, 2); //0=实线,2=线宽
+};
+DHC_PrintByLodop(getLodop(),itmInfo,listInfo,exPrintJson,"打印任务名", otherCfg);
+```
+
+
 
 #### 2021-11-25
 
