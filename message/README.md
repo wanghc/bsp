@@ -33,6 +33,8 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 
 *** 消息实际接收人由`消息类型接收对象配置`、`消息类型高级接收对象配置`、`消息类型抄送人配置`、`ToUserRowId参数`、`ToLocRowId参数`共同决定，取并集 ***
 
+*** 如果需要按照安全组等其它方式指定接收者，见[其它发送接口](OtherSend) ***
+
 ##### 消息动作类型 #####
 
 | 消息类型         | 代码 | 入参        | 接受对象           | 备注                                           |
