@@ -22,7 +22,7 @@ w ##class(BSP.MSG.SRV.Interface).Send(Context, ActionTypeCode, FromUserRowId, Ep
 | FromUserRowId  | 发送消息的用户Id  | 如果获取不到HIS用户Id, 可以传入"^姓名"                       |
 | EpisodeId      | 病人就诊Id        | 如获取不到可以为空。                                         |
 | OrdItemId      | 医嘱Id            | 如获取不到可以为空                                           |
-| ReceiveCode    | 接收消息接收代码<br>Type-Keys-Role,Type-Keys-Role  | Type (L登录科室,LCP科室人员,LCPD科室医生,LCPN科室护士,G安全组,LG科室安全组,U用户,UC用户工号,CP人员,MU诊疗组,M消息平台接收对象,PAT患者)<br>Keys 对应类型id或代码,多个可以^拼接<br>Role(Auto自动,AdmLoc就诊科室,OrdLoc下医嘱科室,Any任何,Lx某科室,Gx某安全组,LxGx某科室某安全组)  |
+| ReceiveCode    | 接收消息接收代码<br>Type-Keys-Role,Type-Keys-Role  | Type (L登录科室,LCP科室人员,LCPD科室医生,LCPN科室护士,<br>G安全组,LG科室安全组,<br>U用户,UC用户工号,CP人员,MU诊疗组,<br>M消息平台接收对象,PAT患者,CPTT人员类型,<br>H院区用户,HCP院区医护人员,HCPD院区医生,HCPN院区护士)<br>Keys 对应类型id或代码,多个可以^拼接<br>Role(Auto自动,AdmLoc就诊科室,OrdLoc下医嘱科室,Any任何,Lx某科室,Gx某安全组,LxGx某科室某安全组)  |
 | OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
@@ -286,6 +286,100 @@ w ##class(BSP.MSG.SRV.Interface).SendReceiveType(Context, ActionTypeCode, FromUs
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
 | ReceiveTypeCode      | 消息平台接收对象代码        | 详细见消息消息接收对象维护                    |
+| TargetRole      | 目标角色  <br>（此消息希望用户登录哪个科室哪个安全组看到）      | 传空自动判断<br>Auto自动,AdmLoc就诊科室,OrdLoc下医嘱科室,Any任何,Lx某科室,Gx某安全组,LxGx某科室某安全组  |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+|大于0|成功||
+|-100^ErrorMsg|表示失败|如:-100^动作类型不存在|
+
+
+##### 消息接收对象 #####
+
+需看项目实际版本
+
+| *代码* | *描述*      | *备注*         |
+| AdmDoctorMedUnit | 主治医生医疗单元 |  | 
+| AdmDoctor | 主治医生 |  | 
+| OrderDoctor | 下医嘱医生 |  | 
+| OrderDoctorMedUnit | 下医嘱医生医疗单元 |  | 
+| AdmLoc | 就诊科室 |  | 
+| WardDoctor | 科室医生 |  | 
+| WardNurse | 病区护士 |  | 
+| WardDoctorNurse | 科室医生与病区护士 |  | 
+| OAUserCode | OA用户Code |  | 
+| OrderRecLocDoc | 医嘱接收科室医生 |  | 
+| OrderRecLocNur | 医嘱接收科室护士 |  | 
+| TriageNurse | 分诊区护士 | 就诊-->队列-->分诊区-->诊区操作员 | 
+| OrderRecLoc | 医嘱接收科室医护人员 |  | 
+| OrderRecLocLogon | 医嘱接收科室用户 |  | 
+| OrderLoc | 开单科室医护人员 |  | 
+| OrderLocDoc | 开单科室医生 |  | 
+| OrderLocNur | 开单科室护士 |  | 
+| OrderLocLogon | 开单科室用户 |  | 
+| SpecCollNurse | 标本采集护士 |  | 
+| AdmLocDirector | 科主任  | 拥有患者科室x某某主任安全组登录权限的用户 | 
+| AdmLocDirectorCT | 科主任(科室表) | 科室表上的科主任字段 | 
+| WardNurseDirector | 病区护士长 | 拥有患者护理单元x某某护士长安全组登录权限的用户 | 
+| OpAdmLinkIpLoc | 门诊关联科室 | 发送给患者门诊科室关联的住院科室去 | 
+| TheHospDoc | 本院医生 | 本院依赖发送科室进行判定 | 
+| TheHospNur | 本院护士 | 本院依赖发送科室进行判定 | 
+| TheHospLogon | 本院所有用户 | 本院依赖发送科室进行判定 | 
+| TheHospALLCP | 本院所有医护人员 | 本院依赖发送科室进行判定 | 
+| TheSiteDoc | 本系统所有医生 |  | 
+| TheSiteNur | 本系统所有护士 |  | 
+| TheSiteLogon | 本系统所有用户 |  | 
+| TheSiteALLCP | 本系统所有医护人员 |  | 
+
+
+
+
+#### 2.10 消息发送 指定院区 ####
+
+传院区ID及限定类型取院区下用户以及消息类型配置的并集发送
+```vb
+w ##class(BSP.MSG.SRV.Interface).SendHosp(Context, ActionTypeCode, FromUserRowId, EpisodeId , OrdItemId , OtherInfoJson , EffectiveDays, CreateLoc, HospId, Type , TargetRole)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| Context        | 发送的消息内容    | 可以为空，系统会根据就诊与医嘱id生成内容                     |
+| ActionTypeCode | 消息动作代码      | 如1002表示处方点评。具体值见 [消息类型](MSGActionType)                         |
+| FromUserRowId  | 发送消息的用户Id  | 如果获取不到HIS用户Id, 可以传入"^姓名"                       |
+| EpisodeId      | 病人就诊Id        | 如获取不到可以为空。                                         |
+| OrdItemId      | 医嘱Id            | 如获取不到可以为空                                           |
+| OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
+| EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
+| CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
+| HospId      | 院区ID        |                     |
+| Type      | 类型        | DOCTOR医生,NURSE护士,空所有用户,ALLCP所有医护人员                 |
+| TargetRole      | 目标角色  <br>（此消息希望用户登录哪个科室哪个安全组看到）      | 传空自动判断<br>Auto自动,AdmLoc就诊科室,OrdLoc下医嘱科室,Any任何,Lx某科室,Gx某安全组,LxGx某科室某安全组  |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+|大于0|成功||
+|-100^ErrorMsg|表示失败|如:-100^动作类型不存在|
+
+
+
+#### 2.11 消息发送 指定人员类型 ####
+
+传人员类型取系统下所有用户以及消息类型配置的并集发送
+```vb
+w ##class(BSP.MSG.SRV.Interface).SendCPTT(Context, ActionTypeCode, FromUserRowId, EpisodeId , OrdItemId , OtherInfoJson , EffectiveDays, CreateLoc, HospId, Type , TargetRole)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| Context        | 发送的消息内容    | 可以为空，系统会根据就诊与医嘱id生成内容                     |
+| ActionTypeCode | 消息动作代码      | 如1002表示处方点评。具体值见 [消息类型](MSGActionType)                         |
+| FromUserRowId  | 发送消息的用户Id  | 如果获取不到HIS用户Id, 可以传入"^姓名"                       |
+| EpisodeId      | 病人就诊Id        | 如获取不到可以为空。                                         |
+| OrdItemId      | 医嘱Id            | 如获取不到可以为空                                           |
+| OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
+| EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
+| CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
+| Type      | 类型        | DOCTOR医生,NURSE护士,空所有用户,ALLCP所有医护人员                 |
 | TargetRole      | 目标角色  <br>（此消息希望用户登录哪个科室哪个安全组看到）      | 传空自动判断<br>Auto自动,AdmLoc就诊科室,OrdLoc下医嘱科室,Any任何,Lx某科室,Gx某安全组,LxGx某科室某安全组  |
 
 |*返回值* |*说明*|*备注*|
