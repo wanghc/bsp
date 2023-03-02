@@ -366,7 +366,7 @@ w ##class(BSP.MSG.SRV.Interface).SendHosp(Context, ActionTypeCode, FromUserRowId
 
 传人员类型取系统下所有用户以及消息类型配置的并集发送
 ```vb
-w ##class(BSP.MSG.SRV.Interface).SendCPTT(Context, ActionTypeCode, FromUserRowId, EpisodeId , OrdItemId , OtherInfoJson , EffectiveDays, CreateLoc, HospId, Type , TargetRole)
+w ##class(BSP.MSG.SRV.Interface).SendCPTT(Context, ActionTypeCode, FromUserRowId, EpisodeId , OrdItemId , OtherInfoJson , EffectiveDays, CreateLoc, Type , TargetRole)
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
