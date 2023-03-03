@@ -130,9 +130,12 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
 ```js
 var otherCfg = {};			
 otherCfg.printListByText = true;
+/*打印列表结束回调。翻页时只有最后一张会进入此方法一次*/
 otherCfg.listAfterCallback = function(cfg){
-    // 表格打印完后，打印粗短斜线/
-	cfg.PrinterObj.ADD_PRINT_LINE(cfg.y + "mm", "80mm", (parseInt(cfg.y)+10)+"mm", "60mm", 0, 2); //0=实线,2=线宽
+    if (cfg.currPageRowNo!=pageRows){  // 数据不满行时才打印反斜线
+        // ADD_PRINT_LINE(起点y,起点x,结束点y,结束点x,0=实线,2=线宽)
+	    cfg.PrinterObj.ADD_PRINT_LINE(cfg.y + "mm", "80mm", (parseInt(cfg.y)+10)+"mm", "60mm", 0, 2);
+    }
 };
 DHC_PrintByLodop(getLodop(),itmInfo,listInfo,exPrintJson,"打印任务名", otherCfg);
 ```
