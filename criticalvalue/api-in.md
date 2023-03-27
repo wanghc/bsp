@@ -13,7 +13,11 @@ table td:first-of-type {
         height: 98%;
         top: 1%;
         overflow: auto;
+        list-style-type:none;
     }
+     .markdown-body>ul:first-of-type ul{
+        list-style-type:none;
+     }
 
 }
 
