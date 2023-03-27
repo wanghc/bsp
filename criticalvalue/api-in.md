@@ -8,10 +8,10 @@ table td:first-of-type {
 @media screen and (min-width: 1600px) {
     .markdown-body>ul:first-of-type{
         position: fixed;
-        right: 30px;
-        width: 300px;
-        height: 98%;
-        top: 1%;
+		right: calc(50% - 800px) ; 
+		width: 300px;
+		height: 90%;
+		top: 5%;
         overflow: auto;
         list-style-type:none;
     }

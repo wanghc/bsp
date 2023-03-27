@@ -8,10 +8,10 @@ table td:first-of-type {
 @media screen and (min-width: 1600px) {
     .markdown-body>ul:first-of-type{
         position: fixed;
-        right: 30px;
-        width: 300px;
-        height: 98%;
-        top: 1%;
+		right: calc(50% - 800px) ; 
+		width: 300px;
+		height: 90%;
+		top: 5%;
         overflow: auto;
         list-style-type:none;
     }
@@ -24,12 +24,9 @@ table td:first-of-type {
 </style>
 
 - [1. 发送消息接口](#1-发送消息接口)
-		- [消息动作类型](#消息动作类型)
-		- [OtherInfoJson说明](#otherinfojson说明)
 - [2. 消息处理](#2-消息处理)
 	- [2.1 消息处理接口ExecAll](#21-消息处理接口execall)
 	- [2.2 消息处理接口Exec](#22-消息处理接口exec)
-		- [OtherParams以^分隔每个位置说明](#otherparams以分隔每个位置说明)
 	- [2.3 消息撤销接口Cancel](#23-消息撤销接口cancel)
 - [3. 配置说明](#3-配置说明)
 	- [3.1 接收对象](#31-接收对象)
@@ -39,6 +36,7 @@ table td:first-of-type {
 - [4. 其它接口](#4-其它接口)
 	- [4.1 获取消息内容ID接口](#41-获取消息内容id接口)
 	- [4.2 获取消息明细ID接口](#42-获取消息明细id接口)
+
 
 
 ## 消息平台 ##
@@ -71,7 +69,7 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 
 *** 如果需要按照安全组等其它方式指定接收者，见[其它发送接口](OtherSend) ***
 
-##### 消息动作类型 #####
+###### 消息动作类型 ######
 
 | 消息类型         | 代码 | 入参        | 接受对象           | 备注                                           |
 | ---------------- | ---- | ----------- | ------------------ | ---------------------------------------------- |
@@ -85,7 +83,7 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 
 
 
-##### OtherInfoJson说明 #####
+###### OtherInfoJson说明 ######
 
 | *键*         | *示例值*                   | *说明*                      |
 | -----------| ----------------------- | --------------------------------------------- |
@@ -170,7 +168,7 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 |-107|执行人为空||
 |-108^ErrorMsg|其它错误||
 
-##### OtherParams以^分隔每个位置说明 #####
+###### OtherParams以^分隔每个位置说明 ######
 
 | *按^分隔位置* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
