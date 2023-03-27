@@ -4,6 +4,7 @@ table td:first-of-type {
     word-break:keep-all;
 }
 </style>
+[toc]
 
 ## 消息平台其它消息发送接口 ##
 

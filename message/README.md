@@ -5,6 +5,8 @@ table td:first-of-type {
 }
 </style>
 
+[toc]
+
 ## 消息平台 ##
 ### 1. 发送消息接口 ###
 ```vb

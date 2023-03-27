@@ -4,6 +4,7 @@ table td:first-of-type {
     word-break:keep-all;
 }
 </style>
+[toc]
 
 ## 危急值管理平台 内部接口 ##
 
