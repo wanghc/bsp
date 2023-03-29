@@ -36,6 +36,9 @@ table td:first-of-type {
 - [4. 其它接口](#4-其它接口)
 	- [4.1 获取消息内容ID接口](#41-获取消息内容id接口)
 	- [4.2 获取消息明细ID接口](#42-获取消息明细id接口)
+	- [4.3 获取消息回复记录接口](#43-获取消息回复记录接口)
+	- [4.4 获取某科室最近发送某类型消息记录](#44-获取某科室最近发送某类型消息记录)
+	- [4.5 消息确认接口](#45-消息确认接口)
 
 
 
@@ -348,3 +351,86 @@ w ##class(websys.DHCMessageInterface).FindDetialsId(ToUserId,ActionType, Episode
 | --- | -- | -- |
 |大于0|消息明细记录ID||
 |0|未获取到|未获取到消息内容记录或者此记录没有发给此用户|
+
+#### 4.3 获取消息回复记录接口 ####
+根据消息类型、就诊、医嘱、业务ID（或`OtherInfonJson`部分值）条件获取此消息最新一条消息记录，然后获取到关于此消息的所有回复记录
+```vb
+d ##class(%ResultSet).RunQuery("websys.DHCMessageInterface","QryReplyList",ActionType , EpisodeId , OEOrdItemId , ObjectId , ContentId)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ActionType   | 消息类型代码    | 发送消息时传的动作代码 |
+| EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
+| OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
+| ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+| ContentId   | 消息内容ID    | 如果已经获取到消息内容ID，前4个参数都不需要 |
+
+|*输出列* |*说明*|*备注*|
+| --- | -- | -- |
+| replyUserName | 回复人姓名 |  | 
+| replyDate | 回复日期 |  | 
+| replyTime | 回复时间 |  | 
+| replyContent | 回复内容 |  | 
+| replyType | 回复类型  | A所有人、S仅发送人 | 
+| isSendUser | 是否是消息发送人的回复 |  | 
+| replyId | 回复记录ID |  | 
+| replyUserId | 回复人ID |  | 
+
+
+
+#### 4.4 获取某科室最近发送某类型消息记录 ####
+
+使用的是消息类型+业务ID索引,关于最近的判断用的是索引的自然排序 (所以只适用于BizObjId为空的，或者本身满足消息发送时间序列，或者同条件下BizObjId一致)
+```vb
+w ##class(websys.DHCMessageInterface).GetLatestMsgInfo(ActionType,CreateLocId)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ActionType   | 消息类型代码    |  |
+| CreateLocId    | 消息发送科室ID    |  |
+
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 空 | 未获取到消息记录 ||
+| 不为空 | 获取到的最近发送记录的 日期^时间^消息内容ID |  |
+
+
+
+
+#### 4.5 消息确认接口 ####
+
+将消息置为一个中间态，确认状态,用于实现霸屏消息在不置为已处理的情况下解除锁屏的效果，如危急值“接收”操作后可以不再锁屏
+```vb
+w ##class(websys.DHCMessageInterface).Confirm(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ConfirmUserDr, ConfirmDate, ConfirmTime,OtherParams)
+```
+
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ToUserId   | 用户ID    | 传空 只是为了和处理接口参数顺序保持一致 |
+| ActionType   | 消息类型代码    | 发送消息时传的动作代码 |
+| EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
+| OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
+| ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+| ConfirmUserDr     | 确认用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
+| ConfirmDate  | 确认日期  | 默认当前日期.   +$h |
+| ConfirmTime  | 确认时间  | 默认当前日期.  $p($h, ","2) |
+| OtherParams | 其它扩展参数 | 用于后续参数扩展，扩展多个用^分隔 默认空  |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+|大于0|成功||
+|-3|未找到消息||
+|-102|消息已确认过||
+|-103|消息内容Id为空||
+|-107|确认人为空||
+|-108^ErrorMsg|其它错误||
+
+###### 确认方法OtherParams参数以^分隔每个位置说明 ######
+
+| *按^分隔位置* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| 1   | 只确认哪个人员类型的消息    | 为空处理所有`(CT_CarPrvTp.CTCPT_InternalType)[NURSE,DOCTOR,Technician,Pharmacist,Other]` |
