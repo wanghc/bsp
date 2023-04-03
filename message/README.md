@@ -440,7 +440,7 @@ w ##class(websys.DHCMessageInterface).Confirm(ToUserId, ActionType, EpisodeId, O
 
 #### 4.6 设置科室消息配置 ####
 
-设置科室的消息配置（是否禁用消息、是否禁止自动弹窗）
+设置科室的消息配置（是否禁用消息、是否禁止自动弹窗） `2023-03-30`
 ```vb
 w ##class(websys.DHCMessageInterface).SetLocMsgCfg(LocId, Disabled, NoAlert )
 ```
