@@ -186,7 +186,7 @@ w ##class(BSP.MSG.SRV.Interface).SendLocGroup(Context, ActionTypeCode, FromUserR
 | OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
-| LocGroupId      | 科室ID|安全组ID        | 多个以^分割  <br>如1|1^1|2                  |
+| LocGroupId      | 科室ID|安全组ID        | 多个以^分割  <br>如1\|1^1\|2                  |
 | TargetRole      | 目标角色  <br>（此消息希望用户登录哪个科室哪个安全组看到）      | 传空自动判断<br>Auto自动,AdmLoc就诊科室,OrdLoc下医嘱科室,Any任何,Lx某科室,Gx某安全组,LxGx某科室某安全组  |
 
 |*返回值* |*说明*|*备注*|
