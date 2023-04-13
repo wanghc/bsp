@@ -54,7 +54,7 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | Context        | 发送的消息内容    | 可以为空，系统会根据就诊与医嘱id生成内容                     |
-| ActionTypeCode | 消息动作代码      | 如1002表示处方点评。具体值见<a href="#消息动作类型">动作类型</a>                         |
+| ActionTypeCode | 消息动作代码      | 代码参见[动作类型清单](MSGActionType)，如无对应代码请通过BOS提交需求增加                     |
 | FromUserRowId  | 发送消息的用户Id  | 如果获取不到HIS用户Id, 可以传入"^姓名"                       |
 | EpisodeId      | 病人就诊Id        | 如获取不到可以为空。                                         |
 | OrdItemId      | 医嘱Id            | 如获取不到可以为空                                           |
@@ -81,7 +81,7 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | OA通知 | 2001 | | | OA通知，用户传代码，程序单独转成用户ID |
 | 危急值 | 1000 | EpisodeID | 危急值平台配置 | 危急值平台通讯，响应对象的接口<br>`危急值平台` |
 | 感染 | 1001 | EpisodeID | 主管医生 | `医政` |
-| [查看更新类型](MSGActionType) |  |  |  |  |
+| [查看更多类型](MSGActionType) |  |  |  |  |
 
 *** 消息动作类型尽可能保证在不同项目中对同一业务使用相同消息类型，避免消息类型的误用 ***
 
