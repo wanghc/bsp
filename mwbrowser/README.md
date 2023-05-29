@@ -5,6 +5,7 @@
 1. 支持NPAPI插件，Flash，PDF
 2. 支持多用户登录
 3. 支持网站配置
+3. 支持跨域调用
 ## 使用说明
 1. [下载文件](http://bsp.hisui.cn/static/DHCWebBrowser.zip),解压后修改DHCWebBrowser49.exe.config
 
@@ -35,7 +36,8 @@
        <add key="ClientSettingsProvider.ServiceUri" value="" />
        <add key="webgl" value="false"/>    <!-- 20210122增加 -->
        <add key="ValidOpenWindowName" value="false" /> <!--20210824 校验打开目标iframe窗口 重庆人民-->
-       <add key="loadingTime" value="2000"/> <!--20210903 首页过渡动画时长，单位毫秒-->
+       <add key="loadingTime" value="0"/> <!--20210903 首页过渡动画时长，单位毫秒-->
+       <add key="titleShowBrowserInfo" value="true"/> <!-- 20220727 是否显示医为浏览器信息 -->
    </appSettings>
    ```
 
@@ -62,6 +64,26 @@
 > 
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
+
+### 2023-05-08（1.0.39）
+
+- 第一次进入浏览器时，增加加载进度条
+
+- 右键菜单增加`查找`功能
+
+- 启动医为浏览器时，检查中间件是否运行，未运行时，会自动拉启中间件。
+
+- 浏览器图标更改  
+
+## 2022-09-29(1.0.36)
+
+- 增加XML配置来决定是否写环境变量
+
+  ```xml
+  <add key="writeEnvironment" value="true"/>
+  ```
+
+  
 
 ## 2022-08-29(1.0.35)
 
