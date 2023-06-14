@@ -69,8 +69,8 @@ table td:first-of-type {
 
 适应于医技系统保存危急值，如果为第三方或分库则应通过平台调用。
 ```vb
-##Class(web.DHCAntService).SaveCVResult(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems )
-##Class(web.DHCAntCVResult).Save(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems) //检验调的可能是这个
+##Class(web.DHCAntService).SaveCVResult(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems,MTS2DocInfo,MTS2PatInfo )
+##Class(web.DHCAntCVResult).Save(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems,MTS2DocInfo,MTS2PatInfo) //检验调的可能是这个
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
