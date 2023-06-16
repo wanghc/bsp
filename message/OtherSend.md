@@ -81,6 +81,25 @@ w ##class(BSP.MSG.SRV.Interface).Send(Context, ActionTypeCode, FromUserRowId, Ep
 | target | 默认空 | 目标窗口 如果为_blank 采用window.open新窗口方式打开，否则为顶层界面弹出hisui(easyui)模态框，内嵌iframe形式打开 |
 | BizObjId | 1 | 业务系统ID，用于后续消息处理、撤销定位消息 |
 
+OtherInfoJson为Json字符传，建议使用工具类进行构造，规避自己拼接时的错误
+
+```vb
+///只指定linkParam形式，最终由消息配置的链接和linkParam共同组合成完整链接
+s adm="1234",appno="100001"
+s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
+s jsonObj.linkParam="EpisodeID="_adm_"&ApplyNo="_appno   //消息对应业务界面所需参数
+s jsonObj.BizObjId=appno //业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    //转成Json字符串
+
+///指定link形式，link属性为要开的链接级所需参数，此时不再需要linkParam属性
+s adm="1234",appno="100001"
+s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
+s jsonObj.link="xxxxxxxx.csp?EpisodeID="_adm_"&ApplyNo="_appno   //消息对应业务界面链接和参数
+s jsonObj.BizObjId=appno //业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    //转成Json字符串
+
+```
+
 
 ### 2. 包装后的消息发送接口 ###
 

@@ -70,10 +70,13 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 |大于0|成功||
 |-100^ErrorMsg|表示失败|如:-100^动作类型不存在|
 
+
 *** 消息实际接收人由`消息类型接收对象配置`、`消息类型高级接收对象配置`、`消息类型抄送人配置`、`ToUserRowId参数`、`ToLocRowId参数`共同决定，取并集 ***
 
 *** 如果需要按照安全组等其它方式指定接收者，见[其它发送接口](OtherSend) ***
+
 *** 如果第三方调用，见[webservice接口](WSInterface) ***
+
 
 ###### 消息动作类型 ######
 
@@ -99,6 +102,26 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | dialogHeight | 500  默认 500 | 打开处理界面时界面高度。界面高度为500px支持百分比表示占顶层宽度的百分比如50%(`HIS8.3`以后) |
 | target | 默认空 | 目标窗口 如果为_blank 采用window.open新窗口方式打开，否则为顶层界面弹出hisui(easyui)模态框，内嵌iframe形式打开 |
 | BizObjId | 1 | 业务系统ID，用于后续消息处理、撤销定位消息 |
+
+OtherInfoJson为Json字符传，建议使用工具类进行构造，规避自己拼接时的错误
+
+```vb
+///只指定linkParam形式，最终由消息配置的链接和linkParam共同组合成完整链接
+s adm="1234",appno="100001"
+s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
+s jsonObj.linkParam="EpisodeID="_adm_"&ApplyNo="_appno   //消息对应业务界面所需参数
+s jsonObj.BizObjId=appno //业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    //转成Json字符串
+
+///指定link形式，link属性为要开的链接级所需参数，此时不再需要linkParam属性
+s adm="1234",appno="100001"
+s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
+s jsonObj.link="xxxxxxxx.csp?EpisodeID="_adm_"&ApplyNo="_appno   //消息对应业务界面链接和参数
+s jsonObj.BizObjId=appno //业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    //转成Json字符串
+
+```
+
 
 
 ### 2. 消息处理 ###
