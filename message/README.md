@@ -40,6 +40,7 @@ table td:first-of-type {
 	- [4.4 获取某科室最近发送某类型消息记录](#44-获取某科室最近发送某类型消息记录)
 	- [4.5 消息确认接口](#45-消息确认接口)
 	- [4.6 设置科室消息配置](#46-设置科室消息配置)
+	- [4.7 获取阅读信息接口](#47-获取阅读信息接口)
 
 
 
@@ -457,4 +458,27 @@ w ##class(websys.DHCMessageInterface).SetLocMsgCfg(LocId, Disabled, NoAlert )
 | --- | -- | -- |
 | 1 | 成功 | |
 | 0 |失败| |
+
+
+#### 4.7 获取阅读信息接口 ####
+
+1. 先根据消息类型和业务ID找消息记录，如果找不到再根据消息类型、就诊、医嘱ID找消息记录
+2. 如果用户ID为空 则获取此消息记录中所有用户最早阅读的时间信息返回;如果用户ID不为空则获取此此消息为此用户产生的记录的阅读信息返回
+
+```vb
+w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId, ObjectId, UserId)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ActionType   | 消息类型代码    | 发送消息时传的动作代码 |
+| EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
+| OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
+| ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+| UserId   | 用户ID    | 要查此消息具体为某用户产生的记录的阅读信息 |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 空 | 未获取到消息记录 | |
+| 其它 | 阅读日期(格式为系统配置)^阅读时间(hh:mm:ss)^用户ID^用户姓名 | |
 
