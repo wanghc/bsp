@@ -203,7 +203,9 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | 1   | 只处理哪个人员类型的消息    | 为空处理所有`(CT_CarPrvTp.CTCPT_InternalType)[NURSE,DOCTOR,Technician,Pharmacist,Other]` |
 | 2   | 审核拒绝标志(Y/N)    | 医呼通 需要审核通过或拒绝标志 Y通过接受 N拒绝驳回 |
-| 3    | 审核备注拒绝原因    | 审核备注拒绝原因 |
+| 3   | 审核备注拒绝原因    | 审核备注拒绝原因 |
+| 4   | 查找最近几条消息处理    | 部分业务会出现同一业务ID多次发消息，且只在最后一次处理情况，故增加此参数实现查到最近几条消息来处理 |
+
 
 示例
 ```html
@@ -227,7 +229,7 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 撤销判断逻辑：读即处理消息，有一人读过则不可撤销，其它有一人处理过则不可撤销
 
 ```vb
-w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ExecUserDr, ExecDate, ExecTime)
+w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ExecUserDr, ExecDate, ExecTime,OtherParams)
 ```
 
 
@@ -238,9 +240,22 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
 | OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
 | ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
-| ExecUserDr     | 处理用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
-| ExecDate  | 处理日期  | 默认当前日期.   +$h |
-| ExecTime  | 处理时间  | 默认当前日期.  $p($h, ","2) |
+| ExecUserDr     | 撤销用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
+| ExecDate  | 撤销日期  | 默认当前日期.   +$h |
+| ExecTime  | 撤销时间  | 默认当前日期.  $p($h, ","2) |
+| OtherParams | 其它扩展参数 | 用于后续参数扩展，扩展多个用^分隔 默认空 注意此参数在`9.0.1`之后才有 |
+
+###### OtherParams以^分隔每个位置说明 ######
+
+OtherParams为了和处理方法Exec一致，^分隔的部分位置实际没用
+
+| *按^分隔位置* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| 1   | 未用    |  |
+| 2   | 未用    |  |
+| 3   | 未用    |  |
+| 4   | 查找最近几条消息撤销    | 部分业务会出现同一业务ID多次发消息，且只在最后一次撤销情况，故增加此参数实现查到最近几条消息来撤销 |
+
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -340,8 +355,9 @@ w ##class(FullClassName).MethodName(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,R
 #### 4.1 获取消息内容ID接口 ####
 
 根据消息类型、就诊、医嘱、业务ID（或`OtherInfonJson`部分值）条件取最后一条消息内容表ID，也可以根据结果是否大于0判断是否发送过消息
+
 ```vb
-w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrdItemId, ObjectId)
+w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrdItemId, ObjectId,FindMaxCnt)
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
@@ -350,6 +366,7 @@ w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrd
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
 | OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
 | ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+| FindMaxCnt   | 最多查找数    | 大于99当99，0-99取实际值，其它当作1  支持按条件查找多条消息记录并返回`2023-06-26` |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -372,6 +389,8 @@ w ##class(websys.DHCMessageInterface).FindDetialsId(ToUserId,ActionType, Episode
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
 | OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
 | ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+| FindMaxCnt   | 最多查找数    | 大于99当99，0-99取实际值，其它当作1  支持按条件查找多条消息记录并返回`2023-06-26` |
+
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
