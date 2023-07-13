@@ -549,7 +549,7 @@ w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId,
 
 需要处理的需要在消息动作类型维护界面将相应消息类型的【团队执行消息】选择为`需要处理`
 
-###### Exec接口（最正统推荐的） ######
+###### 5.1.2.1 Exec接口（最正统推荐的） ######
 
 从消息明细点击须处理进业务界面或者通过系统菜单等进入业务界面，业务处理完成后，产品组调用消息处理接口处理消息
 
@@ -559,7 +559,7 @@ w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId,
 
 相关配置：消息动作类型维护 【处理(查看)链接	】需维护业务处理链接或者发送消息事OtherInfoJson.link传链接
 
-###### ExecAll接口 ######
+###### 5.1.2.2 ExecAll接口 ######
 
 根据消息明细记录ID处理消息。消息明细记录ID获取方法：发送时记录返回结果；通过消息明细点击须处理按钮时弹出业务界面会带入参数MsgDetailsId。
 
@@ -570,7 +570,7 @@ w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId,
 相关配置：消息动作类型维护 【处理(查看)链接	】需维护业务链接或者发送消息事OtherInfoJson.link传链接
 
 
-###### 工具按钮【执行按钮】 ######
+###### 5.1.2.3 工具按钮【执行按钮】 ######
 
 通过配置的工具按钮【执行按钮】处理 
 
@@ -584,7 +584,7 @@ w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId,
 
 
 
-###### 点击按钮弹窗即处理（HIS8.5.3+） ######
+###### 5.1.2.4 点击按钮弹窗即处理（HIS8.5.3+） ######
 
 点击消息根据业务处理链接生成的【须处理】按钮弹窗时即处理 `add:2022-04-07`
 
@@ -595,12 +595,12 @@ w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId,
 相关配置：消息动作类型维护 【处理(查看)链接	】需维护业务链接或者发送消息事OtherInfoJson.link传链接，且【弹窗链接属性】中的execMsgOnOpen参数值维护为All或者One
 
 
-###### Cancel接口 ######
+###### 5.1.2.5 Cancel接口 ######
 
 撤销与处理相似，撤销一般应用于取消申请时撤销消息，或者修改申请后先撤销消息再重新发送新消息。
 
 
-###### 通用处理链接处理 ######
+###### 5.1.2.6 通用处理链接处理 ######
 
 消息平台提供了一简单的处理界面，可以简单记录一下处理备注，当某些业务（如第三方标版拒收）不方便提供处理界面时使用。 `add:2022-03-14`
 
@@ -611,7 +611,7 @@ w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId,
 
 自动处理为消息平台避免消息过度打扰用户的一个功能，自动处理只会将消息的状态置为已处理，不会改变业务状态，如果对应业务涉及后期处理率统计等建议不要使用，避免后期数据不好看问题。
 
-###### 出院自动处理 ######
+###### 5.1.3.1 出院自动处理 ######
 
 患者就诊状态为D的，消息在查询未处理数量时，自动将其置为已处理。
 
@@ -619,7 +619,7 @@ w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId,
 
 相关配置：消息动作类型维护【出院自动处理】勾上
 
-###### 消息超期自动处理 ######
+###### 5.1.3.2 消息超期自动处理 ######
 
 消息在查询未处理数量时，发现此时日期大于消息有效日期时，自动将其置为已处理。
 
