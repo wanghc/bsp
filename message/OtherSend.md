@@ -60,7 +60,7 @@ w ##class(BSP.MSG.SRV.Interface).Send(Context, ActionTypeCode, FromUserRowId, Ep
 | OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
-| TaskSchedule      | 定时发送时间安排字符串        |                    |
+| TaskSchedule      | 定时发送时间安排字符串        |    定时发送参数见<a href="#taskschedule说明">TaskSchedule说明</a>                 |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -104,6 +104,33 @@ s jsonObj.BizObjId=appno ;业务ID  用于消息后续处理、撤销等
 s otherInfoJson=jsonObj.%ToJSON()    ;转成Json字符串
 
 ```
+
+
+##### TaskSchedule说明 #####
+
+定时发送时间安排字符传，支持多种规则，按^分隔。对于产品组来说一般只使用传具体时间点这种规则。
+
+| *按^分隔位置* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| 1   | 开始时间    | 格式 yyyy-MM-dd hh:mm |
+| 2   | 结束时间    | 格式 yyyy-MM-dd hh:mm |
+| 3   | 最多执行次数    |  |
+| 4   | 规则1 固定时间点    | 格式 yyyy-MM-dd hh:mm，多个时间点以\|分隔 |
+| 5   | 规则2 固定间隔    | 单位秒，应尽量使用整分钟即60的整数倍 |
+| 6   | 规则3 cron表达式    | 以cron表达式定义规则，需对cron表达式有所了解 |
+
+*** 规则1、2、3都会受限于于开始日期，结束日期，最多执行次数；且规则2是依托于开始时间进行计算的。 ***
+
+对于产品组来说，一般使用的是规则1，按固定时间点进行发送，即此参数^分隔第四位传时间点，其它位置空。
+
+```vb
+s TaskSchedule=""
+s $p(TaskSchedule,"^",4)="2023-07-27 17:00|2023-07-27 17:30|2023-07-27 18:00"  //^分隔第四位为固定时间点  多个时间点用|符号分隔
+
+```
+
+
+
 
 
 ### 2. 包装后的消息发送接口 ###

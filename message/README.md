@@ -70,6 +70,7 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 |ToLocRowId     | 接收消息的科室 Id | 可以为空。<br>格式"LocId1^LocId2^LocId3\|其它标记" <br> "1^2^3" 发给科室1、2、3所有医护人员<br> "1^2^3\|ToNurse"发给科室1、2、3所有护士<br>"1^2^3\|ToDoctor"发给科室1、2、3所有医生<br>"1^2^3\|Logon"发给有此科室1或2或3登录权限的所有用户(HIS8.4)<br>"1^2^3\|OnlyFlag"仅作一个标识告诉我们这个消息 是想发给哪个科室的人的，<br>具体哪些人还需要在前面ToUserRowId参数传<br>此参数主要是为了解决一个发给A科的所有人的消息（比 如会诊），<br>但是某人拥有AB两科的权限，在登录B科时 不查看 A科消息 |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
+| TaskSchedule      | 定时发送时间安排字符串        |    定时发送参数见<a href="#taskschedule说明">TaskSchedule说明</a>                 |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -132,6 +133,30 @@ s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
 s jsonObj.link="xxxxxxxx.csp?EpisodeID="_adm_"&ApplyNo="_appno   ;消息对应业务界面链接和参数
 s jsonObj.BizObjId=appno ;业务ID  用于消息后续处理、撤销等
 s otherInfoJson=jsonObj.%ToJSON()    ;转成Json字符串
+
+```
+
+
+##### TaskSchedule说明 #####
+
+定时发送时间安排字符传，支持多种规则，按^分隔。对于产品组来说一般只使用传具体时间点这种规则。
+
+| *按^分隔位置* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| 1   | 开始时间    | 格式 yyyy-MM-dd hh:mm |
+| 2   | 结束时间    | 格式 yyyy-MM-dd hh:mm |
+| 3   | 最多执行次数    |  |
+| 4   | 规则1 固定时间点    | 格式 yyyy-MM-dd hh:mm，多个时间点以\|分隔 |
+| 5   | 规则2 固定间隔    | 单位秒，应尽量使用整分钟即60的整数倍 |
+| 6   | 规则3 cron表达式    | 以cron表达式定义规则，需对cron表达式有所了解 |
+
+*** 规则1、2、3都会受限于于开始日期，结束日期，最多执行次数；且规则2是依托于开始时间进行计算的。 ***
+
+对于产品组来说，一般使用的是规则1，按固定时间点进行发送，即此参数^分隔第四位传时间点，其它位置空。
+
+```vb
+s TaskSchedule=""
+s $p(TaskSchedule,"^",4)="2023-07-27 17:00|2023-07-27 17:30|2023-07-27 18:00"  //^分隔第四位为固定时间点  多个时间点用|符号分隔
 
 ```
 
