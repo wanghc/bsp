@@ -6,7 +6,7 @@
 2. 支持跨域调用
 3. 支持多用户,多会话
 ## 使用说明
-1. [下载文件](http://bsp.hisui.cn/static/DHCWebBrowser110.zip),解压后修改DHCWebBrowser110.exe.config
+1. 直接访问此http://bsp.hisui.cn/static/DHCWebBrowser110.zip路径下载,解压后修改DHCWebBrowser110.exe.config
 
    ```xml
    <!--如果没有负载均衡时，一定要配置-->
