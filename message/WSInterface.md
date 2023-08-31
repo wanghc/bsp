@@ -1,8 +1,25 @@
 
 ### webservice接口 ###
 
+提供webservice接口给第三方调用，部署包请联系`基础平台`。
+
+
 #### wsdl地址 ####
-https://127.0.0.1/imedical/web/BSP.MSG.SRV.WSInterface.cls?wsdl=1
+
+`iris2021`
+
+https://ip:1443/imedical/webservice/BSP.MSG.SRV.WSInterface.cls?wsdl=1&IRISUserName=dhwebservice&IRISPassword=密码&IRISNoRedirect=1
+
+`cache2016`
+http://ip/imedical/web/BSP.MSG.SRV.WSInterface.cls?wsdl=1&CacheUserName=dhwebservice&CachePassword=密码&CacheNoRedirect=1
+
+http://ip/dthealth/web/BSP.MSG.SRV.WSInterface.cls?wsdl=1&CacheUserName=dhwebservice&CachePassword=密码&CacheNoRedirect=1
+
+`cache2010`
+http://ip/dthealth/web/BSP.MSG.SRV.WSInterface.cls?wsdl=1
+
+
+
 
 #### 方法Call ####
 统一的调用方法入口，通过FuncCode参数区分不同功能
@@ -60,6 +77,7 @@ FuncCode=Send
 | LCPN  | 科室护士    |  科室代码      |
 | G  | 安全组用户    |  安全组名称      |
 | U  | 用户    |  用户工号      |
+
 
 
 ###### input示例 ######
@@ -193,3 +211,18 @@ FuncCode=Cancel
     <Header></Header>
 </Response>
 ```
+
+
+
+#### 常见问题 ####
+
+1.Cache2016开始，web应用程序配置禁止了匿名访问，所以通过链接获取wsdl时需带上用户名密码
+
+2.IRIS版本链接中的用户名密码参数名从Cache...变成了IRIS...
+
+3.HIS8.3开始web应用程序由/dthealth/web变更为了/imedical/web
+
+4.IRIS版本webservice放在了一个单独的web应用程序 /imedical/webservice
+
+5.使用https协议的，HIS端的https证书可能会有问题，有可能需要忽略掉验证服务器和证书是否匹配
+
