@@ -60,7 +60,7 @@ w ##class(BSP.MSG.SRV.Interface).Send(Context, ActionTypeCode, FromUserRowId, Ep
 | OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
-| TaskSchedule      | 定时发送时间安排字符串        |                    |
+| TaskSchedule      | 定时发送时间安排字符串        |    定时发送参数见<a href="#taskschedule说明">TaskSchedule说明</a>                 |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -80,6 +80,57 @@ w ##class(BSP.MSG.SRV.Interface).Send(Context, ActionTypeCode, FromUserRowId, Ep
 | dialogHeight | 500  默认 500 | 打开处理界面时界面高度。界面高度为500px支持百分比表示占顶层宽度的百分比如50%(`HIS8.3`以后) |
 | target | 默认空 | 目标窗口 如果为_blank 采用window.open新窗口方式打开，否则为顶层界面弹出hisui(easyui)模态框，内嵌iframe形式打开 |
 | BizObjId | 1 | 业务系统ID，用于后续消息处理、撤销定位消息 |
+| ExtReceiveCode |  | 扩展接收对象代码，格式为/mode:type-key-role-tmpl <br>mode 发送方式 I=HIS消息  S 手机短信 WX微信 <br>type 类型 (L科室、G安全组..) <br>key 和类型对应 <br>role 目标角色<br>tmpl 使用模板 |
+| IngoreReceiveCfg |  | 忽略掉消息类型维护的配置：接收对象、高级接收对象、抄送人 |
+| PatientID |  | 患者ID 用于没有患者就诊ID，又想要使用患者本人接收对象或内容模板有患者相关变量时  |
+
+*** 除以上指定属性外产品组还可以传其他属性，用于通过消息模板组装消息内容、短信内容数据。 ***
+
+OtherInfoJson为Json字符传，建议使用工具类进行构造，规避自己拼接时的错误
+
+```vb
+;只指定linkParam形式，最终由消息配置的链接和linkParam共同组合成完整链接
+s adm="1234",appno="100001"
+s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
+s jsonObj.linkParam="EpisodeID="_adm_"&ApplyNo="_appno   ;消息对应业务界面所需参数
+s jsonObj.BizObjId=appno ;业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    ;转成Json字符串
+
+;指定link形式，link属性为要开的链接级所需参数，此时不再需要linkParam属性
+s adm="1234",appno="100001"
+s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
+s jsonObj.link="xxxxxxxx.csp?EpisodeID="_adm_"&ApplyNo="_appno   ;消息对应业务界面链接和参数
+s jsonObj.BizObjId=appno ;业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    ;转成Json字符串
+
+```
+
+
+##### TaskSchedule说明 #####
+
+定时发送时间安排字符传，支持多种规则，按^分隔。对于产品组来说一般只使用传具体时间点这种规则。
+
+| *按^分隔位置* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| 1   | 开始时间    | 格式 yyyy-MM-dd hh:mm |
+| 2   | 结束时间    | 格式 yyyy-MM-dd hh:mm |
+| 3   | 最多执行次数    |  |
+| 4   | 规则1 固定时间点    | 格式 yyyy-MM-dd hh:mm，多个时间点以\|分隔 |
+| 5   | 规则2 固定间隔    | 单位秒，应尽量使用整分钟即60的整数倍 |
+| 6   | 规则3 cron表达式    | 以cron表达式定义规则，需对cron表达式有所了解 |
+
+*** 规则1、2、3都会受限于于开始日期，结束日期，最多执行次数；且规则2是依托于开始时间进行计算的。 ***
+
+对于产品组来说，一般使用的是规则1，按固定时间点进行发送，即此参数^分隔第四位传时间点，其它位置空。
+
+```vb
+s TaskSchedule=""
+s $p(TaskSchedule,"^",4)="2023-07-27 17:00|2023-07-27 17:30|2023-07-27 18:00"  //^分隔第四位为固定时间点  多个时间点用|符号分隔
+
+```
+
+
+
 
 
 ### 2. 包装后的消息发送接口 ###
@@ -186,7 +237,7 @@ w ##class(BSP.MSG.SRV.Interface).SendLocGroup(Context, ActionTypeCode, FromUserR
 | OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
-| LocGroupId      | 科室ID|安全组ID        | 多个以^分割  <br>如1\|1^1\|2                  |
+| LocGroupId      | 科室ID\|安全组ID        | 多个以^分割  <br>如1\|1^1\|2                  |
 | TargetRole      | 目标角色  <br>（此消息希望用户登录哪个科室哪个安全组看到）      | 传空自动判断<br>Auto自动,AdmLoc就诊科室,OrdLoc下医嘱科室,Any任何,Lx某科室,Gx某安全组,LxGx某科室某安全组  |
 
 |*返回值* |*说明*|*备注*|

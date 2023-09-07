@@ -40,6 +40,14 @@ table td:first-of-type {
 	- [4.4 获取某科室最近发送某类型消息记录](#44-获取某科室最近发送某类型消息记录)
 	- [4.5 消息确认接口](#45-消息确认接口)
 	- [4.6 设置科室消息配置](#46-设置科室消息配置)
+	- [4.7 获取阅读信息接口](#47-获取阅读信息接口)
+	- [4.8 停止定时发送任务接口](#48-停止定时发送任务接口)
+- [5. 常见问题](#5-常见问题)
+	- [5.1 消息变为已处理的几种方式](#51-消息变为已处理的几种方式)
+		- [5.1.1 消息相互独立，读后自己消失不显示](#511-消息相互独立读后自己消失不显示)
+		- [5.1.2 需要处理](#512-需要处理)
+		- [5.1.3 自动处理](#513-自动处理)
+
 
 
 
@@ -63,15 +71,20 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 |ToLocRowId     | 接收消息的科室 Id | 可以为空。<br>格式"LocId1^LocId2^LocId3\|其它标记" <br> "1^2^3" 发给科室1、2、3所有医护人员<br> "1^2^3\|ToNurse"发给科室1、2、3所有护士<br>"1^2^3\|ToDoctor"发给科室1、2、3所有医生<br>"1^2^3\|Logon"发给有此科室1或2或3登录权限的所有用户(HIS8.4)<br>"1^2^3\|OnlyFlag"仅作一个标识告诉我们这个消息 是想发给哪个科室的人的，<br>具体哪些人还需要在前面ToUserRowId参数传<br>此参数主要是为了解决一个发给A科的所有人的消息（比 如会诊），<br>但是某人拥有AB两科的权限，在登录B科时 不查看 A科消息 |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
+| TaskSchedule      | 定时发送时间安排字符串        |    定时发送参数见<a href="#taskschedule说明">TaskSchedule说明</a>                 |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
 |大于0|成功||
 |-100^ErrorMsg|表示失败|如:-100^动作类型不存在|
 
+
 *** 消息实际接收人由`消息类型接收对象配置`、`消息类型高级接收对象配置`、`消息类型抄送人配置`、`ToUserRowId参数`、`ToLocRowId参数`共同决定，取并集 ***
 
 *** 如果需要按照安全组等其它方式指定接收者，见[其它发送接口](OtherSend) ***
+
+*** 如果第三方调用，见[webservice接口](WSInterface) ***
+
 
 ###### 消息动作类型 ######
 
@@ -97,6 +110,57 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | dialogHeight | 500  默认 500 | 打开处理界面时界面高度。界面高度为500px支持百分比表示占顶层宽度的百分比如50%(`HIS8.3`以后) |
 | target | 默认空 | 目标窗口 如果为_blank 采用window.open新窗口方式打开，否则为顶层界面弹出hisui(easyui)模态框，内嵌iframe形式打开 |
 | BizObjId | 1 | 业务系统ID，用于后续消息处理、撤销定位消息 |
+| ExtReceiveCode |  | 扩展接收对象代码，格式为/mode:type-key-role-tmpl <br>mode 发送方式 I=HIS消息  S 手机短信 WX微信 <br>type 类型 (L科室、G安全组..) <br>key 和类型对应 <br>role 目标角色<br>tmpl 使用模板 |
+| IngoreReceiveCfg |  | 忽略掉消息类型维护的配置：接收对象、高级接收对象、抄送人 |
+| PatientID |  | 患者ID 用于没有患者就诊ID，又想要使用患者本人接收对象或内容模板有患者相关变量时  |
+
+*** 除以上指定属性外产品组还可以传其他属性，用于通过消息模板组装消息内容、短信内容数据。 ***
+
+
+
+OtherInfoJson为Json字符传，建议使用工具类进行构造，规避自己拼接时的错误
+
+```vb
+;只指定linkParam形式，最终由消息配置的链接和linkParam共同组合成完整链接
+s adm="1234",appno="100001"
+s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
+s jsonObj.linkParam="EpisodeID="_adm_"&ApplyNo="_appno   ;消息对应业务界面所需参数
+s jsonObj.BizObjId=appno ;业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    ;转成Json字符串
+
+;指定link形式，link属性为要开的链接级所需参数，此时不再需要linkParam属性
+s adm="1234",appno="100001"
+s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
+s jsonObj.link="xxxxxxxx.csp?EpisodeID="_adm_"&ApplyNo="_appno   ;消息对应业务界面链接和参数
+s jsonObj.BizObjId=appno ;业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    ;转成Json字符串
+
+```
+
+
+##### TaskSchedule说明 #####
+
+定时发送时间安排字符传，支持多种规则，按^分隔。对于产品组来说一般只使用传具体时间点这种规则。
+
+| *按^分隔位置* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| 1   | 开始时间    | 格式 yyyy-MM-dd hh:mm |
+| 2   | 结束时间    | 格式 yyyy-MM-dd hh:mm |
+| 3   | 最多执行次数    |  |
+| 4   | 规则1 固定时间点    | 格式 yyyy-MM-dd hh:mm，多个时间点以\|分隔 |
+| 5   | 规则2 固定间隔    | 单位秒，应尽量使用整分钟即60的整数倍 |
+| 6   | 规则3 cron表达式    | 以cron表达式定义规则，需对cron表达式有所了解 |
+
+*** 规则1、2、3都会受限于于开始日期，结束日期，最多执行次数；且规则2是依托于开始时间进行计算的。 ***
+
+对于产品组来说，一般使用的是规则1，按固定时间点进行发送，即此参数^分隔第四位传时间点，其它位置空。
+
+```vb
+s TaskSchedule=""
+s $p(TaskSchedule,"^",4)="2023-07-27 17:00|2023-07-27 17:30|2023-07-27 18:00"  //^分隔第四位为固定时间点  多个时间点用|符号分隔
+
+```
+
 
 
 ### 2. 消息处理 ###
@@ -178,7 +242,9 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | 1   | 只处理哪个人员类型的消息    | 为空处理所有`(CT_CarPrvTp.CTCPT_InternalType)[NURSE,DOCTOR,Technician,Pharmacist,Other]` |
 | 2   | 审核拒绝标志(Y/N)    | 医呼通 需要审核通过或拒绝标志 Y通过接受 N拒绝驳回 |
-| 3    | 审核备注拒绝原因    | 审核备注拒绝原因 |
+| 3   | 审核备注拒绝原因    | 审核备注拒绝原因 |
+| 4   | 查找最近几条消息处理    | 部分业务会出现同一业务ID多次发消息，且只在最后一次处理情况，故增加此参数实现查到最近几条消息来处理 |
+
 
 示例
 ```html
@@ -202,7 +268,7 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 撤销判断逻辑：读即处理消息，有一人读过则不可撤销，其它有一人处理过则不可撤销
 
 ```vb
-w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ExecUserDr, ExecDate, ExecTime)
+w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ExecUserDr, ExecDate, ExecTime,OtherParams)
 ```
 
 
@@ -213,9 +279,22 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
 | OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
 | ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
-| ExecUserDr     | 处理用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
-| ExecDate  | 处理日期  | 默认当前日期.   +$h |
-| ExecTime  | 处理时间  | 默认当前日期.  $p($h, ","2) |
+| ExecUserDr     | 撤销用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
+| ExecDate  | 撤销日期  | 默认当前日期.   +$h |
+| ExecTime  | 撤销时间  | 默认当前日期.  $p($h, ","2) |
+| OtherParams | 其它扩展参数 | 用于后续参数扩展，扩展多个用^分隔 默认空 注意此参数在`9.0.1`之后才有 |
+
+###### OtherParams以^分隔每个位置说明 ######
+
+OtherParams为了和处理方法Exec一致，^分隔的部分位置实际没用
+
+| *按^分隔位置* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| 1   | 未用    |  |
+| 2   | 未用    |  |
+| 3   | 未用    |  |
+| 4   | 查找最近几条消息撤销    | 部分业务会出现同一业务ID多次发消息，且只在最后一次撤销情况，故增加此参数实现查到最近几条消息来撤销 |
+
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -315,8 +394,9 @@ w ##class(FullClassName).MethodName(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,R
 #### 4.1 获取消息内容ID接口 ####
 
 根据消息类型、就诊、医嘱、业务ID（或`OtherInfonJson`部分值）条件取最后一条消息内容表ID，也可以根据结果是否大于0判断是否发送过消息
+
 ```vb
-w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrdItemId, ObjectId)
+w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrdItemId, ObjectId,FindMaxCnt)
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
@@ -325,6 +405,7 @@ w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrd
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
 | OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
 | ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+| FindMaxCnt   | 最多查找数    | 大于99当99，0-99取实际值，其它当作1  支持按条件查找多条消息记录并返回`2023-06-26` |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -347,6 +428,8 @@ w ##class(websys.DHCMessageInterface).FindDetialsId(ToUserId,ActionType, Episode
 | EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
 | OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
 | ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+| FindMaxCnt   | 最多查找数    | 大于99当99，0-99取实际值，其它当作1  支持按条件查找多条消息记录并返回`2023-06-26` |
+
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -456,4 +539,166 @@ w ##class(websys.DHCMessageInterface).SetLocMsgCfg(LocId, Disabled, NoAlert )
 | --- | -- | -- |
 | 1 | 成功 | |
 | 0 |失败| |
+
+
+#### 4.7 获取阅读信息接口 ####
+
+1. 先根据消息类型和业务ID找消息记录，如果找不到再根据消息类型、就诊、医嘱ID找消息记录
+2. 如果用户ID为空 则获取此消息记录中所有用户最早阅读的时间信息返回;如果用户ID不为空则获取此此消息为此用户产生的记录的阅读信息返回
+
+```vb
+w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId, ObjectId, UserId)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ActionType   | 消息类型代码    | 发送消息时传的动作代码 |
+| EpisodeId    | 病人就诊ID    | 发送消息时传的EpisodeId |
+| OEOrdItemId   | 医嘱ID    | 发送消息时传的OEOrdItemId |
+| ObjectId   | 业务ID    | 如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+| UserId   | 用户ID    | 要查此消息具体为某用户产生的记录的阅读信息 |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 空 | 未获取到消息记录 | |
+| 其它 | 阅读日期(格式为系统配置)^阅读时间(hh:mm:ss)^用户ID^用户姓名 | |
+
+
+#### 4.8 停止定时发送任务接口 ####
+
+1. 为产品组提供通过消息类型和业务ID来终止之前业务设置的消息定时发送任务。只会根据条件找到最后一条任务记录。
+
+```vb
+w ##(websys.DHCMessageInterface).StopTask(ActionType, BizObjId, UserId)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ActionType   | 消息类型代码    | 发送定时消息时传的动作代码 |
+| BizObjId    | 业务ID    | 发送消息时OtherInfoJson的BizObjId属性值 |
+| UserId   | 用户ID    | 终止操作的用户ID |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 1 | 成功 | |
+| -1^ErrorMsg | 失败 | |
+
+
+### 5. 常见问题 ###
+
+#### 5.1 消息变为已处理的几种方式 ####
+
+##### 5.1.1 消息相互独立，读后自己消失不显示 #####
+
+消息阅读后(点击消息列表的一条记录)即变为已处理(仅自己的明细记录，该消息发送给其他人的记录还是未处理)。
+
+优点：简单
+
+缺点：和业务状态没有关系
+
+应用场景：仅作为消息提醒用，接收者们各自阅读各自的
+
+相关配置：消息动作类型维护 【团队执行消息】选择为`消息相互独立,读后自己消息不显示`
+
+
+##### 5.1.2 需要处理 #####
+
+需要处理的需要在消息动作类型维护界面将相应消息类型的【团队执行消息】选择为`需要处理`
+
+
+###### 5.1.2.1 Exec接口（最正统推荐的） ######
+
+从消息明细点击须处理进业务界面或者通过系统菜单等进入业务界面，业务处理完成后，产品组调用消息处理接口处理消息
+
+优点：业务状态和消息状态可以完美对应，可以在任何界面处理业务，业务处理后消息也会已处理
+
+缺点：对接时要注意约定业务ID，发送和处理要能对应上，避免一个业务ID发送了多条，后期处理不掉消息。
+
+应用场景：需要和业务状态紧密关联的，业务不处理消息一直提醒的
+
+相关配置：消息动作类型维护 【处理(查看)链接	】需维护业务处理链接或者发送消息事OtherInfoJson.link传链接
+
+
+###### 5.1.2.2 ExecAll接口 ######
+
+根据消息明细记录ID处理消息。消息明细记录ID获取方法：发送时记录返回结果；通过消息明细点击须处理按钮时弹出业务界面会带入参数MsgDetailsId。
+
+优点：对接简单
+
+缺点：需要知道消息ID
+
+应用场景：需要和业务状态紧密关联的，业务不处理消息一直提醒的，而且要能获取到消息记录ID，如处理业务只会通过消息进入的
+
+相关配置：消息动作类型维护 【处理(查看)链接	】需维护业务链接或者发送消息事OtherInfoJson.link传链接
+
+
+
+###### 5.1.2.3 工具按钮【执行按钮】 ######
+
+通过配置的工具按钮【执行按钮】处理 
+
+优点：配置即可，无需接口对接
+
+缺点：完全由用户点击确定，和业务状态没有任何关系
+
+应用场景：只需一个人处理的，但是处理业务又无法明确系统表述的或不好对接处理接口的，交由用户自身判断处理完成后点击按钮处理。
+
+`up:2021-01-14`才修改为允许链接和执行按钮并存的，此前版本如果配置执行按钮则链接不再显示
+
+相关配置：消息动作类型维护 【工具按钮】需勾选执行按钮
+
+
+
+###### 5.1.2.4 点击按钮弹窗即处理（HIS8.5.3+） ######
+
+点击消息根据业务处理链接生成的【须处理】按钮弹窗时即处理 `add:2022-04-07`
+
+优点：配置即可
+
+缺点：完全由用户点击确定，和业务状态没有任何关系
+
+应用场景：只需一个人处理的，但是处理业务又无法明确系统表述的或不好对接处理接口的，在用户点击按钮进入相应业务界面即处理
+
+相关配置：消息动作类型维护 【处理(查看)链接	】需维护业务链接或者发送消息事OtherInfoJson.link传链接，且【弹窗链接属性】中的execMsgOnOpen参数值维护为All或者One
+
+
+###### 5.1.2.5 Cancel接口 ######
+
+撤销与处理相似，撤销一般应用于取消申请时撤销消息，或者修改申请后先撤销消息再重新发送新消息。
+
+
+
+###### 5.1.2.6 通用处理链接处理 ######
+
+消息平台提供了一简单的处理界面，可以简单记录一下处理备注，当某些业务（如第三方标版拒收）不方便提供处理界面时使用。 `add:2022-03-14`
+
+相关配置：消息动作类型维护 【处理(查看)链接	】需维护为dhc.message.commexec.csp
+
+
+
+##### 5.1.3 自动处理 #####
+
+自动处理为消息平台避免消息过度打扰用户的一个功能，自动处理只会将消息的状态置为已处理，不会改变业务状态，如果对应业务涉及后期处理率统计等建议不要使用，避免后期数据不好看问题。
+
+
+###### 5.1.3.1 出院自动处理 ######
+
+患者就诊状态为D的，消息在查询未处理数量时，自动将其置为已处理。
+
+应用场景：此消息患者出院后不需要再关注，且对应业务也不需要处理了。
+
+相关配置：消息动作类型维护【出院自动处理】勾上
+
+
+###### 5.1.3.2 消息超期自动处理 ######
+
+消息在查询未处理数量时，发现此时日期大于消息有效日期时，自动将其置为已处理。
+
+消息有效日期为消息发送时根据当时日期+有效天数产生存入表中。 
+
+有效天数有两处决定：消息类型维护上有有效天数，发送接口上有有效天数参数，接口参数优先级大于类型配置。
+
+应用场景：某些具有时效性的消息通知，如发送一个放假通知，可能过了通知日期，再看也没有意义了。
+
+相关配置：消息动作类型维护【有效天数】
 

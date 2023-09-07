@@ -9,7 +9,7 @@ base system platform
 5. [医为浏览器说明](https://wanghc.github.io/bsp/mwbrowser/)
 6. [业务功能](https://wanghc.github.io/bsp/biz/)
 7. [等保相关](https://wanghc.github.io/bsp/security/infoSysSafetyLevelProtection.html)
-
+8. [危急值管理平台说明](https://wanghc.github.io/bsp/criticalvalue/)
 
 
 
@@ -32,3 +32,5 @@ base system platform
 - 中间件（35）
 - 医为浏览器（24）
 - 登录加密（SHA256）
+
+
