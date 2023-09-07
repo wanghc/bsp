@@ -62,7 +62,21 @@
 > [下载X86安装包](http://bsp.hisui.cn/static/MedBrowser_vc_redist_x86.rar)(http://bsp.hisui.cn/static/MedBrowser_vc_redist_x86.rar)
 > 
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
+
 ## 更新说明
+
+### 2023-09-07
+
+### V2.0.6
+
+-  :sparkles: 自定义协议打开功能实现 [3866498]
+
+- :sparkles: 查找功能修改成跨线程调用
+
+```csharp
+// 不再允许跨线程调用，解决冲突
+// Control.CheckForIllegalCrossThreadCalls = false; // 加载时取消跨线程检查
+
 ### 2023-07-27
 
 #### V2.0.5
