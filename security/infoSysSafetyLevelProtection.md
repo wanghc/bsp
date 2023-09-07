@@ -63,10 +63,28 @@ if (%request.GetCgiEnv("HTTP_REFERER")["hcl.com"){ Q 0 }
 
 ## 5. 登录提示
 
-1. demo -- 翻译菜单 -- 字典翻译，在界面中找到`用户不存在`，翻译成`用户或密码错误`
+1. demo -- 翻译菜单 -- 字典翻译，在界面中找到`用户不存在`，翻译成`用户或密码错误`, 点击保存，应用到组件，在弹出小窗口，勾中所有点击应用。
+
+1. demo - 侧菜单 - 系统配置 -- 标题及消息翻译 ，在界面中找到`Your Login is Flagged Inactive. Please see  your System Administrator`,翻译成正确值
+
+1. demo 侧菜单 - 系统配置 - 标题&消息翻译（ 翻译 -- 字典翻译页签）
+
+   把: Your Login is Flagged Inactive. Please see your System Administrator 与
+   Please enter a valid Username and Password 与
+   You have had
+
+   都翻译成：用户名或密码错误
 
 
 ## 6. 越权访问
 
-   
+   在csp的代码第一行增加以下代码
+
+```html
+<csp:method name=OnPreHTTP arguments="" returntype=%Boolean>
+ i '##class(websys.DHCCspGrant).IsAccessByMenu() q 1    // 防止界面越权
+ i ##Class(websys.SessionEvents).SessionExpired() q 1   // 判断是否登录
+ quit 1
+</csp:method>
+```
 
