@@ -76,6 +76,7 @@
 ```csharp
 // 不再允许跨线程调用，解决冲突
 // Control.CheckForIllegalCrossThreadCalls = false; // 加载时取消跨线程检查
+```
 
 ### 2023-07-27
 
