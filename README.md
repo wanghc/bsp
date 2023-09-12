@@ -10,3 +10,27 @@ base system platform
 6. [业务功能](https://wanghc.github.io/bsp/biz/)
 7. [等保相关](https://wanghc.github.io/bsp/security/infoSysSafetyLevelProtection.html)
 8. [危急值管理平台说明](https://wanghc.github.io/bsp/criticalvalue/)
+
+
+
+
+## 8.3
+
+- 新版集成视图
+
+- 闭环管理( 检查，检验，药品)
+
+## 8.4
+
+- 医嘱闭环管理（手术）
+- 中间件（15版）
+- 医为浏览器（10）
+
+## 8.5
+
+- 医嘱闭环管理（危急值，会诊）
+- 中间件（35）
+- 医为浏览器（24）
+- 登录加密（SHA256）
+
+
