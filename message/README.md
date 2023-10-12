@@ -64,8 +64,8 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | Context        | 发送的消息内容    | 可以为空，系统会根据就诊与医嘱id生成内容                     |
 | ActionTypeCode | 消息动作代码      | 代码参见[动作类型清单](MSGActionType)，如无对应代码请通过BOS提交需求增加                     |
 | FromUserRowId  | 发送消息的用户Id  | 如果获取不到HIS用户Id, 可以传入"^姓名"                       |
-| EpisodeId      | 病人就诊Id        | 如获取不到可以为空。                                         |
-| OrdItemId      | 医嘱Id            | 如获取不到可以为空                                           |
+| EpisodeId      | 病人就诊Id        | 如获取不到可以为空。非空时消息显示时会显示患者信息及就诊信息    |
+| OrdItemId      | 医嘱Id            | 如获取不到可以为空。                                       |
 | ToUserRowId    | 接收消息的用户Id  | 多个以^分隔，可以为空 (SS_User.SSUSR_RowId)                                 |
 | OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
 |ToLocRowId     | 接收消息的科室 Id | 可以为空。<br>格式"LocId1^LocId2^LocId3\|其它标记" <br> "1^2^3" 发给科室1、2、3所有医护人员<br> "1^2^3\|ToNurse"发给科室1、2、3所有护士<br>"1^2^3\|ToDoctor"发给科室1、2、3所有医生<br>"1^2^3\|Logon"发给有此科室1或2或3登录权限的所有用户(HIS8.4)<br>"1^2^3\|OnlyFlag"仅作一个标识告诉我们这个消息 是想发给哪个科室的人的，<br>具体哪些人还需要在前面ToUserRowId参数传<br>此参数主要是为了解决一个发给A科的所有人的消息（比 如会诊），<br>但是某人拥有AB两科的权限，在登录B科时 不查看 A科消息 |
