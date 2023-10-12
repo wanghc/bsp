@@ -65,7 +65,25 @@
 
 ## 更新说明
 
-### 2023-09-07
+### 2023-10-12（V2.0.9)
+
+- 增加自定义协议`mwwebbrowser2:`
+
+- - ```js
+    open('mwwebbrowser2://https://ip/imedical/web/form.htm?CASTypeCode=xx&Code=xx',"_self")
+    ```
+
+### 2023-09-27
+
+### V2.0.8
+
+- :sparkles: [3910704] 退出浏览器时调用`unlockbeforeunload`以便实现提示功能
+
+### 2023-09-08
+
+### V2.0.7
+
+- :bug: 修复点击`<a href="#">click</a>`链接，再右键刷新界面会导致浏览器卡白问题 [3874057]
 
 ### V2.0.6
 

@@ -65,6 +65,15 @@
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
 
+### 2023-10-12 （1.0.40）
+
+- 增加自定义协议`mwwebbrowser1:`
+
+- - ```js
+    open('mwwebbrowser1://https://ip/imedical/web/form.htm?CASTypeCode=xx&Code=xx',"_self")
+    ```
+
+
 ### 2023-05-08（1.0.39）
 
 - 第一次进入浏览器时，增加加载进度条
