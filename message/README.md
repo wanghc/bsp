@@ -120,20 +120,20 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 
 OtherInfoJson为Json字符传，建议使用工具类进行构造，规避自己拼接时的错误
 
-```vb
-;只指定linkParam形式，最终由消息配置的链接和linkParam共同组合成完整链接
+```c#
+//只指定linkParam形式，最终由消息配置的链接和linkParam共同组合成完整链接
 s adm="1234",appno="100001"
 s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
-s jsonObj.linkParam="EpisodeID="_adm_"&ApplyNo="_appno   ;消息对应业务界面所需参数
-s jsonObj.BizObjId=appno ;业务ID  用于消息后续处理、撤销等
-s otherInfoJson=jsonObj.%ToJSON()    ;转成Json字符串
+s jsonObj.linkParam="EpisodeID="_adm_"&ApplyNo="_appno   //消息对应业务界面所需参数
+s jsonObj.BizObjId=appno    //业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    //转成Json字符串
 
-;指定link形式，link属性为要开的链接级所需参数，此时不再需要linkParam属性
+//指定link形式，link属性为要开的链接及所需参数，此时不再需要linkParam属性
 s adm="1234",appno="100001"
 s jsonObj=##class(BSP.SYS.COM.ProxyObject).%New()
-s jsonObj.link="xxxxxxxx.csp?EpisodeID="_adm_"&ApplyNo="_appno   ;消息对应业务界面链接和参数
-s jsonObj.BizObjId=appno ;业务ID  用于消息后续处理、撤销等
-s otherInfoJson=jsonObj.%ToJSON()    ;转成Json字符串
+s jsonObj.link="xxxxxxxx.csp?EpisodeID="_adm_"&ApplyNo="_appno   //消息对应业务界面链接和参数
+s jsonObj.BizObjId=appno  //;业务ID  用于消息后续处理、撤销等
+s otherInfoJson=jsonObj.%ToJSON()    //;转成Json字符串
 
 ```
 
