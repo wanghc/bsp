@@ -58,9 +58,9 @@
 >2. 还报错再安装vc_redist_2015_xxx.exe
 > 3. 还报错再安装MSVBCRT.AIO.2019.10.19.xxx.exe
 >
-> [下载X64安装包](http://bsp.hisui.cn/static/MedBrowser_vc_redist_x64.rar)(http://bsp.hisui.cn/static/MedBrowser_vc_redist_x64.rar)
+> 操作系统为64位时[下载X64安装包](http://bsp.hisui.cn/static/MedBrowser_vc_redist_x64.rar)(http://bsp.hisui.cn/static/MedBrowser_vc_redist_x64.rar)
 >
-> [下载X86安装包](http://bsp.hisui.cn/static/MedBrowser_vc_redist_x86.rar)(http://bsp.hisui.cn/static/MedBrowser_vc_redist_x86.rar)
+> 操作系统为32位时[下载X86安装包](http://bsp.hisui.cn/static/MedBrowser_vc_redist_x86.rar)(http://bsp.hisui.cn/static/MedBrowser_vc_redist_x86.rar)
 > 
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
