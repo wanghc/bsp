@@ -65,6 +65,11 @@
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
 
+### 2023-11-8（1.0.41）
+
+- 远程调试端口(`8080`)与手写板ws服务端口冲突，不再使用远程调试功能 [4027187]
+
+
 ### 2023-10-12 （1.0.40）
 
 - 增加自定义协议`mwwebbrowser1:`
