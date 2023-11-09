@@ -42,6 +42,7 @@ table td:first-of-type {
 	- [4.6 设置科室消息配置](#46-设置科室消息配置)
 	- [4.7 获取阅读信息接口](#47-获取阅读信息接口)
 	- [4.8 停止定时发送任务接口](#48-停止定时发送任务接口)
+	- [4.9 消息查询接口](#49-消息查询接口)
 - [5. 常见问题](#5-常见问题)
 	- [5.1 消息变为已处理的几种方式](#51-消息变为已处理的几种方式)
 		- [5.1.1 消息相互独立，读后自己消失不显示](#511-消息相互独立读后自己消失不显示)
@@ -437,6 +438,7 @@ w ##class(websys.DHCMessageInterface).FindDetialsId(ToUserId,ActionType, Episode
 |0|未获取到|未获取到消息内容记录或者此记录没有发给此用户|
 
 #### 4.3 获取消息回复记录接口 ####
+
 根据消息类型、就诊、医嘱、业务ID（或`OtherInfonJson`部分值）条件获取此消息最新一条消息记录，然后获取到关于此消息的所有回复记录
 ```vb
 d ##class(%ResultSet).RunQuery("websys.DHCMessageInterface","QryReplyList",ActionType , EpisodeId , OEOrdItemId , ObjectId , ContentId)
@@ -582,6 +584,53 @@ w ##(websys.DHCMessageInterface).StopTask(ActionType, BizObjId, UserId)
 | --- | -- | -- |
 | 1 | 成功 | |
 | -1^ErrorMsg | 失败 | |
+
+
+#### 4.9 消息查询接口 ####
+
+使用场景：
+
+- 查询一段日期内消息数据
+- 查询一段日期内某类型消息数据 
+- 查询患者某次就诊所有消息数据
+- 查询患者某次就诊某类型消息数据
+- 查询某类型消息某业务ID的数据
+
+```vb
+d ##class(%ResultSet).RunQuery("websys.DHCMessageContentMgr","FindByAct",pActionCodes,pDateStart,pDateEnd,pAdm,pBizObjId)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| pActionCodes   | 消息类型代码    | 多个用逗号分隔 |
+| pDateStart    | 开始日期    | 就诊ID为空和业务ID也为空时 开始日期结束日期必须要有 |
+| pDateEnd   | 结束日期    |  |
+| pAdm   | 患者就诊ID    |  |
+| pBizObjId   | 业务ID    | 如果发送消息的OtherInfoJson中的BizObjId属性 |
+
+|*输出列* |*说明*|*备注*|
+| --- | -- | -- |
+| ContentId | 消息记录ID |  | 
+| CActionType | 消息类型ID |  | 
+| CActionTypeDesc | 消息类型名称 |  | 
+| CText | 消息内容 |  | 
+| CSendDate | 消息发送日期  |  | 
+| CSendTime | 消息发送时间 |  | 
+| CSendUser | 消息发送人 |  | 
+| CFirstReadDate | 消息首次阅读日期 |  | 
+| CFirstReadTime | 消息首次阅读时间 |  | 
+| CFirstReadUser | 消息首次阅读人 |  | 
+| CExecDate | 消息处理时日期 |  | 
+| CExecTime | 消息处理时间 |  | 
+| CExecUser | 消息处理人 |  | 
+| CExecFlag | 消息处理标志 | Y已处理N未处理O无需处理 | 
+| CStatus | 消息状态 | N正常 E已处理 C已撤销 <br> EP超期  D出院 <br> R无需处理消息 F强制处理 | 
+| CSendMode | 发送方式 |  | 
+| CBizObjId | 业务ID |  | 
+| CPatName | 患者姓名 |  | 
+| PatientID | 患者ID |  | 
+| EpisodeId | 就诊ID |  | 
+| OEOrdItemId | 医嘱ID |  | 
 
 
 ### 5. 常见问题 ###
