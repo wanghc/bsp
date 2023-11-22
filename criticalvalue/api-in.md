@@ -752,7 +752,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 #### 2.28 是否有超时处理以及超时未处理危急值 ####
 
-适应于判断患者是否有超时处理以及超时未处理危急值。
+适应于判断患者是否有超时处理以及超时未处理危急值。  `2023-11-22`
 ```vb
 ##Class(BSP.CV.SRV.Interface).IfAdmHasOverTimeCV(Adm)  
 ```
@@ -769,7 +769,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 #### 2.29 此前24小时内是否产生过危急值 ####
 
-适应于判断患者在此前24小时内是否产生过危急值。
+适应于判断患者在此前24小时内是否产生过危急值。  `2023-11-22`
 ```vb
 ##Class(BSP.CV.SRV.Interface).IfAdmHasCVIn24H(Adm)  
 ```
@@ -786,8 +786,9 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 #### 2.30 患者一段时间内是否产生过危急值 ####
 
-适应于判断患者在一段时间内是否产生过危急值。
+适应于判断患者在一段时间内是否产生过危急值。  `2023-11-22`
 ```vb
+##Class(BSP.CV.SRV.Interface).IfAdmHasCVReport(Adm,Status,StDate,StTime,EndDate,EndTime)  
 ##Class(BSP.CV.SRV.Interface).IfHasCVReport(Adm,Status,StDate,StTime,EndDate,EndTime)  
 ```
 
