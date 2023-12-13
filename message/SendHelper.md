@@ -47,7 +47,7 @@ table td:first-of-type {
 创建工具类实例对象
 
 ```vb
-    s helper=##class(BSP.MSG.SRV.SendHelper).%New(context , actionTypeCode , createUser , createLoc , effectiveDays)
+s helper=##class(BSP.MSG.SRV.SendHelper).%New(context , actionTypeCode , createUser , createLoc , effectiveDays)
 ```
 
 ##### 参数说明 ######
@@ -70,7 +70,7 @@ SendHelper实例
 设置业务相关数据，就诊ID、医嘱ID、患者ID、关联业务ID
 
 ```vb
-    d helper.SetBizData(episodeId , ordItemId , patientId , bizObjId )
+d helper.SetBizData(episodeId , ordItemId , patientId , bizObjId )
 ```
 
 ##### 参数说明 ######
@@ -92,7 +92,7 @@ SendHelper实例
 设置业务链接
 
 ```vb
-    d helper.SetBizLink(link , linkParam , dialogWidth , dialogHeight , target  )
+d helper.SetBizLink(link , linkParam , dialogWidth , dialogHeight , target  )
 ```
 
 ##### 参数说明 ######
@@ -116,7 +116,7 @@ SendHelper实例
 添加接收者
 
 ```vb
-    d helper.AddReceiver(type , key , role , mode , tmpl)
+d helper.AddReceiver(type , key , role , mode , tmpl)
 ```
 
 ##### 参数说明 ######
@@ -140,7 +140,7 @@ SendHelper实例
 清空接收者
 
 ```vb
-    d helper.ClearReceiver()
+d helper.ClearReceiver()
 ```
 
 ##### 返回值 ######
@@ -154,7 +154,7 @@ SendHelper实例
 忽略掉消息动作类型维护上的接收者（接收对象、抄送人、高级接收对象）
 
 ```vb
-    d helper.IngoreReceiveCfg()
+d helper.IngoreReceiveCfg()
 ```
 
 ##### 返回值 ######
@@ -167,7 +167,7 @@ SendHelper实例
 增加模板数据 
 
 ```vb
-    d helper.AddTmplData( key , value)
+d helper.AddTmplData( key , value)
 ```
 
 ##### 参数说明 ######
@@ -188,7 +188,7 @@ SendHelper实例
 发送消息
 
 ```vb
-    s ret=helper.Send()
+s ret=helper.Send()
 ```
 
 ##### 返回值 ######
@@ -204,7 +204,7 @@ SendHelper实例
 在某时间点发送消息
 
 ```vb
-    s ret=helper.SendAt(datetime1 , datetime2 , datetime3 , datetime4 , datetime5)
+s ret=helper.SendAt(datetime1 , datetime2 , datetime3 , datetime4 , datetime5)
 ```
 
 ##### 参数说明 ######
@@ -230,7 +230,7 @@ SendHelper实例
 从某时间开始，每隔一段时间进行发送
 
 ```vb
-    s ret=helper.SendFreq(startDatetime, stopDateTime, maxTimes, intervalMinutes)
+s ret=helper.SendFreq(startDatetime, stopDateTime, maxTimes, intervalMinutes)
 ```
 
 ##### 参数说明 ######
@@ -256,7 +256,7 @@ SendHelper实例
 按照cron表达式规则发送
 
 ```vb
-    s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
+s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
 ```
 
 ##### 参数说明 ######
@@ -280,30 +280,47 @@ SendHelper实例
 ### 调用流程 ###
 
 1. 创建实例对象
+
     s helper=##class(BSP.MSG.SRV.SendHelper).%New(context , actionTypeCode , createUser , createLoc , effectiveDays)
 
 2. 其它设置（此步骤下的调用需结合业务实际情况决定要不要进行设置，下面每个方法返回值都是当前对象引用，所以可以链式调用）
 
 2.1 设置业务数据
+
     d helper.SetBizData(episodeId , ordItemId , patientId , bizObjId )
+
 2.2 设置业务链接信息
+
     d helper.SetBizLink(link , linkParam , dialogWidth , dialogHeight , target  )
+
 2.3 增加模板变量
+
     d helper.AddTmplData( key , value)
+
 2.4 增加接收人
+
     d helper.AddReceiver(type , key , role , mode , tmpl)
+
 2.5 忽略配置的接收人
+
     d helper.IngoreReceiveCfg()
 
 3.发送（支持立即发送和定时发送，下面方法选择一个即可）
 
 3.1 立即发送
+
     s ret= helper.Send()
+
 3.2 固定时间发送
+
     s ret=helper.SendAt(datetime1 , datetime2 , datetime3 , datetime4 , datetime5)
+
 3.3 固定频率发送
+
     s ret=helper.SendFreq(startDatetime, stopDateTime, maxTimes, intervalMinutes)
+
 3.4 按Cron表达式发送
+
     s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
 
 
