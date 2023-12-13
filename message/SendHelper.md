@@ -281,46 +281,66 @@ s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
 
 1. 创建实例对象
 
+```vb
     s helper=##class(BSP.MSG.SRV.SendHelper).%New(context , actionTypeCode , createUser , createLoc , effectiveDays)
+```
 
 2. 其它设置（此步骤下的调用需结合业务实际情况决定要不要进行设置，下面每个方法返回值都是当前对象引用，所以可以链式调用）
 
 2.1 设置业务数据
 
+```vb
     d helper.SetBizData(episodeId , ordItemId , patientId , bizObjId )
+```
 
 2.2 设置业务链接信息
 
+```vb
     d helper.SetBizLink(link , linkParam , dialogWidth , dialogHeight , target  )
+```
 
 2.3 增加模板变量
 
+```vb
     d helper.AddTmplData( key , value)
+```vb
 
 2.4 增加接收人
 
+```vb
     d helper.AddReceiver(type , key , role , mode , tmpl)
+```vb
 
 2.5 忽略配置的接收人
 
+```vb
     d helper.IngoreReceiveCfg()
+```vb
 
 3.发送（支持立即发送和定时发送，下面方法选择一个即可）
 
 3.1 立即发送
 
+```vb
     s ret= helper.Send()
+```vb
 
 3.2 固定时间发送
 
+```vb
     s ret=helper.SendAt(datetime1 , datetime2 , datetime3 , datetime4 , datetime5)
+```vb
 
 3.3 固定频率发送
 
+```vb
     s ret=helper.SendFreq(startDatetime, stopDateTime, maxTimes, intervalMinutes)
+```vb
 
 3.4 按Cron表达式发送
 
+```vb
     s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
+```vb
 
 
