@@ -86,6 +86,8 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 
 *** 如果第三方调用，见[webservice接口](WSInterface) ***
 
+*** 使用工具类发送，[SendHelper](SendHelper) ***
+
 
 ###### 消息动作类型 ######
 
