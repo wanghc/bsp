@@ -303,19 +303,19 @@ s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
 
 ```vb
     d helper.AddTmplData( key , value)
-```vb
+```
 
 2.4 增加接收人
 
 ```vb
     d helper.AddReceiver(type , key , role , mode , tmpl)
-```vb
+```
 
 2.5 忽略配置的接收人
 
 ```vb
     d helper.IngoreReceiveCfg()
-```vb
+```
 
 3.发送（支持立即发送和定时发送，下面方法选择一个即可）
 
@@ -323,24 +323,24 @@ s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
 
 ```vb
     s ret= helper.Send()
-```vb
+```
 
 3.2 固定时间发送
 
 ```vb
     s ret=helper.SendAt(datetime1 , datetime2 , datetime3 , datetime4 , datetime5)
-```vb
+```
 
 3.3 固定频率发送
 
 ```vb
     s ret=helper.SendFreq(startDatetime, stopDateTime, maxTimes, intervalMinutes)
-```vb
+```
 
 3.4 按Cron表达式发送
 
 ```vb
     s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
-```vb
+```
 
 
