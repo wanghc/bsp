@@ -279,13 +279,13 @@ s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
 
 ### 调用流程 ###
 
-1. 创建实例对象
+1.创建实例对象
 
 ```vb
     s helper=##class(BSP.MSG.SRV.SendHelper).%New(context , actionTypeCode , createUser , createLoc , effectiveDays)
 ```
 
-2. 其它设置（此步骤下的调用需结合业务实际情况决定要不要进行设置，下面每个方法返回值都是当前对象引用，所以可以链式调用）
+2.其它设置（此步骤下的调用需结合业务实际情况决定要不要进行设置，下面每个方法返回值都是当前对象引用，所以可以链式调用）
 
 2.1 设置业务数据
 
