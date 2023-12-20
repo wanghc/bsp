@@ -79,7 +79,7 @@ table td:first-of-type {
 | ExamNo    | 检查(检验)号    |  |
 | Adm   | 就诊ID    | 发送消息时传的OEOrdItemId |
 | OEOrdId   | 医嘱ID    | 多个医嘱以英文逗号,分隔 |
-| ReportInfo   | 报告审核信息    | 审核日期2(yyyy-MM-dd)^审核时间2(hh:mm:ss)^审核人ID3^审核说明4^报告审核科室5^报告科室联系电话6^危急值等级7（Normal一般危急值  High高危危急值 Extreme极危危急值 Unknown未分级） |
+| ReportInfo   | 报告审核信息    | 审核日期2(yyyy-MM-dd)^审核时间2(hh:mm:ss)^审核人ID3^审核说明4^报告审核科室5^报告科室联系电话6^危急值等级7（Normal一般危急值  High高危危急值 Extreme极危危急值 Unknown未分级）<br>`审核人`指的是确定危急值要报告的人，对于需要审核才上报的是审核人，但是对于不需要审核就上报的那是报告人。 |
 | Result   | 危急值报告内容    | 危急值报告内容 |
 | LisRowid   | 唯一ID    | 一个检查(检验)号可能调用多次，需要唯一ID来区分哪次调用 |
 | OrderInfo   | 医嘱信息，后续添加串    | 申请人^申请日期时间^采集人^采集日期时间^接收人^接收日期时间^预警日期时间^复核人^复核日期时间^报告人^报告日期时间(审核日期时间)^标本类型^危机说明^备注     (时间格式：YYYY-MM-DD  hh:mm:ss) |
