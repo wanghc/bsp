@@ -170,6 +170,9 @@ s $p(TaskSchedule,"^",4)="2023-07-27 17:00|2023-07-27 17:30|2023-07-27 18:00"  /
 
 #### 2.1 消息处理接口ExecAll ####
 用于已知消息明细记录ID（1.发送时记录下来，2.在消息处打开的处理界面会传入明细记录ID），来处理消息
+
+*** 建议优先考虑使用接口[2.2 消息处理接口Exec](#22-消息处理接口exec) ***
+
 ```vb
 w ##class(websys.DHCMessageInterface).ExecAll(MsgDetailsId, ExecUserDr, ExecDate, ExecTime)
 ```
