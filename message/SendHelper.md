@@ -23,6 +23,7 @@ table td:first-of-type {
 </style>
 - [发送工具类SendHelper](#发送工具类SendHelper)
   - [%New](#-new)
+  - [SetContextByMode](#setcontextbymode)
   - [SetBizData](#setbizdata)
   - [SetBizLink](#setbizlink)
   - [AddReceiver](#addreceiver)
@@ -54,7 +55,7 @@ s helper=##class(BSP.MSG.SRV.SendHelper).%New(context , actionTypeCode , createU
 
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
-| context  | 消息内容    |        |
+| context  | 消息内容或模板代码   |        |
 | actionTypeCode |  消息动作类型代码      | 代码参见[动作类型清单](MSGActionType)，如无对应代码请通过BOS提交需求增加       |
 | createUser |  发送消息的用户Id       | 如果获取不到HIS用户Id, 可以传入"^姓名"            |
 | createLoc |  发送人科室Id      | 如果没有科室Id，可传"＾科室描述"               |
@@ -63,6 +64,26 @@ s helper=##class(BSP.MSG.SRV.SendHelper).%New(context , actionTypeCode , createU
 ##### 返回值 ######
 
 SendHelper实例
+
+
+#### SetContextByMode ####
+
+按照发送方式设置消息内容或模板
+
+```vb
+d helper.SetContextByMode(mode , context )
+```
+
+##### 参数说明 ######
+
+| *参数名* | *说明*      |  *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| mode  | 发送方式    |  |
+| context | 消息内容或模板代码      |  |
+
+##### 返回值 ######
+
+该对象
 
 
 #### SetBizData ####
@@ -127,7 +148,7 @@ d helper.AddReceiver(type , key , role , mode , tmpl)
 | key | 对应类型类型的数据标识      | 如U对应key应是用户ID，G对应key是安全组ID... |
 | role | 目标角色    | Auto自动,AdmLoc就诊科室,OrdLoc下医嘱科室,Any任何,Lx某科室,Gx某安全组,LxGx某科室某安全组 |
 | mode |  发送方式    | I信息系统即HIS，S短信，E邮箱，TEL电话，HCCS医呼通 |
-| tmpl |  模板代码  | 使用的消息模板代码 |
+| tmpl |  模板代码  | 使用的消息模板代码  <br> <span style="color:red">只有某些发送方式才支持在接收对象上设置模板：短信</span> |
 
 
 ##### 返回值 ######
