@@ -38,7 +38,10 @@ http://ip/dthealth/web/BSP.MSG.SRV.WSInterface.cls?wsdl=1
 | Cancel |  <a href="#撤销消息">撤销消息</a>      |
 
 ##### 发送消息 #####
+
 FuncCode=Send
+
+对应后台类方法`##class(BSP.MSG.BL.WSInterface).Send(Input)`
 
 ###### input节点说明 ######
 
@@ -131,7 +134,10 @@ FuncCode=Send
 
 
 ##### 处理消息 #####
+
 FuncCode=Exec
+
+对应后台类方法`##class(BSP.MSG.BL.WSInterface).Exec(Input)`
 
 ###### input节点说明 ######
 
@@ -175,7 +181,10 @@ FuncCode=Exec
 
 
 ##### 撤销消息 #####
+
 FuncCode=Cancel
+
+对应后台类方法`##class(BSP.MSG.BL.WSInterface).Cancel(Input)`
 
 ###### input节点说明 ######
 
