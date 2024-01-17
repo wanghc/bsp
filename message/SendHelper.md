@@ -23,9 +23,9 @@ table td:first-of-type {
 </style>
 - [发送工具类SendHelper](#发送工具类SendHelper)
   - [%New](#-new)
-  - [SetContextByMode](#setcontextbymode)
   - [SetBizData](#setbizdata)
   - [SetBizLink](#setbizlink)
+  - [SetContextByMode](#setcontextbymode)
   - [AddReceiver](#addreceiver)
   - [ClearReceiver](#clearreceiver)
   - [IngoreReceiveCfg](#ingorereceivecfg)
@@ -65,25 +65,6 @@ s helper=##class(BSP.MSG.SRV.SendHelper).%New(context , actionTypeCode , createU
 
 SendHelper实例
 
-
-#### SetContextByMode ####
-
-按照发送方式设置消息内容或模板
-
-```vb
-d helper.SetContextByMode(mode , context )
-```
-
-##### 参数说明 ######
-
-| *参数名* | *说明*      |  *备注*                                                 |
-| -------------- | ----------------- | ------------------------------------------------------------ |
-| mode  | 发送方式    | I信息系统即HIS，S短信，E邮箱，TEL电话，HCCS医呼通 |
-| context | 消息内容或模板代码      |  |
-
-##### 返回值 ######
-
-该对象
 
 
 #### SetBizData ####
@@ -130,6 +111,25 @@ d helper.SetBizLink(link , linkParam , dialogWidth , dialogHeight , target  )
 
 该对象
 
+
+#### SetContextByMode ####
+
+按照发送方式设置消息内容或模板
+
+```vb
+d helper.SetContextByMode(mode , context )
+```
+
+##### 参数说明 ######
+
+| *参数名* | *说明*      |  *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| mode  | 发送方式    | I信息系统即HIS，S短信，E邮箱，TEL电话，HCCS医呼通 |
+| context | 消息内容或模板代码      |  |
+
+##### 返回值 ######
+
+该对象
 
 
 #### AddReceiver ####
@@ -320,19 +320,26 @@ s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
     d helper.SetBizLink(link , linkParam , dialogWidth , dialogHeight , target  )
 ```
 
-2.3 增加模板变量
+2.3 设置不同发送方式的消息内容
+
+```vb
+    d helper.SetContextByMode(mode , context )
+```
+
+
+2.4 增加模板变量
 
 ```vb
     d helper.AddTmplData( key , value)
 ```
 
-2.4 增加接收人
+2.5 增加接收人
 
 ```vb
     d helper.AddReceiver(type , key , role , mode , tmpl)
 ```
 
-2.5 忽略配置的接收人
+2.6 忽略配置的接收人
 
 ```vb
     d helper.IngoreReceiveCfg()
