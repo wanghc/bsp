@@ -106,6 +106,21 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
 
 ### 更新日志 ###
 
+### 2024-03-07
+
+- 打印得到base64方法，增加配置项encoderOptions实现压缩文件
+
+```js
+// 第6入参为增加配置项encoderOptions,encoderOptions是0到1间的一个小数,表示压缩比例
+DHC_PrintByLodop(getLodop(),itmInfo,listInfo,ajson,"xmlname",
+      {printListByText:true,tdnowrap:false,encoderOptions:0.2,onCreatePDFBase64:function(pdfbase64){
+		console.log(pdfbase64);
+	}
+});
+```
+
+
+
 ### 2023-02-24
 
 - DHC_PrintByLodop打印方法增加listAfterCallback回调方法, 在打印列表结束后调用
