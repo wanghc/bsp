@@ -57,7 +57,7 @@ FuncCode=Send
 | EpisodeId |  就诊ID      | 如果业务有尽量传，可以为空            |
 | OrdItemId |  医嘱ID      | 如果业务有尽量传，可以为空             |
 | EffectiveDays |  有效天数      | 超过有效天数自动置为已处理             |
-| ReceiverList |  接收对象列表      | 见<a href="#接收对象列表元素节点说明">接收对象列表元素节点说明</a>            |
+| ReceiverList |  接收对象列表      | 需要结合实际，如果接收对象是可以在HIS内配置出来的，不需要传，<br>如果是业务指定某些人接收的，需要传。<br> 列表元素节点说明见下方`接收对象列表元素节点说明`           |
 | BizLink |  业务处理链接      | 此参数应为完整链接，传了此参数，则BizLinkParam不生效            |
 | BizLinkParam |  业务处理链接参数   | 如EpisodeId=1&b=2 和消息类型配置处的链接组合成完整链接              |
 | BizLinkWidth |  链接窗口宽度      |    如1200          |
