@@ -872,7 +872,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 
 ```vb
-##class(BSP.CV.SRV.Interface).SaveReceive4TPS(reportID,contact,contactTel,contactResult,contactResultDesc,note,usercode,oprUserCode,oprLocCode)  
+##class(BSP.CV.SRV.Interface).SaveReceive4TPS(reportID,contact,contactTel,contactResult,contactResultDesc,note,usercode,oprUserCode,oprLocCode,sourceSystem,sourceIdentity)  
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
@@ -886,6 +886,8 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 | usercode   |  接收人工号  |  |
 | oprUserCode   |  操作人工号  |  |
 | oprLocCode   |  操作科室代码  |  |
+| sourceSystem   |  来源系统  | HIS、APP、SMS、WX等 `2024-03-21` |
+| sourceIdentity   |  来源身份  | IP、MAC、IMEI、手机号等 `2024-03-21` |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -900,7 +902,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 联系人、联系电话、联系结果需要结合实际情况，有些项目可能不需要此信息。
 
 ```vb
-##class(BSP.CV.SRV.Interface).SaveExec4TPS(reportID,contact,contactTel,contactResult,contactResultDesc,note,usercode,oprUserCode,oprLocCode)  
+##class(BSP.CV.SRV.Interface).SaveExec4TPS(reportID,contact,contactTel,contactResult,contactResultDesc,note,usercode,oprUserCode,oprLocCode,sourceSystem,sourceIdentity)  
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
@@ -914,6 +916,8 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 | usercode   |  处理工号  |  |
 | oprUserCode   |  操作人工号  |  |
 | oprLocCode   |  操作科室代码  |  |
+| sourceSystem   |  来源系统  | HIS、APP、SMS、WX等 `2024-03-21` |
+| sourceIdentity   |  来源身份  | IP、MAC、IMEI、手机号等 `2024-03-21` |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
