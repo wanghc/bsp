@@ -64,6 +64,35 @@
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 
 ## 更新说明
+### 2023-05-27(V2.0.17)
+
+- :sparkles: 处理点击`<a href="#">xx</a>`链接带来的界面偏移问题 [1547086]
+
+  ```csharp
+  // 因上次修改影响切换科室界面，重新修改MyResourceRequestHandler类中代码
+  request.Url = request.Url.Substring(0, request.Url.IndexOf("#"));
+  ```  
+
+### 2023-05-21(V2.0.16)
+
+- :sparkles: 处理点击`<a href="#">xx</a>`链接带来的界面偏移问题 [1547086]
+
+  ```c#
+  //修改浏览器的OnBeforeBrowse方法
+  if (request.Url.EndsWith("#")) {
+      return true;
+  }
+  ```  
+
+### 2024-03-22(V2.0.15)
+
+- 提供`restartWebsysServer`方法，供js端调用，以便重新启动中间件 [4407602]
+- 关闭按钮任务加入超时1000毫秒, 防止一直等待假死
+
+
+### 2024-01-10（V2.0.14）
+
+- :bug: 还原V2.0.10的视频播放功能，不再支持视频播放，此功能导致无法查看PDF文件 [4164644]
 
 ### 2024-01-10 (V2.0.13)
 - 修改浏览器图标[4187892]
@@ -79,7 +108,7 @@
 
 - 增加视频功能
 - - `cmake下载源代码，修改c++源代码，build得到ceflib等dll,再替换109版原生的dll`
- 
+
 
 ### 2023-10-12（V2.0.9)
 
