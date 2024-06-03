@@ -59,6 +59,8 @@ table td:first-of-type {
   - [2.33 保存第三方系统接收信息](#233-保存第三方系统接收信息)
   - [2.34 保存第三方系统处理信息](#234-保存第三方系统处理信息)
   - [2.35 获取危急值处理情况信息](#235-获取危急值处理情况信息)
+  - [2.36 保存第三方系统接收信息(不知HIS危急值报告ID)](#236-保存第三方系统接收信息不知his危急值报告id)
+  - [2.37 保存第三方系统处理信息(不知HIS危急值报告ID)](#237-保存第三方系统处理信息不知his危急值报告id)
   
   
 
@@ -944,3 +946,79 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 | --- | -- | -- |
 | 空 | 失败 | 危急值ID不正确 |
 | 其它字符串 | 成功 | 字符串,以^分隔： <br>1检查(验)号 2就诊ID 3医嘱ID 4业务系统唯一ID，危急值接口传参LisRowid <br> 5处理日期 6处理时间 7处理人工号 8处理人姓名 <br> 9联系人姓名 10联系人电话 11处理结果 12处理意见措施  <br> 13接收日期 14接收时间 15接收人工号 16接收人姓名 <br> 17接收时联系人（通知医生）18接收时联系电话（通知医生电话） 19接收时联系结果 20接收时备注信息 <br> 21护士确认日期 22护士确认时间 23护士工号 24护士姓名 （护士确认为可能是护士点击接收危急值为确认，也可能是医生处理之后护士才看到危急值点下确认表示知晓） |
+
+
+
+
+
+#### 2.36 保存第三方系统接收信息(不知HIS危急值报告ID) ####
+
+适应于保存第三方系统(如医技系统本身，或者医技系统直接推危急值给到的系统)对危急值的接收操作（不知HIS危急值报告ID）  `2024-06-03`
+
+接收步骤需要结合项目实际情况，某些项目可能配置的是无需接收，此时就不需要接收接口。
+
+某些项目配置的是“医生处理时接收 护士显示按钮” 此时护士时对于护士来说还是有接收概念的，医生则只有处理。
+
+ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
+
+
+```vb
+##class(BSP.CV.SRV.Interface).SaveReceive4MTS(ReportType, ExamNo, OEOrdId, LisRowid,contact,contactTel,contactResult,contactResultDesc,note,usercode,oprUserCode,oprLocCode,sourceSystem,sourceIdentity)  
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ReportType   | 危急值类型    | 1检验,2病理,3心电,4超声,5内镜,6放射   |
+| ExamNo   | 检查(检验)号    |  |
+| OEOrdId   | 医嘱ID   |  |
+| LisRowid   | 唯一ID   | 一般为医技系统的危急值ID |
+| contact   | 联系人姓名     | 如果联系人为HIS用户 应为联系人姓名@工号 <br> 一般护士接收联系人通知的医生，医生接收为本人 |
+| contactTel   | 联系人电话   |  |
+| contactResult   | 联系结果代码   |  F\|C |
+| contactResultDesc   | 联系结果   | 已通知\|未联系到 |
+| note   |  备注信息  |  |
+| usercode   |  接收人工号  |  |
+| oprUserCode   |  操作人工号  |  |
+| oprLocCode   |  操作科室代码  |  |
+| sourceSystem   |  来源系统  | HIS、APP、SMS、WX等  |
+| sourceIdentity   |  来源身份  | IP、MAC、IMEI、手机号等  |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| -1^失败原因 | 失败 |  |
+| 1 | 成功 |  |
+
+
+#### 2.37 保存第三方系统处理信息(不知HIS危急值报告ID) ####
+
+适应于保存第三方系统(如医技系统本身，或者医技系统直接推危急值给到的系统)对危急值的处理操作（不知HIS危急值报告ID）  `2024-06-03`
+
+联系人、联系电话、联系结果需要结合实际情况，有些项目可能不需要此信息。
+
+ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
+
+```vb
+##class(BSP.CV.SRV.Interface).SaveExec4MTS(ReportType, ExamNo, OEOrdId, LisRowid,contact,contactTel,contactResult,contactResultDesc,note,usercode,oprUserCode,oprLocCode,sourceSystem,sourceIdentity)  
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ReportType   | 危急值类型    | 1检验,2病理,3心电,4超声,5内镜,6放射   |
+| ExamNo   | 检查(检验)号    |  |
+| OEOrdId   | 医嘱ID   |  |
+| LisRowid   | 唯一ID   | 一般为医技系统的危急值ID |
+| contact   | 联系人姓名     | 如果联系人为HIS用户 应为联系人姓名@工号  |
+| contactTel   | 联系人电话   |  |
+| contactResult   | 联系结果代码   |  F\|C |
+| contactResultDesc   | 联系结果   | 已通知\|未联系到 |
+| note   |  处理意见措施  |  |
+| usercode   |  处理工号  |  |
+| oprUserCode   |  操作人工号  |  |
+| oprLocCode   |  操作科室代码  |  |
+| sourceSystem   |  来源系统  | HIS、APP、SMS、WX等  |
+| sourceIdentity   |  来源身份  | IP、MAC、IMEI、手机号等  |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| -1^失败原因 | 失败 |  |
+| 1 | 成功 |  |
