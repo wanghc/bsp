@@ -432,7 +432,7 @@ w ##class(BSP.MSG.SRV.Interface).SendHosp(Context, ActionTypeCode, FromUserRowId
 | ActionTypeCode | 消息动作代码      | 如1002表示处方点评。具体值见 [消息类型](MSGActionType)                         |
 | FromUserRowId  | 发送消息的用户Id  | 如果获取不到HIS用户Id, 可以传入"^姓名"                       |
 | EpisodeId      | 病人就诊Id        | 如获取不到可以为空。                                         |
-| OrdItemId      | 医嘱Id            | 如获取不到可以为空                                           |
+| OrdItemId      | 医嘱Id            | 多个医嘱ID 用英文逗号分隔，如获取不到可以为空                                           |
 | OtherInfoJson  | 其它信息          |  可以为空。格式为json<br> `"link":"xx.csp",linkParam:"EpisodeId=1&ReportId=002"`,<br>`"dialogWidth":1000,"dialogHeight":500,`<br>`"target":"_blank","BizObjId":1` ，其中属性均为可选项 具体值见<a href="#otherinfojson说明">OtherInfoJson说明</a>  |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
