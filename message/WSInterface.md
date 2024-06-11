@@ -55,7 +55,7 @@ FuncCode=Send
 | CreateLocCode |  发送人科室代码      | 可以为空             |
 | CreateLocDesc |  发送人科室名称      | 可以为空              |
 | EpisodeId |  就诊ID      | 如果业务有尽量传，可以为空            |
-| OrdItemId |  医嘱ID      | 如果业务有尽量传，可以为空             |
+| OrdItemId |  医嘱ID      | 如果业务有尽量传，多个医嘱ID 用英文逗号分隔，可以为空             |
 | EffectiveDays |  有效天数      | 超过有效天数自动置为已处理             |
 | ReceiverList |  接收对象列表      | 需要结合实际，如果接收对象是可以在HIS内配置出来的，不需要传，<br>如果是业务指定某些人接收的，需要传。<br> 列表元素节点说明见下方`接收对象列表元素节点说明`           |
 | BizLink |  业务处理链接      | 此参数应为完整链接，传了此参数，则BizLinkParam不生效            |

@@ -80,7 +80,7 @@ d helper.SetBizData(episodeId , ordItemId , patientId , bizObjId )
 | *参数名* | *说明*      |  *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | episodeId  | 就诊ID    |  |
-| ordItemId | 医嘱ID      |  |
+| ordItemId | 医嘱ID      | 多个医嘱ID 用英文逗号分隔 |
 | patientId | 患者ID    |  |
 | bizObjId |  关联业务ID    | 如果需要做需要处理的消息，此参数需要传 |
 
