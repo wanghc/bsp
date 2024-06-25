@@ -58,7 +58,6 @@ table td:first-of-type {
 w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowId, EpisodeId, OrdItemId, 
         ToUserRowId, OtherInfoJson, ToLocRowId, EffectiveDays , CreateLoc)
 ```
-`HIS8.0`
 
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
