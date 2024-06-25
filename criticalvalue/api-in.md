@@ -75,6 +75,8 @@ table td:first-of-type {
 #### 2.1 保存危急值 ####
 
 适应于医技系统保存危急值，如果为第三方或分库则应通过平台调用。
+`HIS8.0.2`
+
 ```vb
 ##Class(web.DHCAntService).SaveCVResult(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems,MTS2DocInfo,MTS2PatInfo )
 ##Class(web.DHCAntCVResult).Save(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems,MTS2DocInfo,MTS2PatInfo) //检验调的可能是这个
@@ -88,11 +90,11 @@ table td:first-of-type {
 | OEOrdId   | 医嘱ID    | 多个医嘱以英文逗号,分隔 |
 | ReportInfo   | 报告审核信息    | 审核日期2(yyyy-MM-dd)^审核时间2(hh:mm:ss)^审核人ID3^审核说明4^报告审核科室5^报告科室联系电话6^危急值等级7（Normal一般危急值  High高危危急值 Extreme极危危急值 Unknown未分级）<br>`审核人`指的是确定危急值要报告的人，对于需要审核才上报的是审核人，但是对于不需要审核就上报的那是报告人。 |
 | Result   | 危急值报告内容    | 危急值报告内容 |
-| LisRowid   | 唯一ID    | 一个检查(检验)号可能调用多次，需要唯一ID来区分哪次调用 |
-| OrderInfo   | 医嘱信息，后续添加串    | 申请人^申请日期时间^采集人^采集日期时间^接收人^接收日期时间^预警日期时间^复核人^复核日期时间^报告人^报告日期时间(审核日期时间)^标本类型^危机说明^备注     (时间格式：YYYY-MM-DD  hh:mm:ss) |
-| TestItems   | 检验项目结果    | $lb($lb(项目代码,项目名称,缩写,结果,单位,结果异常标志,范围,仪器,备注),$lb(项目代码,项目名称,缩写,结果,单位,结果异常标志,范围,仪器,备注)) |
-| MTS2DocInfo   | 医技系统电话通知医生信息   | 日期(yyyy-MM-dd)1^时间(hh:mm:ss)2^结果3(1成功-1失败)^结果备注(失败原因等)4^通知人姓名5^通知人电话6^沟通内容7^医生姓名8^医生电话9 `2023-06-14` |
-| MTS2PatInfo   | 医技系统电话通知患者信息   | 日期(yyyy-MM-dd)1^时间(hh:mm:ss)2^结果3(1成功-1失败)^结果备注(失败原因等)4^通知人姓名5^通知人电话6^沟通内容7^患者姓名8^患者电话9 `2023-06-14` |
+| LisRowid   | 唯一ID    | 一个检查(检验)号可能调用多次，需要唯一ID来区分哪次调用 `HIS8.1` |
+| OrderInfo   | 医嘱信息，后续添加串    | 申请人^申请日期时间^采集人^采集日期时间^接收人^接收日期时间^预警日期时间^复核人^复核日期时间^报告人^报告日期时间(审核日期时间)^标本类型^危机说明^备注     (时间格式：YYYY-MM-DD  hh:mm:ss) `HIS8.1` |
+| TestItems   | 检验项目结果    | $lb($lb(项目代码,项目名称,缩写,结果,单位,结果异常标志,范围,仪器,备注),$lb(项目代码,项目名称,缩写,结果,单位,结果异常标志,范围,仪器,备注)) `HIS8.4.2` |
+| MTS2DocInfo   | 医技系统电话通知医生信息   | 日期(yyyy-MM-dd)1^时间(hh:mm:ss)2^结果3(1成功-1失败)^结果备注(失败原因等)4^通知人姓名5^通知人电话6^沟通内容7^医生姓名8^医生电话9 `HIS9.0.1` |
+| MTS2PatInfo   | 医技系统电话通知患者信息   | 日期(yyyy-MM-dd)1^时间(hh:mm:ss)2^结果3(1成功-1失败)^结果备注(失败原因等)4^通知人姓名5^通知人电话6^沟通内容7^患者姓名8^患者电话9 `HIS9.0.1` |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -104,6 +106,8 @@ table td:first-of-type {
 #### 2.2 根据就诊判断是否有需处理危急值 ####
 
 适应于根据就诊ID判断是否存在需处理的危急值报告。
+`HIS8.0.2`
+
 ```vb
 ##Class(web.DHCAntService).GetReportWarn(EpisodeId)
 ```
@@ -121,6 +125,8 @@ table td:first-of-type {
 #### 2.3 根据就诊获取需处理的危急值报告数量 ####
 
 适应于根据就诊ID获取需处理的危急值报告数量。
+`HIS8.0.2`
+
 ```vb
 ##Class(web.DHCAntService).GetReportWarnNum(EpisodeId)
 ```
@@ -137,6 +143,8 @@ table td:first-of-type {
 #### 2.4 根据检查(验)号与医嘱ID判断是否是危急值 ####
 
 适应于根据检查(验)号与医嘱ID判断是否是危急值。
+`HIS8.3`
+
 ```vb
 ##Class(web.DHCAntService).IsCVReport(ExamNo,OEOrdId)
 ```
@@ -155,6 +163,8 @@ table td:first-of-type {
 #### 2.5 根据就诊ID获取危急值列表 ####
 
 适应于根据就诊ID获取危急值列表。
+`HIS8.0.2`
+
 ```vb
 ##class(%ResultSet).RunQuery("web.DHCCVCommon","CVReportFromAdm",EpisodeId,TransStatus)
 ```
@@ -185,6 +195,8 @@ table td:first-of-type {
 #### 2.6 危急值与医嘱关联 ####
 
 适应于保存危急值与医嘱关联。
+`HIS8.4`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).SaveTransOrd(reportID,OEOrdItemIds,UserID)
 ##class(web.DHCAntCVReportLink).SaveTransOrd(reportID,OEOrdItemIds,UserID)
@@ -206,6 +218,8 @@ table td:first-of-type {
 #### 2.7 是不是为处理危急值而开的医嘱 ####
 
 适应于判断是不是为处理危急值而开的医嘱。
+`HIS8.4`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).IsTransOrd(OEOrdItemId)
 ```
@@ -224,6 +238,8 @@ table td:first-of-type {
 #### 2.8 危急值与病历关联 ####
 
 适应于保存危急值与病历关联。
+`HIS8.4`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).SaveTransEMR(reportID,OEOrdItemIds,UserID)   //实际未使用此
 ##class(web.DHCAntCVReportLink).SaveTransEMR(reportID,OEOrdItemIds,UserID)
@@ -245,6 +261,8 @@ table td:first-of-type {
 #### 2.9 是不是为处理危急值而写的病程 ####
 
 适应于判断是不是为处理危急值而写的病程。
+`HIS8.4`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).IsTransEMR(InstanceID)
 ```
@@ -262,6 +280,7 @@ table td:first-of-type {
 #### 2.10 是否需要弹出危急值界面 ####
 
 适应于根据就诊或患者ID判断是否需要弹出危急值。 `2023-02-13`
+`HIS9.0`
 
 判断此患者历次就诊是否有未处理的危急值，有则返回此患者危急值列表链接，无则返回空
 
@@ -283,6 +302,8 @@ table td:first-of-type {
 #### 2.11 根据危急值ID获取危急值信息以及开具的医嘱 ####
 
 适应于根据危急值ID获取危急值信息及开的医嘱。 
+`HIS8.4`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).GetOneCVInfo(reportID)
 ```
@@ -372,6 +393,8 @@ table td:first-of-type {
 #### 2.13 根据就诊ID获取危急值列表V2 ####
 
 适应于根据就诊ID获取危急值列表。
+`HIS8.4`
+
 ```vb
 ##class(%ResultSet).RunQuery("web.DHCAntService","QryCVByAdm",Adm,Status,DateFrom,DateTo,UseType,ReportType)
 ```
@@ -400,10 +423,10 @@ table td:first-of-type {
 | trUser | 处理人 |  | 
 | trAdvice | 处理意见 |  | 
 | ordItemDesc | 医嘱名称 |  | 
-| trDate | 处理日期 |  | 
-| trTime | 处理时间 |  | 
+| trDate | 处理日期 | `HIS8.5` | 
+| trTime | 处理时间 | `HIS8.5` | 
 | nurseDoneStatus | 护士是否处理完成（1/0） | 一般指危急值是否已接收,个别项目也为护士处理  | 
-| recUser | 接收人 |  | 
+| recUser | 接收人 | `HIS8.5.3` | 
 | recAdvice | 接收备注 |  | 
 | recDate | 接收日期 |  | 
 | recTime | 接收时间 |  | 
@@ -412,6 +435,8 @@ table td:first-of-type {
 #### 2.14 危急值与会诊申请关联 ####
 
 适应于危急值处理时进行会诊申请，保存危急值与会诊申请关联。
+`HIS8.5`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).SaveTransConsultation(reportID,CstID,UserID)   
 ```
@@ -486,8 +511,10 @@ table td:first-of-type {
 #### 2.18 获取危急值处理意见措施 ####
 
 适应于为医技系统提供获取危急值处理意见措施接口。  
+`HIS8.5`
 
 只会根据条件查到最后一条危急值，然后返回它最后一条处理记录的意见措施字段。ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
+
 
 ```vb
 ##Class(BSP.CV.SRV.Interface).GetTransAdvice(ReportType, ExamNo, OEOrdId, LisRowid)  
@@ -509,6 +536,7 @@ table td:first-of-type {
 #### 2.19 保存医技系统确认危急值处理结果 ####
 
 适应于医技系统用户确认收到临床处理结果时调用。  
+`HIS8.5`
 
 ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
@@ -532,6 +560,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.20 危急值撤销 ####
 
 适应于为医技系统提供获取危急值撤销接口。  
+`HIS9.0`
 
 只会根据条件查到最后一条危急值，然后撤销。已处理的危急值不能撤销。ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数。
 
@@ -556,7 +585,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 #### 2.21 获取患者(待处理/已处理)危急值列表(护士) ####
 
-适应于为护理提供获取某患者危急值列表。  
+适应于为护理提供获取某患者危急值列表。  `个别项目`
 
 
 ```vb
@@ -577,6 +606,8 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.22 根据危急值ID获取危急值详细信息 ####
 
 适应于根据危急值ID获取危急值详细信息用于界面呈现等。 
+`HIS8.5.3`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).GetCVDetailsInfo(reportID)
 ```
@@ -648,7 +679,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 #### 2.23 危急值阅读 ####
 
-适应于提供危急值首次阅读接口给第三方（PDA等）。  
+适应于提供危急值首次阅读接口给第三方（PDA等）。  `个别项目`
 
 ```vb
 ##Class(BSP.CV.SRV.Interface).SaveFirstRead(reportID, usercode,sessLocCode)  
@@ -669,7 +700,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 #### 2.24 危急值接收 ####
 
-适应于提供危急值接收接口给第三方（PDA等）。  
+适应于提供危急值接收接口给第三方（PDA等）。  `个别项目`
 
 个别项目将护士接收称作【护士处理】。
 
@@ -736,6 +767,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.27 获取患者要弹出的危急值链接 ####
 
 适应于判断患者是否需要弹出危急值界面，有则返回需要弹出的链接，没有则返回空。  `2023-11-14`
+`HIS9.0.2`
 
 不传场景时，查患者30内历次就诊是否有未处理的危急值
 
@@ -760,6 +792,8 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.28 是否有超时处理以及超时未处理危急值 ####
 
 适应于判断患者是否有超时处理以及超时未处理危急值。  `2023-11-22`
+`HIS9.0.2`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).IfAdmHasOverTimeCV(Adm)  
 ```
@@ -777,6 +811,8 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.29 此前24小时内是否产生过危急值 ####
 
 适应于判断患者在此前24小时内是否产生过危急值。  `2023-11-22`
+`HIS9.0.2`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).IfAdmHasCVIn24H(Adm)  
 ```
@@ -794,6 +830,8 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.30 患者一段时间内是否产生过危急值 ####
 
 适应于判断患者在一段时间内是否产生过危急值。  `2023-11-22`
+`HIS9.0.2`
+
 ```vb
 ##Class(BSP.CV.SRV.Interface).IfAdmHasCVReport(Adm,Status,StDate,StTime,EndDate,EndTime)  
 ##Class(BSP.CV.SRV.Interface).IfHasCVReport(Adm,Status,StDate,StTime,EndDate,EndTime)  
@@ -817,6 +855,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.31 保存医技系统电话通知医生信息 ####
 
 适应于为医技系统提供保存电话通知医生信息。   `2023-06-14`
+`HIS9.0.1`
 
 只会根据条件查到最后一条危急值，然后保存。ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数。
 
@@ -842,6 +881,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.32 保存医技系统电话通知患者信息 ####
 
 适应于为医技系统提供保存电话通知患者信息。  `2023-06-14`
+`HIS9.0.1`
 
 只会根据条件查到最后一条危急值，然后保存。ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数。
 
@@ -867,6 +907,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.33 保存第三方系统接收信息 ####
 
 适应于保存第三方系统(如手机APP等)对危急值的接收操作（已知HIS危急值报告ID）  `2023-12-22`
+`HIS9.0.3`
 
 接收步骤需要结合项目实际情况，某些项目可能配置的是无需接收，此时就不需要接收接口。
 
@@ -888,8 +929,8 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 | usercode   |  接收人工号  |  |
 | oprUserCode   |  操作人工号  |  |
 | oprLocCode   |  操作科室代码  |  |
-| sourceSystem   |  来源系统  | HIS、APP、SMS、WX等 `2024-03-21` |
-| sourceIdentity   |  来源身份  | IP、MAC、IMEI、手机号等 `2024-03-21` |
+| sourceSystem   |  来源系统  | HIS、APP、SMS、WX等 `2024-03-21 还未提交` |
+| sourceIdentity   |  来源身份  | IP、MAC、IMEI、手机号等 `2024-03-21 还未提交` |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -900,6 +941,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.34 保存第三方系统处理信息 ####
 
 适应于保存第三方系统(如手机APP等)对危急值的处理操作（已知HIS危急值报告ID）  `2023-12-22`
+`HIS9.0.3`
 
 联系人、联系电话、联系结果需要结合实际情况，有些项目可能不需要此信息。
 
@@ -918,8 +960,8 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 | usercode   |  处理工号  |  |
 | oprUserCode   |  操作人工号  |  |
 | oprLocCode   |  操作科室代码  |  |
-| sourceSystem   |  来源系统  | HIS、APP、SMS、WX等 `2024-03-21` |
-| sourceIdentity   |  来源身份  | IP、MAC、IMEI、手机号等 `2024-03-21` |
+| sourceSystem   |  来源系统  | HIS、APP、SMS、WX等 `2024-03-21 还未提交` |
+| sourceIdentity   |  来源身份  | IP、MAC、IMEI、手机号等 `2024-03-21 还未提交` |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -929,6 +971,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 #### 2.35 获取危急值处理情况信息 ####
 
 适应于根据危急值ID，获取危急值处理结果(接收、处理、护士确认等)信息  `2023-12-26`
+`HIS9.0.3`
 
 `护士确认` 是为了实现危急值必须有护士参与而增加的，这个节点可能是护士点击接收即为确认，也可能是医生接收处理后护士再单独点击一个确认按钮。
 
@@ -953,7 +996,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 #### 2.36 保存第三方系统接收信息(不知HIS危急值报告ID) ####
 
-适应于保存第三方系统(如医技系统本身，或者医技系统直接推危急值给到的系统)对危急值的接收操作（不知HIS危急值报告ID）  `2024-06-03`
+适应于保存第三方系统(如医技系统本身，或者医技系统直接推危急值给到的系统)对危急值的接收操作（不知HIS危急值报告ID）  `2024-06-03 还未提交`
 
 接收步骤需要结合项目实际情况，某些项目可能配置的是无需接收，此时就不需要接收接口。
 
@@ -991,7 +1034,7 @@ ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数
 
 #### 2.37 保存第三方系统处理信息(不知HIS危急值报告ID) ####
 
-适应于保存第三方系统(如医技系统本身，或者医技系统直接推危急值给到的系统)对危急值的处理操作（不知HIS危急值报告ID）  `2024-06-03`
+适应于保存第三方系统(如医技系统本身，或者医技系统直接推危急值给到的系统)对危急值的处理操作（不知HIS危急值报告ID）  `2024-06-03 还未提交`
 
 联系人、联系电话、联系结果需要结合实际情况，有些项目可能不需要此信息。
 
