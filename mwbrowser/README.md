@@ -65,6 +65,14 @@
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
 
+### 2024-06-22（1.0.43）
+
+- :bug: 在框架内右键刷新iframe时，丢失post数据问题处理 [4679065]
+
+### 2024-06-19（1.0.42）
+
+- :bug: 解决读卡时丢失字符问题
+
 ### 2023-11-8（1.0.41）
 
 - 远程调试端口(`8080`)与手写板ws服务端口冲突，不再使用远程调试功能 [4027187]
