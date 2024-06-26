@@ -43,6 +43,8 @@ table td:first-of-type {
 	- [4.7 获取阅读信息接口](#47-获取阅读信息接口)
 	- [4.8 停止定时发送任务接口](#48-停止定时发送任务接口)
 	- [4.9 消息查询接口](#49-消息查询接口)
+	- [4.10 用户消息列表接口](#410-用户消息列表接口)
+
 - [5. 常见问题](#5-常见问题)
 	- [5.1 消息变为已处理的几种方式](#51-消息变为已处理的几种方式)
 		- [5.1.1 消息相互独立，读后自己消失不显示](#511-消息相互独立读后自己消失不显示)
@@ -659,6 +661,53 @@ d ##class(%ResultSet).RunQuery("websys.DHCMessageContentMgr","FindByAct",pAction
 | EpisodeId | 就诊ID |  | 
 | OEOrdItemId | 医嘱ID |  | 
 
+
+#### 4.10 用户消息列表接口 ####
+
+用于在其它系统下获取用户消息列表数据
+`HIS9.1.1`
+
+```vb
+d ##class(%ResultSet).RunQuery("websys.DHCMessageDetailsMgr","FindInfo",UserId, ReadFlag, SendDateStart, SendDateEnd , ActionTypeArg, LevelType, MarqueeShow, OtherParams , SessStr)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| UserId   | 用户ID    | ss_user.rowid 必须 |
+| ReadFlag    | 处理状态标志    | N未处理或有新回复 Y已处理 必须 |
+| SendDateStart   | 开始日期    | 消息发送日期开始日期 HIS配置日期格式 |
+| SendDateEnd   | 结束日期    | 消息发送日期结束日期 HIS配置日期格式 |
+| ActionTypeArg   | 消息类型代码    | 如果为空 不限制消息类型 |
+| LevelType   | 消息重要性   | D紧急、V非常重要、I重要、G一般，为空不限制，也可传多个英文`,`分隔 |
+| MarqueeShow   | 是否仅查跑马灯显示的消息    | Y是 |
+| OtherParams   | 扩展参数    | 暂为内部使用，传空 |
+| SessStr   | 会话字符串    | userId^locId^groupId^hospId 用户ID^科室ID^安全组ID^医院ID <br> 当传了科室、安全组等，接口会按照消息配置过滤掉目标科室、安全组不是当前科室、安全组的消息 |
+
+
+|*输出列* |*说明*|*备注*|
+| --- | -- | -- |
+| DetailsId | 消息明细记录ID |  | 
+| PatientId | 患者ID |  | 
+| EpisodeId | 就诊ID |  | 
+| OEOrdItemId | 医嘱ID |  | 
+| SendUserDesc | 发送人姓名  |  | 
+| Content | 消息内容 |  | 
+| SendDate | 发送日期 | HIS配置日期格式 | 
+| SendTime | 发送时间 | HH:mm:ss | 
+| ActionCode | 消息类型代码 |  | 
+| ActionDesc | 消息类型描述 |  | 
+| TReadFlag | 阅读标志 | readFlag-Y已读 readFlag-N未读 | 
+| OtherJson | 消息发送时的OtherJson |  | 
+| ActionLevelType | 重要性 |  | 
+| ActionLevelTypeDesc | 重要性描述 |  | 
+| TExecFlag | 处理标志 | read-exec已读已处理、unread-exec未读已处理、<br> read-unexec已读未处理、unread-unexec未读未处理<br> read已读、unread未读 | 
+| TExecLink | 处理链接 | 消息类型处配置 | 
+| NewReplyCount | 新回复数量 |  | 
+| TDialogStyle | 弹窗链接属性 |  | 
+| BedNo | 床位 |  | 
+| AdmLoc | 就诊科室名称 |  | 
+| PatName | 患者姓名 |  | 
+| ContentId | 消息记录ID |  |
 
 ### 5. 常见问题 ###
 
