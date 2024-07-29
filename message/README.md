@@ -43,6 +43,8 @@ table td:first-of-type {
 	- [4.7 获取阅读信息接口](#47-获取阅读信息接口)
 	- [4.8 停止定时发送任务接口](#48-停止定时发送任务接口)
 	- [4.9 消息查询接口](#49-消息查询接口)
+	- [4.10 用户消息列表接口](#410-用户消息列表接口)
+
 - [5. 常见问题](#5-常见问题)
 	- [5.1 消息变为已处理的几种方式](#51-消息变为已处理的几种方式)
 		- [5.1.1 消息相互独立，读后自己消失不显示](#511-消息相互独立读后自己消失不显示)
@@ -59,7 +61,6 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
         ToUserRowId, OtherInfoJson, ToLocRowId, EffectiveDays , CreateLoc)
 ```
 
-
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | Context        | 发送的消息内容    | 可以为空，系统会根据就诊与医嘱id生成内容                     |
@@ -72,7 +73,7 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 |ToLocRowId     | 接收消息的科室 Id | 可以为空。<br>格式"LocId1^LocId2^LocId3\|其它标记" <br> "1^2^3" 发给科室1、2、3所有医护人员<br> "1^2^3\|ToNurse"发给科室1、2、3所有护士<br>"1^2^3\|ToDoctor"发给科室1、2、3所有医生<br>"1^2^3\|Logon"发给有此科室1或2或3登录权限的所有用户(HIS8.4)<br>"1^2^3\|OnlyFlag"仅作一个标识告诉我们这个消息 是想发给哪个科室的人的，<br>具体哪些人还需要在前面ToUserRowId参数传<br>此参数主要是为了解决一个发给A科的所有人的消息（比 如会诊），<br>但是某人拥有AB两科的权限，在登录B科时 不查看 A科消息 |
 | EffectiveDays  | 消息有效天数      | 可以为空。此有效天数级别高于动作类型所配置                   |
 | CreateLoc      | 发送者科室        | 可以为空。传HIS中科室Id，可传“＾科室描述”                    |
-| TaskSchedule      | 定时发送时间安排字符串        |    定时发送参数见<a href="#taskschedule说明">TaskSchedule说明</a>                 |
+| TaskSchedule      | 定时发送时间安排字符串        |    定时发送参数见<a href="#taskschedule说明">TaskSchedule说明</a>       `HIS9.0.1`        |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -113,9 +114,9 @@ w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowI
 | dialogHeight | 500  默认 500 | 打开处理界面时界面高度。界面高度为500px支持百分比表示占顶层宽度的百分比如50%(`HIS8.3`以后) |
 | target | 默认空 | 目标窗口 如果为_blank 采用window.open新窗口方式打开，否则为顶层界面弹出hisui(easyui)模态框，内嵌iframe形式打开 |
 | BizObjId | 1 | 业务系统ID，用于后续消息处理、撤销定位消息 |
-| ExtReceiveCode |  | 扩展接收对象代码，格式为/mode:type-key-role-tmpl <br>mode 发送方式 I=HIS消息  S 手机短信 WX微信 <br>type 类型 (L科室、G安全组..) <br>key 和类型对应 <br>role 目标角色<br>tmpl 使用模板 |
-| IngoreReceiveCfg |  | 忽略掉消息类型维护的配置：接收对象、高级接收对象、抄送人 |
-| PatientID |  | 患者ID 用于没有患者就诊ID，又想要使用患者本人接收对象或内容模板有患者相关变量时  |
+| ExtReceiveCode |  | 扩展接收对象代码，格式为/mode:type-key-role-tmpl <br>mode 发送方式 I=HIS消息  S 手机短信 WX微信 <br>type 类型 (L科室、G安全组..) <br>key 和类型对应 <br>role 目标角色<br>tmpl 使用模板 <br> `HIS9.0.1`|
+| IngoreReceiveCfg |  | 忽略掉消息类型维护的配置：接收对象、高级接收对象、抄送人 `HIS9.0.1` |
+| PatientID |  | 患者ID 用于没有患者就诊ID，又想要使用患者本人接收对象或内容模板有患者相关变量时 `HIS9.0.1` |
 
 *** 除以上指定属性外产品组还可以传其他属性，用于通过消息模板组装消息内容、短信内容数据。 ***
 
@@ -169,7 +170,9 @@ s $p(TaskSchedule,"^",4)="2023-07-27 17:00|2023-07-27 17:30|2023-07-27 18:00"  /
 ### 2. 消息处理 ###
 
 #### 2.1 消息处理接口ExecAll ####
+
 用于已知消息明细记录ID（1.发送时记录下来，2.在消息处打开的处理界面会传入明细记录ID），来处理消息
+`HIS8.0.2`
 
 *** 建议优先考虑使用接口[2.2 消息处理接口Exec](#22-消息处理接口exec) ***
 
@@ -215,7 +218,10 @@ w ##class(websys.DHCMessageInterface).ExecAll(MsgDetailsId, ExecUserDr, ExecDate
 ```
 
 #### 2.2 消息处理接口Exec ####
+
 用于相应业务处理完成后，将消息置为已处理，此方法为根据业务数据(消息类型、就诊、医嘱、业务ID)去查找消息数据，将查到的最新一条消息置为已处理。注意要避免同一业务数据发送多条消息。
+`HIS8.0.2`
+
 ```vb
 w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ExecUserDr, ExecDate, ExecTime,OtherParams)
 ```
@@ -231,7 +237,7 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 | ExecUserDr     | 处理用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
 | ExecDate  | 处理日期  | 默认当前日期.   +$h |
 | ExecTime  | 处理时间  | 默认当前日期.  $p($h, ","2) |
-| OtherParams | 其它扩展参数 | 用于后续参数扩展，扩展多个用^分隔 默认空 注意此参数在8.4之后才有 |
+| OtherParams | 其它扩展参数 | 用于后续参数扩展，扩展多个用^分隔 默认空  `HIS8.4` |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -247,9 +253,9 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 | *按^分隔位置* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | 1   | 只处理哪个人员类型的消息    | 为空处理所有`(CT_CarPrvTp.CTCPT_InternalType)[NURSE,DOCTOR,Technician,Pharmacist,Other]` |
-| 2   | 审核拒绝标志(Y/N)    | 医呼通 需要审核通过或拒绝标志 Y通过接受 N拒绝驳回 |
-| 3   | 审核备注拒绝原因    | 审核备注拒绝原因 |
-| 4   | 查找最近几条消息处理    | 部分业务会出现同一业务ID多次发消息，且只在最后一次处理情况，故增加此参数实现查到最近几条消息来处理 |
+| 2   | 审核拒绝标志(Y/N)    | 医呼通 需要审核通过或拒绝标志 Y通过接受 N拒绝驳回 `HIS8.5` |
+| 3   | 审核备注拒绝原因    | 审核备注拒绝原因 `HIS8.5` |
+| 4   | 查找最近几条消息处理    | 部分业务会出现同一业务ID多次发消息，且只在最后一次处理情况，故增加此参数实现查到最近几条消息来处理 `HIS9.0.1` |
 
 
 示例
@@ -270,8 +276,11 @@ w ##class(websys.DHCMessageInterface).Exec(ToUserId, ActionType, EpisodeId, OEOr
 ```
 
 #### 2.3 消息撤销接口Cancel ####
+
 用于撤销已发送的消息  
 撤销判断逻辑：读即处理消息，有一人读过则不可撤销，其它有一人处理过则不可撤销
+`HIS8.3`
+
 
 ```vb
 w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ExecUserDr, ExecDate, ExecTime,OtherParams)
@@ -288,7 +297,7 @@ w ##class(websys.DHCMessageInterface).Cancel(ToUserId, ActionType, EpisodeId, OE
 | ExecUserDr     | 撤销用户ID      | 默认当前会话用户.  %session.Data("LOGON.USERID") |
 | ExecDate  | 撤销日期  | 默认当前日期.   +$h |
 | ExecTime  | 撤销时间  | 默认当前日期.  $p($h, ","2) |
-| OtherParams | 其它扩展参数 | 用于后续参数扩展，扩展多个用^分隔 默认空 注意此参数在`9.0.1`之后才有 |
+| OtherParams | 其它扩展参数 | 用于后续参数扩展，扩展多个用^分隔 默认空 注意此参数在`HIS9.0.1`之后才有 |
 
 ###### OtherParams以^分隔每个位置说明 ######
 
@@ -299,7 +308,7 @@ OtherParams为了和处理方法Exec一致，^分隔的部分位置实际没用
 | 1   | 未用    |  |
 | 2   | 未用    |  |
 | 3   | 未用    |  |
-| 4   | 查找最近几条消息撤销    | 部分业务会出现同一业务ID多次发消息，且只在最后一次撤销情况，故增加此参数实现查到最近几条消息来撤销 |
+| 4   | 查找最近几条消息撤销    | 部分业务会出现同一业务ID多次发消息，且只在最后一次撤销情况，故增加此参数实现查到最近几条消息来撤销 `HIS9.0.1` |
 
 
 |*返回值* |*说明*|*备注*|
@@ -400,6 +409,7 @@ w ##class(FullClassName).MethodName(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,R
 #### 4.1 获取消息内容ID接口 ####
 
 根据消息类型、就诊、医嘱、业务ID（或`OtherInfonJson`部分值）条件取最后一条消息内容表ID，也可以根据结果是否大于0判断是否发送过消息
+`HIS8.0.2`
 
 ```vb
 w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrdItemId, ObjectId,FindMaxCnt)
@@ -423,6 +433,8 @@ w ##class(websys.DHCMessageInterface).FindContentId(ActionType, EpisodeId, OEOrd
 #### 4.2 获取消息明细ID接口 ####
 
 根据消息类型、就诊、医嘱、业务ID（或`OtherInfonJson`部分值）条件获取此消息最新一条消息记录，然后获取到发给此用户的消息明细记录ID
+`HIS8.0.2`
+
 ```vb
 w ##class(websys.DHCMessageInterface).FindDetialsId(ToUserId,ActionType, EpisodeId, OEOrdItemId, ObjectId)
 ```
@@ -445,6 +457,8 @@ w ##class(websys.DHCMessageInterface).FindDetialsId(ToUserId,ActionType, Episode
 #### 4.3 获取消息回复记录接口 ####
 
 根据消息类型、就诊、医嘱、业务ID（或`OtherInfonJson`部分值）条件获取此消息最新一条消息记录，然后获取到关于此消息的所有回复记录
+`HIS8.4`
+
 ```vb
 d ##class(%ResultSet).RunQuery("websys.DHCMessageInterface","QryReplyList",ActionType , EpisodeId , OEOrdItemId , ObjectId , ContentId)
 ```
@@ -473,6 +487,8 @@ d ##class(%ResultSet).RunQuery("websys.DHCMessageInterface","QryReplyList",Actio
 #### 4.4 获取某科室最近发送某类型消息记录 ####
 
 使用的是消息类型+业务ID索引,关于最近的判断用的是索引的自然排序 (所以只适用于BizObjId为空的，或者本身满足消息发送时间序列，或者同条件下BizObjId一致)
+`HIS8.4`
+
 ```vb
 w ##class(websys.DHCMessageInterface).GetLatestMsgInfo(ActionType,CreateLocId)
 ```
@@ -494,6 +510,8 @@ w ##class(websys.DHCMessageInterface).GetLatestMsgInfo(ActionType,CreateLocId)
 #### 4.5 消息确认接口 ####
 
 将消息置为一个中间态，确认状态,用于实现霸屏消息在不置为已处理的情况下解除锁屏的效果，如危急值“接收”操作后可以不再锁屏
+`HIS9.0`
+
 ```vb
 w ##class(websys.DHCMessageInterface).Confirm(ToUserId, ActionType, EpisodeId, OEOrdItemId, ObjectId, ConfirmUserDr, ConfirmDate, ConfirmTime,OtherParams)
 ```
@@ -530,7 +548,9 @@ w ##class(websys.DHCMessageInterface).Confirm(ToUserId, ActionType, EpisodeId, O
 
 #### 4.6 设置科室消息配置 ####
 
-设置科室的消息配置（是否禁用消息、是否禁止自动弹窗） `2023-03-30`
+设置科室的消息配置（是否禁用消息、是否禁止自动弹窗） 
+`2023-03-30` `HIS9.0`
+
 ```vb
 w ##class(websys.DHCMessageInterface).SetLocMsgCfg(LocId, Disabled, NoAlert )
 ```
@@ -552,6 +572,7 @@ w ##class(websys.DHCMessageInterface).SetLocMsgCfg(LocId, Disabled, NoAlert )
 
 1. 先根据消息类型和业务ID找消息记录，如果找不到再根据消息类型、就诊、医嘱ID找消息记录
 2. 如果用户ID为空 则获取此消息记录中所有用户最早阅读的时间信息返回;如果用户ID不为空则获取此此消息为此用户产生的记录的阅读信息返回
+`HIS9.0.1`
 
 ```vb
 w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId, ObjectId, UserId)
@@ -574,6 +595,7 @@ w ##(websys.DHCMessageInterface).GetReadInfo(ActionType, EpisodeId, OEOrdItemId,
 #### 4.8 停止定时发送任务接口 ####
 
 1. 为产品组提供通过消息类型和业务ID来终止之前业务设置的消息定时发送任务。只会根据条件找到最后一条任务记录。
+`HIS9.0.1`
 
 ```vb
 w ##(websys.DHCMessageInterface).StopTask(ActionType, BizObjId, UserId)
@@ -600,6 +622,8 @@ w ##(websys.DHCMessageInterface).StopTask(ActionType, BizObjId, UserId)
 - 查询患者某次就诊所有消息数据
 - 查询患者某次就诊某类型消息数据
 - 查询某类型消息某业务ID的数据
+
+`HIS9.0.3`
 
 ```vb
 d ##class(%ResultSet).RunQuery("websys.DHCMessageContentMgr","FindByAct",pActionCodes,pDateStart,pDateEnd,pAdm,pBizObjId)
@@ -637,6 +661,53 @@ d ##class(%ResultSet).RunQuery("websys.DHCMessageContentMgr","FindByAct",pAction
 | EpisodeId | 就诊ID |  | 
 | OEOrdItemId | 医嘱ID |  | 
 
+
+#### 4.10 用户消息列表接口 ####
+
+用于在其它系统下获取用户消息列表数据
+`HIS9.1.1`
+
+```vb
+d ##class(%ResultSet).RunQuery("websys.DHCMessageDetailsMgr","FindInfo",UserId, ReadFlag, SendDateStart, SendDateEnd , ActionTypeArg, LevelType, MarqueeShow, OtherParams , SessStr)
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| UserId   | 用户ID    | ss_user.rowid 必须 |
+| ReadFlag    | 处理状态标志    | N未处理或有新回复 Y已处理 必须 |
+| SendDateStart   | 开始日期    | 消息发送日期开始日期 HIS配置日期格式 |
+| SendDateEnd   | 结束日期    | 消息发送日期结束日期 HIS配置日期格式 |
+| ActionTypeArg   | 消息类型代码    | 如果为空 不限制消息类型 |
+| LevelType   | 消息重要性   | D紧急、V非常重要、I重要、G一般，为空不限制，也可传多个英文`,`分隔 |
+| MarqueeShow   | 是否仅查跑马灯显示的消息    | Y是 |
+| OtherParams   | 扩展参数    | 暂为内部使用，传空 |
+| SessStr   | 会话字符串    | userId^locId^groupId^hospId 用户ID^科室ID^安全组ID^医院ID <br> 当传了科室、安全组等，接口会按照消息配置过滤掉目标科室、安全组不是当前科室、安全组的消息 |
+
+
+|*输出列* |*说明*|*备注*|
+| --- | -- | -- |
+| DetailsId | 消息明细记录ID |  | 
+| PatientId | 患者ID |  | 
+| EpisodeId | 就诊ID |  | 
+| OEOrdItemId | 医嘱ID |  | 
+| SendUserDesc | 发送人姓名  |  | 
+| Content | 消息内容 |  | 
+| SendDate | 发送日期 | HIS配置日期格式 | 
+| SendTime | 发送时间 | HH:mm:ss | 
+| ActionCode | 消息类型代码 |  | 
+| ActionDesc | 消息类型描述 |  | 
+| TReadFlag | 阅读标志 | readFlag-Y已读 readFlag-N未读 | 
+| OtherJson | 消息发送时的OtherJson |  | 
+| ActionLevelType | 重要性 |  | 
+| ActionLevelTypeDesc | 重要性描述 |  | 
+| TExecFlag | 处理标志 | read-exec已读已处理、unread-exec未读已处理、<br> read-unexec已读未处理、unread-unexec未读未处理<br> read已读、unread未读 | 
+| TExecLink | 处理链接 | 消息类型处配置 | 
+| NewReplyCount | 新回复数量 |  | 
+| TDialogStyle | 弹窗链接属性 |  | 
+| BedNo | 床位 |  | 
+| AdmLoc | 就诊科室名称 |  | 
+| PatName | 患者姓名 |  | 
+| ContentId | 消息记录ID |  |
 
 ### 5. 常见问题 ###
 
