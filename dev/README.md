@@ -30,7 +30,7 @@
   start_date is null or start_date='' or start_date>=current_date
   ```
 
-  修改为
+  删除~~`start_date=''`~~，修改成
 
   ```sql
   start_date is null or start_date>=current_date
