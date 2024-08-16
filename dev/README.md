@@ -24,13 +24,13 @@
 
 ### 2024-08-13
 
-- 因为`高斯`数据库中`日期字段名=''`写法不被允许，需要删除相关代码
+- 因为`高斯`数据库中~~`日期字段名=''`~~写法不被允许，需要删除相关代码
 
   ```sql
   start_date is null or start_date='' or start_date>=current_date
   ```
 
-  删除~~`start_date=''`~~，修改成
+  删除~~start_date=''~~，修改成
 
   ```sql
   start_date is null or start_date>=current_date
