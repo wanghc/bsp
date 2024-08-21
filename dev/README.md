@@ -1,5 +1,28 @@
 ## 信创版-开发备忘录
 
+### 2024-08-18
+
+- 关于LISTAGG方法兼容性问题
+
+  ```sql
+  SELECT LISTAGG(doc.id,",")
+  FROM mr_emrdb0_docdata doc
+  ```
+
+  以上SQL在KingBase下可以执行，但在GaussDB下会报`missing WITHIN keyword`，应该使用以下兼容写法
+
+  ```sql
+  SELECT LISTAGG(doc.id,",") WITHIN GROUP (ORDER BY doc.id ASC)
+  FROM mr_emrdb0_docdata doc
+  ```
+
+### 2024-08-17
+
+- 升级HOS-2.5.4版本前端
+- 修改表中字段名称
+- - 表名全小写，单词间用下划线连接
+  - 列名全小写，单词间用下划线连接
+
 ### 2024-08-16
 
 - 大家删一下本地maven仓库中的hos-app-config的包，昨天hos修改了bug
