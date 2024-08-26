@@ -1,16 +1,40 @@
 ## 信创版-开发备忘录
 
-### 2024-08-18
+### 2024-08-26
 
-- 关于LISTAGG方法兼容性问题
+- 关于`count(*)`与`order by` 使用
 
   ```sql
-  SELECT LISTAGG(doc.id,",")
-  FROM mr_emrdb0_docdata doc
+  select count(*) as total from oe_ord_exec order by ex_stdatetime desc  -- 兼容性差
   ```
 
-  以上SQL在KingBase下可以执行，但在GaussDB下会报`missing WITHIN keyword`，应该使用以下兼容写法
+  以上代码可以在`人大金仓`上运行，在`高斯`数据库下报错，**正确**的写法应该如下：
 
+  ```sql
+  select count(*) as total from oe_ord_exec
+  ```
+  存在`group by`时，`count`与`order by`可以同时存在
+
+  ```sql
+  select count(*) as total, rule_alias from bsp_cache_tables where 1=1
+  group by rule_alias order by rule_alias;
+  ```
+  
+
+###　2024-08-24
+
+- 润乾服务器地址由之前的： `111.205.6.225` 修改为`111.205.100.74` , 只修改ip地址即可，其他不变
+
+### 2024-08-18
+
+- 关于`LISTAGG`方法兼容性问题
+
+  ```sql
+  SELECT LISTAGG(doc.id,",") FROM mr_emrdb0_docdata doc     -- 兼容性差
+  ```
+  
+  以上SQL在KingBase下可以执行，但在GaussDB下会报`missing WITHIN keyword`，应该使用以下兼容写法
+  
   ```sql
   SELECT LISTAGG(doc.id,",") WITHIN GROUP (ORDER BY doc.id ASC)
   FROM mr_emrdb0_docdata doc
@@ -30,7 +54,7 @@
 - 因为`高斯`数据库不支持~~datetime~~数据类型，所以在导入时崔工统一修改成了date，但是测试发现date转LocalDatetime会报这个错，提个脚本将数据类型转成timestamp就可以解决这个问题
 
   ```cmd
-  cannot convert the column of type DATE to requested type java.time.LocalDateTime.
+  cannot convert the column of type DATE to requested type java.time.LocalDateTime
   ```
 
 ### 2024-08-14
@@ -50,7 +74,7 @@
 - 因为`高斯`数据库中~~日期字段名=''~~写法不被允许，需要删除相关代码
 
   ```sql
-  start_date is null or start_date='' or start_date>=current_date
+  start_date is null or start_date='' or start_date>=current_date    -- start_date=''兼容性差
   ```
 
   删除~~start_date=''~~，修改成
