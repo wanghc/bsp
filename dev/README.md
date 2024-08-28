@@ -1,5 +1,28 @@
 ## 信创版-开发备忘录
 
+### 2024-08-27
+
+- 在`高斯`数据库中关于 `field=''`问题
+
+- 如果表字段非varchar类型，高斯不允许使用`field=''`, 应该使用`field is null`
+
+  ```sql
+  select field1 from t_test where field_varchar=''   -- 可以运行
+  ```
+
+  ```sql
+  select field1 from t_test where field_amount='' -- 人大金仓可以，高斯报错 field_amount为int类型
+  select field1 from t_test where start_date=''   -- 人大金仓可以，高斯报错 start_date为date类型
+  ```
+  应使用以下方式
+  ```sql
+  select field1 from t_test where field_varchar is null or field_varchar=''
+  select field1 from t_test where field_amount is null
+  select field1 from t_test where start_date is null
+  ```
+  
+  
+
 ### 2024-08-26
 
 - 关于`count(*)`与`order by` 使用
