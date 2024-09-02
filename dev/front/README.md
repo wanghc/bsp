@@ -64,7 +64,7 @@ public BaseResponse<List<MyVo>> getListByItemId(@RequestParam("p1") String p1) {
 // 通过传入{resultSetType:"excel"}参数实现导出Excel功能,fileName来定义导出文件名称(不带后缀),
 $ipost('/xx/xxx',{resultSetType:"excel",fileName:'文件名'}); // 导出excel
 $ipost('/xx/xxx',{resultSetType:"pdf",fileName:'文件名'});   // 导出pdf文件
-$ipost('/xx/xxx',{resultSetType:"excelPrint",fileName:'文件名',printer:''}) // 导出并打印pdf
+$ipost('/xx/xxx',{resultSetType:"excelPrint",printer:''}) // 导出并打印pdf
 ```
 
 ```js
