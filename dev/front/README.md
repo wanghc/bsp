@@ -124,8 +124,9 @@ function uploadFile(){
 // 在/base/scripts/locale/zh_CN.js内写入对应键值对
 // 可以使用$g来实现转对应提示功能
 $g('notNull.code')  //返回代码不能为空
-$g('password.errorTimes',[3,2]); // 返回"你已错误登录3次,还有2机会"
-$g('你已错误登录{0}次,还有{1}机会',[3,2]); // 返回"你已错误登录3次,还有2机会"
+$g('password.errorTimes',[3,2]); // 你已错误登录3次,还有2机会
+$g('你已错误登录{0}次,还有{1}机会',[3,2]); // 你已错误登录3次,还有2机会
+$g('你已错误登录{etimes}次,还有{rtimes}机会',{etimes:3,rtimes:2}); // 你已错误登录3次,还有2机会
 ```
 ```html
 <!-- html内翻译使用hisui-label -->
