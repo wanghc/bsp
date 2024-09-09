@@ -1,5 +1,22 @@
 ## 信创版-开发备忘录
 
+### 2024-09-09
+
+- 基础数据平台表名修改了一下内容
+  `ct_ar_item_addinfo` -> `ct_mat_item`
+  以下表没有做维护，只是迁移his里之前有的但是业务含义不明确或者不确定是否在用的字段，请用到的同事联系我确认
+  `ct_oe_itmmast_addinfo` -> `ct_oe_itmmast_ext`  
+  `ct_org_location` -> `ct_org_location_ext`
+  `ct_org_useraccount_addinfo` -> `ct_org_useraccount_ext`
+  `ct_org_healthorg_addinfo` -> `ct_org_healthorg_ext`
+  `ct_rb_careprov_addinfo` -> `ct_rb_careprov_ext`
+  `ct_or_operation_addinfo` -> `ct_or_operation_ext`
+  `ct_mr_icddx_addinfo` -> `ct_mr_icddx_ext`
+  注意事项：
+  (1)医护人员的手机号，请大家优先取`hos_org_person`人员表里的mobile
+  (2)是否麻醉师  请取医护人员表`ct_rb_careprov` 的 `anaesthetist_flag`
+  (3)医嘱项的通用名方式获取方式联系药房药库，不要取自`ct_oe_itmmast_ext`表
+
 ### 2024-09-03
 
 - 搭建`错误日志平台`，查看[详细说明](https://106.63.4.7:8000/his-mediway-java/his-document/-/blob/master/%E6%97%A5%E5%BF%97%E5%B9%B3%E5%8F%B0/readme.md)
