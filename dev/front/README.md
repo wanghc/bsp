@@ -167,7 +167,7 @@ $g('你已错误登录{etimes}次,还有{rtimes}机会',{etimes:3,rtimes:2}); //
 ```
 
 
-### 住院/急诊的诊疗与病历调用
+### 图表组界面调用
 
 路径：`/bsp/menugroup/html/chart.html`
 
