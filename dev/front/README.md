@@ -165,3 +165,21 @@ $g('你已错误登录{etimes}次,还有{rtimes}机会',{etimes:3,rtimes:2}); //
     CmdShell.Run("chrome.exe https://www.hisui.cn");
 </script>
 ```
+
+
+### 住院/急诊的诊疗与病历调用
+
+路径：`/bsp/menugroup/html/chart.html`
+
+参数说明
+
+| 参数名             | 参数说明                                                     | 是否必传 |
+| ------------------ | ------------------------------------------------------------ | -------- |
+| `chartBookCode`    | 图表组代码。如：`IPOrderChart`                               | 必传     |
+| `switchSysPat`     | 切换病人时，是否修改头菜单框架病人信息。默认：N；[ Y 或 N]   | 可选     |
+| `patientListPanel` | 左侧病人列表路径，不传时左侧区域隐藏。如：`../emr/browse/html/emr.browse.episodelist.html` | 可选     |
+| `NoPatientBanner`  | 是否显示病人信息条，[ Y或N ]                                 | 可选     |
+| `patientListPage`  | 当病人信息条显示时，病人信息条 - 病人列表按钮关联的界面      | 可选     |
+| `episodeId`        | 就诊id，不传时会取头菜单中就诊id                             | 可选     |
+| `patientId`        | 病人id，不传时会取头菜单中病人id                             | 可选     |
+
