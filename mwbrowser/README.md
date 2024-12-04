@@ -64,6 +64,9 @@
 > 
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 ## 更新说明
+
+
+
 ### 2024-07-17（1.0.45）
 - 右键菜单及提示国际化
 
