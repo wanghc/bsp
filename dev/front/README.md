@@ -16,15 +16,50 @@ var session = websys_getSession();
 
 ### 获得头菜单表单
 ```js
-/// 头菜单表单
-websys_setMenuForm({EpisodeID:2,PatientID:1});
-var frm = websys_getMenuForm();
-var admId = frm.EpisodeID.value;     // 得到2
-var patientId = frm.PatientID.value; // 得到1
+/// 头菜单表单用于存储全局参数，如:病人id,就诊id
+// 重设所以参数
 websys_resetMenuForm();
 admId = frm.EpisodeID.value;     // 得到''
 patientId = frm.PatientID.value; // 得到''
+// 设置EpisodeID=2,PatientID=2
+websys_setMenuForm({EpisodeID:2,PatientID:1});
+// 从头菜单表单中获取值
+var frm = websys_getMenuForm();
+var admId = frm.EpisodeID.value;     // 得到2
+var patientId = frm.PatientID.value; // 得到1
+
 ```
+### 弹出HISUI窗口
+
+```js
+// 在【顶层】窗口弹出界面
+websys_showModal({
+    title:'弹出窗口',
+	width:700,height:400,
+	url:'../base/runqian/html/test.html?open=2',
+	myData:{startDate:'2024-12-09'}  /*附加参数对象*/
+});
+// 在弹出界面test.html中获得附加参数
+let myData  = websys_showModal('options').myData; // {startDate:'2024-12-09'}
+websys_showModal('close') //$hisui.window组件有的方法都可以在此使用
+```
+如果需要在某区域iframe内弹出窗口，可以指定targetFrm或targetName。如果这二值都传则会在targetFrm下查找targetName
+```js
+// 在【指定window】内弹出界面
+websys_showModal({
+    title:'弹出窗口',
+	width:700,height:400,
+	targetFrm:window,              // 也可以是iframe名称 targetName:"MyName"
+	url:'../../../base/runqian/html/test.html?open=1',
+	myData:{startDate:'2024-12-09'}
+});
+// 在test.html中可以使用以下代码获得附加参数
+var myData = websys_showModal('options',{targetFrm:window.parent}).myData; // {startDate:'2024-12-09'}
+websys_showModal('close',{targetFrm:window.parent}); // $hisui.window组件有的方法都可以在此使用
+```
+
+
+
 ### 请求后台时使用的方法
 
 ```js
