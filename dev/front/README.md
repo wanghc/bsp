@@ -27,8 +27,20 @@ websys_setMenuForm({EpisodeID:2,PatientID:1});
 var frm = websys_getMenuForm();
 var admId = frm.EpisodeID.value;     // 得到2
 var patientId = frm.PatientID.value; // 得到1
-
 ```
+补充说明：
+
+`websys_resetMenuForm(forceGlobalPatient)`、`websys_getMenuForm`(forceGlobalPatient)、`websys_setMenuForm(options,forceGlobalPatient)`方法入参`forceGlobalPatient`表示【是否强制处理全局就诊信息】，如果为true则强制对全局就诊信息处理，否则【包含(switchSysPat=N参数)的最近Window对象上的就诊信息】或全局就诊信息
+
+```js
+// 以下三个方法强制处理全局头菜单上就诊信息，不考虑switchSysPat=N参数
+websys_resetMenuForm(true);
+websys_getMenuForm(true);
+websys_setMenuForm({EpisodeID:2,PatientID:1},true);
+```
+
+
+
 ### 弹出HISUI窗口
 
 ```js
@@ -196,9 +208,40 @@ $g('你已错误登录{etimes}次,还有{rtimes}机会',{etimes:3,rtimes:2}); //
 <addins></addins>
 <!--业务使用 -->
 <script type="text/javascript">
-    CmdShell.Run("calc.exe");
+// 在非window客户端上使用ws实现中件间功能,只能通过回调方法得到返回值
+// 示例1。不同操作系统下区别调用
+if ((navigator.platform.indexOf("Linux")>-1){
+    CmdShell.Run("ipconfig",rtn=>console.log(rtn));
+	CmdShell.Run("calc.exe");
     CmdShell.Run("chrome.exe https://www.hisui.cn");
+}else{
+    // 推荐回调
+    CmdShell.Run("ip a",rtn=>console.log(rtn));
+    CmdShell.Run("chrome https://www.hisui.cn");
+}
 </script>
+```
+```js
+// 示例2。不同平台下不同zip包示例
+XX.clear();
+if (navigator.platform.indexOf("Linux x86_64")>-1){
+	XX.data[0]["_dllDir"] = XX.data[0]["_dllDir"].replace('.zip',"-linux-x64.zip");
+}				
+if ((navigator.platform == "Win32") || (navigator.platform == "Windows")){
+	XX.data[0]["_dllDir"] = XX.data[0]["_dllDir"].replace('.zip',"-win.zip");
+}
+if ((navigator.platform == "Linux aarch64"))
+	XX.data[0]["_dllDir"] = XX.data[0]["_dllDir"].replace('.zip',"-linux-arm64.zip");
+}
+XX.mymethod(arg,rtn=>console.log(rtn));
+```
+```js
+//示例3。 不同操作系统下脚本命令相同时，可以统一写法
+helloTestObj.clear();
+helloTestObj.cmd('HelloTest.jar myArg1 myArg2',function(rtn){
+    console.log(rtn);
+    //{msg:"success",rtn:"第0个入参myArg1,第1个入参myArg2,~.~Hello Addins !",status:200}
+});
 ```
 
 
