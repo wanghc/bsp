@@ -2,6 +2,36 @@
 
 以HOS功能为基础，整合HISUI的前端最小工程范例
 
+### 在html界面中引入HISUI
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>界面名称</title>
+    <!--引用HISUI-->
+    <script type="text/javascript" src="../../../base/scripts/hisui.js"></script>
+</head>
+<body>
+ ...
+</body>
+</html>
+```
+
+引入hisui.js后，会同步获取后台HISUI版本、语言、字体大小等配置，引入对应的js，相关样式的css；引入界面定义相关js，来自动获得界面元素定义及表格定义。
+
+如果不希望自动引入界面定义相关文件，可以在引入hisui.js前，把变量$pageOptionsDisable设置为true即可。
+
+```html
+<script type="text/javascript" >window.$pageOptionsDisable = true;</script>
+<script type="text/javascript" src="../../../base/scripts/hisui.js"></script>
+```
+
+
+
 ## 公共方法
 
 ### 获得头菜单Window对象
@@ -16,17 +46,20 @@ var session = websys_getSession();
 
 ### 获得头菜单表单
 ```js
-/// 头菜单表单用于存储全局参数，如:病人id,就诊id
-// 重设所以参数
+/// 头菜单表单用于存储全局参数，如:病人id,就诊id,就诊类型
+// --- 重设全局信息
 websys_resetMenuForm();
-admId = frm.EpisodeID.value;     // 得到''
-patientId = frm.PatientID.value; // 得到''
-// 设置EpisodeID=2,PatientID=2
-websys_setMenuForm({EpisodeID:2,PatientID:1});
-// 从头菜单表单中获取值
+// --- 从全局信息中获取值
 var frm = websys_getMenuForm();
-var admId = frm.EpisodeID.value;     // 得到2
-var patientId = frm.PatientID.value; // 得到1
+let admId = frm.EpisodeID.value;     // 得到''
+let patientId = frm.PatientID.value; // 得到''
+let admType = frm.admType.value; // 得到''
+// --- 设置值, 把EpisodeID=2,PatientID=2,admType=I写到全局信息中
+websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I'});
+// --- 取值
+admId = frm.EpisodeID.value;     // 得到2
+patientId = frm.PatientID.value; // 得到1
+admType = frm.admType.value;     // 得到I
 ```
 补充说明：
 
@@ -36,7 +69,7 @@ var patientId = frm.PatientID.value; // 得到1
 // 以下三个方法强制处理全局头菜单上就诊信息，不考虑switchSysPat=N参数
 websys_resetMenuForm(true);
 websys_getMenuForm(true);
-websys_setMenuForm({EpisodeID:2,PatientID:1},true);
+websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I'},true);
 ```
 
 
