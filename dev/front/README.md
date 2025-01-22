@@ -154,6 +154,16 @@ $ipost('/xx/list',{p1:"入参",resultSetType:"excel",fileName:'文件名'},funct
     $.messager.progress("close");  // 关闭遮罩层
 });
 ```
+
+
+```js
+// 指定纸张大小为A3/A4且横向输出,默认A4-纵向，rotate只支持0与90
+$ipost('/x/x',{resultSetType:"pdf",fileName:'文件名',pageSize:"A3",rotate:"90"});
+$ipost('/x/x',{resultSetType:"excelPrint",printer:'x',pageSize:"A4",rotate:"90"})
+```
+
+
+
 #### 文件上传
 
 - 使用HOS的`/file/uploadReturnUrl`服务上传，文件存储在minio服务上
