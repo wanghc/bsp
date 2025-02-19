@@ -121,6 +121,83 @@ $iget('/cf/sys/getmenu',{code:'his'},function(json){
     // 后台返回的json数据
 })
 ```
+#### 参数加密后再请求($iget_enc，$ipost_enc)
+
+前台使用`$ipost_enc`或`$iget_enc`发送请求时，会先把`所有参数`加密，然后再发送到后台，后台java使用`@InterfaceDecrypt`来解密`所有参数`，还原入参
+
+- GET请求全参数加密示例
+
+```js
+$iget_enc('/xx/xxx',{password:"123456",username:"医生02",loc:'所有科室'},function(rtn){
+	console.log(rtn.data);
+});
+```
+
+```java
+@GetMapping("/xxx")
+@InterfaceDecrypt
+public BaseResponse<MyVo> xxxGet(String password,String username,String loc){
+    // do something
+    return BaseResponse.success(myVo);
+}
+```
+- POST请求全参数加密示例
+```js
+$ipost_enc('/xx/xxx',{password:"123456",username:"医生02",loc:'所有科室'},function(rtn){
+	console.log(rtn.data);
+});
+```
+
+```java
+@PostMapping("/xxx")
+@InterfaceDecrypt
+public BaseResponse<dto> xxxPost(@RequestBody MyDto dto){
+    // do something
+    return BaseResponse.success(dto);
+}
+```
+
+如果只要部分参数加密，可以使用websys_interfaceEncrypt方法来加密发送，后台使用`@InterfaceDecrypt`来解密指定的某些参数
+
+- GET请求部分参数加密示例：
+
+```js
+let passwordEnc = websys_interfaceEncrypt("123456");
+let usernameEnc = websys_interfaceEncrypt("admin");
+$iget('/xx/xxx',{password:passwordEnc,username:usernameEnc,loc:'部分科室'},function(rtn){
+	console.log(rtn.data);
+});
+```
+
+```java
+@GetMapping("/xxx")
+@InterfaceDecrypt(keyParams = {"password","username"}) // 前台只对用户与密码参数加密
+public BaseResponse<MyVo> xxxGet(String password, String username, String loc){
+    // do something
+    return BaseResponse.success(myVo);
+}
+```
+
+- POST请求部分参数加密示例：
+
+```js
+let passwordEnc = websys_interfaceEncrypt("123456");
+let usernameEnc = websys_interfaceEncrypt("admin");
+$ipost('/xx/xxx',{password:passwordEnc,username:usernameEnc,loc:'部分科室'},function(rtn){
+  	console.log(rtn.data);
+});
+```
+
+```java
+@PostMapping("/xxx")
+@InterfaceDecrypt(bodyParams = {"password","username"})  // 前台只对用户与密码参数加密
+public BaseResponse<MyDto> xxxPost(@RequestBody MyDto dto){
+    return BaseResponse.success(dto);
+}
+```
+
+  
+
 #### 导出Excel
 
 - 1. `后台Java代码`（确保引入了`hiscfsv-bsp`依赖）
