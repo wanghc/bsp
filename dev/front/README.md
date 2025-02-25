@@ -34,17 +34,17 @@
 
 ## 公共方法
 
-### 获得头菜单Window对象
+### 1、获得头菜单Window对象
 ```js
 var menuWin = websys_getMenuWin();
 ```
 
-### 获得当前会话信息
+### 2、获得当前会话信息
 ```js
 var session = websys_getSession();
 ```
 
-### 获得头菜单表单
+### 3、获得头菜单表单
 ```js
 /// 头菜单表单用于存储全局参数，如:病人id,就诊id,就诊类型
 // --- 重设全局信息
@@ -74,7 +74,7 @@ websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I'},true);
 
 
 
-### 弹出HISUI窗口
+### 4、弹出HISUI窗口
 
 ```js
 // 在【顶层】窗口弹出界面
@@ -105,7 +105,7 @@ websys_showModal('close',{targetFrm:window.parent}); // $hisui.window组件有�
 
 
 
-### 请求后台时使用的方法
+### 5、请求后台时使用的方法($ipost，$iget)
 
 ```js
 // 向后台发送post请求，默认requestbody-json方式
@@ -121,7 +121,9 @@ $iget('/cf/sys/getmenu',{code:'his'},function(json){
     // 后台返回的json数据
 })
 ```
-#### 参数加密后再请求($iget_enc，$ipost_enc)
+### 6、参数加密及返回值加密
+
+#### 6.1 请求参数加密再请求($iget_enc，$ipost_enc)
 
 前台使用`$ipost_enc`或`$iget_enc`发送请求时，会先把`所有参数`加密，然后再发送到后台，后台java使用`@InterfaceDecrypt`来解密`所有参数`，还原入参
 
@@ -198,7 +200,21 @@ public BaseResponse<MyDto> xxxPost(@RequestBody MyDto dto){
 
   
 
-#### 导出Excel
+#### 6.2 后台数据加密返回
+
+```java
+@InterfaceEncrypt
+@PostMapping("/xxx")
+public BaseResponse<IPage<MyVO>> findByCodeOrDescription(@RequestBody MyDto dto) {
+    return BaseResponse.success(myServices.find(dto));
+}
+// 返回{code:"200",msg:"success",data:"xxxxxxxxxx"}
+// 前台自动解密成{code:"200",msg:"success",data:{records:[{}],current:1,page:1,size:10...}}
+```
+
+
+
+### 7、导出Excel
 
 - 1. `后台Java代码`（确保引入了`hiscfsv-bsp`依赖）
 
@@ -241,7 +257,7 @@ $ipost('/x/x',{resultSetType:"excelPrint",printer:'x',pageSize:"A4",rotate:"90"}
 
 
 
-#### 文件上传
+### 8、文件上传
 
 - 使用HOS的`/file/uploadReturnUrl`服务上传，文件存储在minio服务上
 
@@ -285,7 +301,7 @@ function uploadFile(){
 }
 ```
 
-### 国际化方法
+### 9、国际化方法
 ```js
 // 用于翻译
 // 在/base/scripts/locale/zh_CN.js内写入对应键值对
@@ -301,7 +317,7 @@ $g('你已错误登录{etimes}次,还有{rtimes}机会',{etimes:3,rtimes:2}); //
 <span class="hisui-label">登记号</span>
 ```
 
-### 润乾打印方法
+### 10、润乾打印方法
 
 ```html
 <!--查看报错界面 runqian/html/runqian.preview.html?reportName=bsp/sys/test.rpx -->
@@ -321,7 +337,7 @@ $g('你已错误登录{etimes}次,还有{rtimes}机会',{etimes:3,rtimes:2}); //
 </script>
 ```
 
-### 中间件调用
+### 11、中间件调用
 ```html
 <!--引入中间件js ， 业务插件放入\base\addins\plugin\目录-->
 <script type="text/javascript" src="../../scripts/websys.jquery.bsp.js"></script>
@@ -365,7 +381,7 @@ helloTestObj.cmd('HelloTest.jar myArg1 myArg2',function(rtn){
 ```
 
 
-### 图表组界面调用
+### 12、图表组界面调用
 
 路径：`/bsp/menugroup/html/chart.html`
 
