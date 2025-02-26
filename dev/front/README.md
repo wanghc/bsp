@@ -396,4 +396,5 @@ helloTestObj.cmd('HelloTest.jar myArg1 myArg2',function(rtn){
 | `patientListPage`  | 当病人信息条显示时，病人信息条 - 病人列表按钮关联的界面      | 可选     |
 | `episodeId`        | 就诊id，不传时会取头菜单中就诊id                             | 可选     |
 | `patientId`        | 病人id，不传时会取头菜单中病人id                             | 可选     |
+| `patListCollapse`  | 是否折叠侧边病人列表，1时折叠，空或不传展开                  | 可选     |
 
