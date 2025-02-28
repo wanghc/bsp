@@ -20,7 +20,7 @@
 
 #### 3、微服务工程中的`api`模块应该包含`Configuration`类及`spring.factories`配置文件
 
-- ![image-20250228090450435](C:\Users\wangh\AppData\Roaming\Typora\typora-user-images\image-20250228090450435.png)
+- ![micro-Configuration](micro.png)
 
 #### 2025-02-26
 
