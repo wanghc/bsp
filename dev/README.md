@@ -1,5 +1,36 @@
 ## 信创版-开发备忘录
 
+#### 2025-02-27
+
+晚间19点会议
+
+#### 1、pom.xml中引入依赖jar时，除特殊情况外，不使用~~`<optional>`~~与~~`<scope>`~~配置
+
+```xml
+  <dependency>
+  	<groupId>com.mediway.his</groupId>
+  	<artifactId>xx-xxx</artifactId>
+  	<version>1.0-SNAPSHOT</version>
+  	<!--<optional>true</optional> 不使用-->
+  	<!--<scope>provided</scope> 不使用-->        <!--compile值可以-->
+  </dependency>
+```
+
+#### 2、程序中不直接注入 hos 的 service,应调用api接口，来解藕对HOS的依赖
+
+#### 3、微服务工程中的`api`模块应该包含`Configuration`类及`spring.factories`配置文件
+
+- ![image-20250228090450435](C:\Users\wangh\AppData\Roaming\Typora\typora-user-images\image-20250228090450435.png)
+
+#### 2025-02-26
+
+- 说明：为统一各种操作系统下插件与医为浏览器，决定windows下也使用新版本插件及医为浏览器(内核chrome108)
+- - 1、进入【常德】或【87系统】登录界面时会提示安装插件，点击下载安装即可，安装完成（建议使用常德登录界面下载，大小77M）。
+    2、刷新登录界面会自动生成医为浏览器快捷方式到桌面上（不同项目生成的医为浏览器首页不同，医为浏览器图标与iMedical图标一样）
+    3、使用桌面快捷方式入口进入系统
+
+
+
 ### 2024-09-27
 
 - `gitlab`删除`addins/plugin`目录的管理，移到84服务器`/home/his/base/addins/plugin`下
