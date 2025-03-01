@@ -103,6 +103,61 @@ var myData = websys_showModal('options',{targetFrm:window.parent}).myData; // {s
 websys_showModal('close',{targetFrm:window.parent}); // $hisui.window组件有的方法都可以在此使用
 ```
 
+#### 4.1 公共方法列表
+
+```js
+function websys_rewriteUrl(url: String,paramObj: Object) // 为url增加请求参数，返回字符串
+// 示例：
+websys_rewriteUrl("my.html?id=1",{id:2,name:'whc'}); /* 返回： my.html?id=2&name=whc  */
+websys_rewriteUrl("my.html",{id:2,name:'whc'});      /* 返回： my.html?id=2&name=whc */
+websys_rewriteUrl("",{id:2,name:'whc'});             /* 返回： ?id=2&name=whc  */
+```
+
+```js
+function websys_frontPathCombine(urlForBasePath: String); // 相对static/base/目录转换成绝对路径，入参是相对于static/base/的html路径，生成绝对路径，保证在不同vue路由下能找对界面,来解决404问题
+// 示例1：
+websys_frontPathCombine("../emr/ip/html/my.html"); 
+/* 返回：/his/base/../emr/ip/html/my.html,访问的实际是static/emr/ip/html/my.html文件 */
+
+// 示例2：
+// 如果以/或//开头不处理，
+websys_frontPathCombine("//emr/ip/html/my.html"); /* 返回：//emr/ip/html/my.html */
+websys_frontPathCombine("/emr/ip/html/my.html");  /* 返回：/emr/ip/html/my.html */
+```
+
+```js
+// 获得同域下最顶层window对象。一直向上查找parent，遇到跨域则返回当前window
+function websys_getTop();
+let myTop = websys_getTop();
+```
+
+```js
+function websys_urlToParamObj(url: String) // 获取请求路径中的参数对象
+// 示例：
+websys_urlToParamObj(location.href)  /* 返回当前界面的请求参数对象 */
+websys_urlToParamObj("my.html?id=1&name=whc")  /* 返回： {id:1,name:"whc"} */
+websys_urlToParamObj("id=1&name=whc")          /* 返回： {id:1,name:"whc"} */
+```
+
+```js
+function websys_objToParam(obj: Object, originParam: String, containEmpty: boolean|undefined)
+// 在originParam内补充obj参数, containEmpty为【false或不传】时会忽略obj中空值对
+// 示例：
+websys_objToParam({id:1},"id=2&type=",true);         /*返回：'id=2&type='*/
+websys_objToParam({id:1,sex:''},"id=2&type=",false); /*返回：'id=2&type='*/
+```
+
+
+
+创建新窗口`websys_createWindow`方法
+
+```js
+function websys_createWindow(url: String, name: String, features: String); // 打开窗口
+// 示例：
+websys_createWindow('my.html','_blank');
+websys_createWindow('my.html','TRAK_hidden','status,scrollbars,resizable,hisui=true,width=80%,height=80%');
+```
+
 
 
 ### 5、请求后台时使用的方法($ipost，$iget)
