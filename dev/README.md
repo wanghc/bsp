@@ -1,5 +1,40 @@
 ## 信创版-开发备忘录
 
+#### 2025-03-25
+
+- 登录界面路径修改成`/imedical/his`
+
+- 前台代码中写死路径的地方要修改
+
+- nginx中以前`/his`的代理修改为以下代理
+
+  ```nginx
+  location /imedical/his {
+  	alias D:/his-mediway-front/hisfront/static;
+  	if ($request_filename ~* ^.+\.(?:html|js|css|png|jpg|gif|woff)$){
+  		break;
+  	}
+  	if ($request_filename ~* "(.*?)(undefined)$"){
+  		return 200 '{"message":""}';
+  	}
+  	try_files $uri $uri/ /imedical/his/hos/index.html;
+  	index  index.html index.htm;
+  }
+  ```
+
+#### 2025-03-01
+
+- 查询his内数据时，`mapper`文件中不写死数据库schema名称`ho_his`
+
+- feign类与controller类的路径要一致
+
+- ```java
+  // Feign内path
+  @FeignClient(value="${mediway.application.emnur}",path="${server.servlet.context-path}/comem/emer/nurorder")
+  //  Controller
+  @RequestMapping("/comem/emer/nurorder")
+  ```
+
 #### 2025-02-27
 
 晚间19点会议
