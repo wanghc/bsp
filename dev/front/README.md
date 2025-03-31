@@ -453,3 +453,18 @@ helloTestObj.cmd('HelloTest.jar myArg1 myArg2',function(rtn){
 | `patientId`        | 病人id，不传时会取头菜单中病人id                             | 可选     |
 | `patListCollapse`  | 是否折叠侧边病人列表，1时折叠，空或不传展开                  | 可选     |
 
+13、侧菜单界面（住院诊疗/急诊诊疗）
+
+路径：/bsp/menugroup/html/side.html
+
+参数说明
+
+| 参数名            | 参数说明                                                     | 是否必传 |
+| ----------------- | ------------------------------------------------------------ | -------- |
+| `resourceMCode`   | 当前HOS菜单的菜单名。因为在首页下获得的路由是welcome,无法获得菜单名。以参数传入 | 必传     |
+| `switchSysPat`    | 切换病人时，是否修改头菜单框架病人信息。默认：N；[ Y 或 N]   | 可选     |
+| `homeTab`         | 首页路径，如：homeTab=emdt/docm/patm/html/patoverviews.html  | 必传     |
+| `NoPatientBanner` | 是否显示病人信息条，[ Y或N ]                                 | 可选     |
+| `patientListPage` | 当病人信息条显示时，病人信息条 - 病人列表按钮关联的界面。如：patientListPage=emdt/docm/patm/html/emdtPatlist.html | 可选     |
+| `episodeId`       | 就诊id，不传时会取头菜单中就诊id                             | 可选     |
+| `patientId`       | 病人id，不传时会取头菜单中病人id                             | 可选     |
