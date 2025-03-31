@@ -69,6 +69,7 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
      	  <tr><td>rowContentFit: false</td><td>默认false 行内容是否自动换行。替换listHtmlTableWordWrapFlag</td></tr>
      	  <tr><td>rowHeightExpand: false</td><td>默认false 是否推动表格后面元素位置</td></tr>
      	  <tr><td>listAfterCallback:function</td><td>默认null,当表格打印完成后，回调此函数 20230224</td></tr>
+     	  <tr><td>onPrintEnd</td><td>打印完成时回调方法</td></tr>
      	  </table>
      </li></ul></pre>
      </details>
