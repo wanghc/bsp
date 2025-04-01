@@ -44,7 +44,7 @@ var menuWin = websys_getMenuWin();
 var session = websys_getSession();
 ```
 
-### 3、获得头菜单表单
+### 3、获得与设置头菜单表单信息
 ```js
 /// 头菜单表单用于存储全局参数，如:病人id,就诊id,就诊类型
 // --- 重设全局信息
@@ -55,7 +55,10 @@ let admId = frm.EpisodeID.value;     // 得到''
 let patientId = frm.PatientID.value; // 得到''
 let admType = frm.admType.value; // 得到''
 // --- 设置值, 把EpisodeID=2,PatientID=2,admType=I写到全局信息中
+// --- 2025-04-01 禁用使用属性直接赋值
 websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I'});
+/**对象属性有以下这些EpisodeID,PatientID,mradm,DoingSth,canGiveBirth,admType,PACSApplyNo,IsOtherLocAdmFlag,AcctBookID,AcctBookName,PPRowId,AppointmentID,PlannedOperationID
+*/
 // --- 取值
 admId = frm.EpisodeID.value;     // 得到2
 patientId = frm.PatientID.value; // 得到1
