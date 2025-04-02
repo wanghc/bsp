@@ -1,5 +1,25 @@
 ## 信创版-开发备忘录
 
+#### 2025-04-01
+
+- 使用menuForm.EpisodeID.value属性赋值时，会提示错误，浏览器`控制台`也会抛出异常，通过`控制台`的堆栈信息，可以定义到自己的代码。修改成`websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I',PPRowId:1}); ` 这种格式即可。 `读取值功能`不受影响。
+
+#### 2025-03-29
+
+- 切换数据库大小写敏感方式，修改like功能
+
+  如果别名中有大小写字符时，使用双引号包裹处，以防数据库把列名转成全小写
+
+  ```sql
+  select locId as "ctLocId" from ct_org_location
+  ```
+
+  如果使用模糊查询功能可以使用`ilike`功能，来忽略大小查询
+
+  ```sql
+  (code ilike concat('%', #{dto.code}, '%') or description ilike concat('%',#{dto.code},'%'))
+  ```
+
 #### 2025-03-25
 
 - 登录界面路径修改成`/imedical/his`

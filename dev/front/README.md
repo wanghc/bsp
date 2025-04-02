@@ -45,24 +45,44 @@ var session = websys_getSession();
 ```
 
 ### 3、获得与设置头菜单表单信息
+
+头菜单表单用于存储全局参数，如：病人id，就诊id，就诊类型，手术ID，会诊ID，DoingSth。
+
+| 属性名             | 说明                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| EpisodeID          | 就诊ID<BR/>就诊唯一标识，因医嘱录入界面同时需要admType，所以传此值时admType也需要传入 |
+| PatientID          | 患者ID                                                       |
+| mradm              |                                                              |
+| DoingSth           | 正在做某事的说明。表示正在做某事，为空值时才允许切换菜单。不为空时，切换菜单会弹出窗口提示。<br/>`frm.DoingSth.value="病历文书正在编辑中，是否保存"` |
+| canGiveBirth       | 是否可以分娩，是否满足分娩条件，如：床位图选中大于18岁女性时<br/>`websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I',canGiveBirth:1});`，canGiveBirth为0时，进入分娩界面会提示 |
+| admType            | 用于患者信息条和诊断录入界面，区分患者就诊类型。`websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I'});` |
+| PACSApplyNo        | 医技申请单号                                                 |
+| IsOtherLocAdmFlag  | 跨科就诊标志                                                 |
+| AcctBookID         | 会计核算成品-帐套                                            |
+| AcctBookName       | 会计核算成品-帐套                                            |
+| PPRowId            | 药理实验项目指针                                             |
+| AppointmentID      | 手术申请ID                                                   |
+| PlannedOperationID | 拟施手术id                                                   |
+
 ```js
-/// 头菜单表单用于存储全局参数，如:病人id,就诊id,就诊类型
-// --- 重设全局信息
+/// 重设表单信息，全初始化
 websys_resetMenuForm();
-// --- 从全局信息中获取值
+```
+
+```js
+/// 从头表单中获取值
 var frm = websys_getMenuForm();
-let admId = frm.EpisodeID.value;     // 得到''
-let patientId = frm.PatientID.value; // 得到''
-let admType = frm.admType.value; // 得到''
-// --- 设置值, 把EpisodeID=2,PatientID=2,admType=I写到全局信息中
-// --- 2025-04-01 禁用使用属性直接赋值
-websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I'});
-/**对象属性有以下这些EpisodeID,PatientID,mradm,DoingSth,canGiveBirth,admType,PACSApplyNo,IsOtherLocAdmFlag,AcctBookID,AcctBookName,PPRowId,AppointmentID,PlannedOperationID
-*/
-// --- 取值
-admId = frm.EpisodeID.value;     // 得到2
-patientId = frm.PatientID.value; // 得到1
-admType = frm.admType.value;     // 得到I
+let admId = frm.EpisodeID.value;
+let patientId = frm.PatientID.value;
+let admType = frm.admType.value;
+```
+
+```js
+// websys_setMenuForm设置值，会先清空所有表单信息，再把参数信息写到全局表单中
+// 2025-04-01 除DoingSth标志外，禁用所有属性直接使用x.value=x方式赋值，必须使用websys_setMenuForm赋值
+websys_setMenuForm({PatientID:1,EpisodeID:2,admType:'I'});
+websys_setMenuForm({PatientID:1,EpisodeID:2,admType:'I',canGiveBirth:1});
+websys_setMenuForm({PatientID:1,EpisodeID:2,admType:'I',AppointmentID:1});
 ```
 补充说明：
 
