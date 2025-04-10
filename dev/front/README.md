@@ -97,7 +97,9 @@ websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I'},true);
 
 
 
-### 4、弹出HISUI窗口
+### 公共方法
+
+#### 4.1 弹出HISUI窗口
 
 ```js
 // 在【顶层】窗口弹出界面
@@ -126,7 +128,7 @@ var myData = websys_showModal('options',{targetFrm:window.parent}).myData; // {s
 websys_showModal('close',{targetFrm:window.parent}); // $hisui.window组件有的方法都可以在此使用
 ```
 
-#### 4.1 公共方法列表
+#### 4.2 链接路径相关方法
 
 ```js
 function websys_rewriteUrl(url: String,paramObj: Object) // 为url增加请求参数，返回字符串
@@ -149,12 +151,6 @@ websys_frontPathCombine("/emr/ip/html/my.html");  /* 返回：/emr/ip/html/my.ht
 ```
 
 ```js
-// 获得同域下最顶层window对象。一直向上查找parent，遇到跨域则返回当前window
-function websys_getTop();
-let myTop = websys_getTop();
-```
-
-```js
 function websys_urlToParamObj(url: String) // 获取请求路径中的参数对象
 // 示例：
 websys_urlToParamObj(location.href)  /* 返回当前界面的请求参数对象 */
@@ -172,13 +168,39 @@ websys_objToParam({id:1,sex:''},"id=2&type=",false); /*返回：'id=2&type='*/
 
 
 
-创建新窗口`websys_createWindow`方法
+#### 4.3 创建新窗口`websys_createWindow`方法
 
 ```js
 function websys_createWindow(url: String, name: String, features: String); // 打开窗口
 // 示例：
 websys_createWindow('my.html','_blank');
 websys_createWindow('my.html','TRAK_hidden','status,scrollbars,resizable,hisui=true,width=80%,height=80%');
+```
+
+#### 4.4 获得token方法
+
+目前各个系统可能采用同一个域名，因此会造成sessionStorage中存储数据的key值会被覆盖，因此各个系统的session storage中key的前缀要进行区分，防止同名情况出现，目前HOS可以通过前端配置修改前缀，HIS配置的前缀是hispro__，固封装方法来获得sessionStorage中值的方法
+
+```js
+// window.sessionStorage.getItem("hispro__access-token");
+websys_getHosAccessToken() ; //获得登录的token值
+websys_getHosStorageItemValue('access-token'); // 方法来获取token
+websys_getHosStorageItemValue('HostName');  // 获得hispro__HostName值
+
+// 也可以使用hos基础平台组封装的hos_utils.ls.get方法来获得信息
+hos的window.hos_utils.ls.get('access-token')
+```
+#### 4.5 获得同域最顶层
+```js
+// 获得同域下最顶层window对象。一直向上查找parent，遇到跨域则返回当前window
+function websys_getTop();
+let myTop = websys_getTop();
+```
+
+#### 4.6 获得头菜单窗口Window对象
+
+```js
+let myWin = websys_getMenuWin();
 ```
 
 
