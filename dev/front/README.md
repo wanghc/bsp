@@ -509,7 +509,8 @@ helloTestObj.cmd('HelloTest.jar myArg1 myArg2',function(rtn){
 | `resourceMCode`   | 当前HOS菜单的菜单名。因为在首页下获得的路由是welcome,无法获得菜单名。以参数传入 | 必传     |
 | `switchSysPat`    | 切换病人时，是否修改头菜单框架病人信息。默认：N；[ Y 或 N]   | 可选     |
 | `homeTab`         | 首页路径，如：homeTab=emdt/docm/patm/html/patoverviews.html  | 必传     |
-| `NoPatientBanner` | 是否显示病人信息条，[ Y或N ]                                 | 可选     |
+| `NoPatientBanner` | 是否显示病人信息条，Y表示不显示信息条。[ Y或N ]              | 可选     |
 | `patientListPage` | 当病人信息条显示时，病人信息条 - 病人列表按钮关联的界面。如：patientListPage=emdt/docm/patm/html/emdtPatlist.html | 可选     |
 | `episodeId`       | 就诊id，不传时会取头菜单中就诊id                             | 可选     |
 | `patientId`       | 病人id，不传时会取头菜单中病人id                             | 可选     |
+| notValidAdmType   | 是否判断【患者就诊类型】与【科室就诊类型】一致。Y表示不判断。[ Y或N ] | 可选     |
