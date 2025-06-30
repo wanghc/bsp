@@ -1,5 +1,59 @@
 ## 信创版-开发备忘录
 
+#### 2025-06-30
+
+- 为兼容TDSQL数据库，约定以下二种修改
+
+- 在`mybatis.xml`或`java`代码内的sql，`表名`二边**去掉双引号**，`字段名`二边**去掉双引号** ，字段后的as 的名称**可以加双引号***
+
+  ```sql
+  select my_Name as "myName" from my_table
+  ```
+
+- **未承继**com.mediway.his.api.entity.BaseEntity的PO类，要的PO类中指定id属性，且一定对应大写ID字段；**如果承继了不用修改**
+
+  ```java
+  @TableId(value="ID",type=IdType.AUTO)
+  private Long id;
+  ```
+
+  
+
+#### 2025-05-02
+
+- sql查询优化测试
+
+  ```sql
+  -- 当test_patient表patient_id为varchar类型时
+  explain analyze
+      select p.name from cf_bsp_test_patient t 
+      left join pa_pat_mast p on p.id=t.patient_id        -- 125ms
+  
+  explain analyze 
+  	SELECT p.name FROM pa_pat_mast p WHERE EXISTS (    -- 70ms
+      	SELECT 1 FROM cf_bsp_test_patient t WHERE p.id = t.patient_id
+  	)
+  explain analyze 
+  	select p.name from pa_pat_mast p where p.id in ( -- 76ms
+      	select t.patient_id from cf_bsp_test_patient t
+  	)
+  explain analyze 
+  	select p.name from pa_pat_mast p where p.id in (  -- 0.099ms
+       '72258','3','1','2'
+  	)
+  -- 强转类型再联接 或 字段类型修改成bigint后查询
+  explain analyze
+      select p.name from cf_bsp_test_patient t 
+      left join pa_pat_mast p on p.id=CAST(t.patient_id as bigint) -- 0.09ms
+  或    
+  alter table cf_bsp_test_patient modify patient_id bigint null;  
+  explain analyze
+      select p.name from cf_bsp_test_patient t 
+      left join pa_pat_mast p on p.id=CAST(t.patient_id as bigint) -- 0.07ms
+  ```
+
+  
+
 #### 2025-04-07
 
 - 微服务下，SQL语句中`::text`转字符串会报错，应使用TOCHAR()
