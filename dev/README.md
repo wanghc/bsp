@@ -4,17 +4,44 @@
 
 - 为兼容TDSQL数据库，约定以下二种修改
 
-- 在`mybatis.xml`或`java`代码内的sql，`表名`二边**去掉双引号**，`字段名`二边**去掉双引号** ，字段后的as 的名称**可以加双引号***
+- 1、在`mybatis.xml`或`java`代码内的sql，`表名`二边**去掉双引号**，`字段名`二边**去掉双引号** ，字段后的as 的名称**可以加双引号**(字段二边加双引号后表示不转大小写，而TDSQL默认把字段转成大写,会导致字段不存在错误)
 
   ```sql
-  select my_Name as "myName" from my_table
+  select my_Name as "myName" from my_table where my_sex_id = 1
   ```
 
-- **未承继**com.mediway.his.api.entity.BaseEntity的PO类，要的PO类中指定id属性，且一定对应大写ID字段；**如果承继了不用修改**
+- 2、**未承继**com.mediway.his.api.entity.BaseEntity的PO类，要的PO类中指定id属性，且一定对应大写ID字段；**如果承继了不用修改**
 
   ```java
   @TableId(value="ID",type=IdType.AUTO)
   private Long id;
+  ```
+
+- 技术说明（建表时不加双引号时,字段默认强制转成大写）
+  
+  ```sql
+  CREATE TABLE my_table (field_name VARCHAR(255),"field_name2" varchar(255)); 
+  -- 在默认大写字段名情况下，实现列名为FIELD_NAME,field_name2
+  ```
+  
+  ```sql
+  SELECT field_name,"field_name2" FROM my_table; -- 肯定工作正常
+  SELECT FIELD_NAME,"field_name2" FROM my_table; -- 可能工作正常(列名默认转成大写)
+  -- 查询时也必须使用相同的大小写和双引号 
+  ```
+  
+- 3、~~now()~~修改成CURRENT_TIMESTAMP
+
+- - SQL中now()带有时区，CURRENT_TIMESTAMP不带时区，update_datetime和create_datetime都是无时区的，所以使用CURRENT_TIMESTAMP来获得当前时间戳
+
+  ```sql
+  update my_table set update_datetime=now() where id=1;   -- 增删查改都要修改
+  ```
+
+  修改成
+
+  ```sql
+  update my_table set update_datetime=CURRENT_TIMESTAMP where id=1; -- 增删查改都要修改
   ```
 
   
