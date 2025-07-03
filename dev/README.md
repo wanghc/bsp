@@ -35,16 +35,60 @@
 - - SQL中now()带有时区，CURRENT_TIMESTAMP不带时区，update_datetime和create_datetime都是无时区的，所以使用CURRENT_TIMESTAMP来获得当前时间戳
 
   ```sql
-  update my_table set update_datetime=now() where id=1;   -- 增删查改都要修改
+  update my_table set update_datetime=now() where id=1;   -- 在tdsql下运行会报错
   ```
 
   修改成
 
   ```sql
-  update my_table set update_datetime=CURRENT_TIMESTAMP where id=1; -- 增删查改都要修改
+  -- [增加与修改]语句要修改，删除与查询暂时不作要求
+  update my_table set update_datetime=CURRENT_TIMESTAMP where id=1;
   ```
 
-  
+- 4、查询count(`*`)，sum(`*`)，int类型字段，返回值默认为`bigdecimal`类型
+
+- - 4.1 返回类型转成int来解决兼容性
+
+  ```xml
+  <select id='mybatisMethod' resultType="int">
+      select count(*) from my_table where userid=#{userid}
+  </select>
+  ```
+
+- - 4.2 查询不固定列得到map对象后，转换类型兼容性
+  - 现假设my_table表有amount字段，类型为 int8
+
+  ```xml
+  <select id="getPriority" resultType="java.util.HashMap">
+   SELECT amount, display_name as "caption" FROM my_table
+   where activity = true and (end_date >= now() or end_date is null)
+  </select>
+  ```
+
+  - java中获取`数量`值写法
+
+    ```java
+    Long amount = myMap.get("amount");  // TDSQL下报错，因为BigDecimal类型转成Long报错
+    ```
+
+  - 修改成
+
+  - ```java
+    Object value = myMap.get("amount"); // TDSQL下value为BigDecimal类型,人大金仓下为Long
+    Long amount = 0L;
+    if (value instanceof BigDecimal) {
+        amount = ((BigDecimal) value).longValueExact();
+    }else{
+        amount = (Long)value;
+    }
+    ```
+
+  - 或
+
+  - ```java
+    import cn.hutool.core.convert.Convert; // 引入hutool的类
+    Long amount = Convert.toLong(myMap.get("amount"),0L);
+    ```
 
 #### 2025-05-02
 
