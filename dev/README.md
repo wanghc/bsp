@@ -2,22 +2,101 @@
 
 #### 2025-06-30
 
-- 为兼容TDSQL数据库，约定以下二种修改
+- 为兼容TDSQL数据库，约定以下修改
 
-- 在`mybatis.xml`或`java`代码内的sql，`表名`二边**去掉双引号**，`字段名`二边**去掉双引号** ，字段后的as 的名称**可以加双引号***
+- 1、在`mybatis.xml`或`java`代码内的sql，`表名`二边**去掉双引号**，`字段名`二边**去掉双引号** ，字段后的as 的名称**可以加双引号**(字段二边加双引号后表示不转大小写，而TDSQL默认把字段转成大写,会导致字段不存在错误)
 
   ```sql
-  select my_Name as "myName" from my_table
+  -- ✅正确写法
+  select my_Name as "myName" from my_table where my_sex_id = 1
   ```
 
-- **未承继**com.mediway.his.api.entity.BaseEntity的PO类，要的PO类中指定id属性，且一定对应大写ID字段；**如果承继了不用修改**
+- 2、**未承继**com.mediway.his.api.entity.BaseEntity的PO类，要的PO类中指定id属性，且一定对应大写ID字段；**如果承继了不用修改**
 
   ```java
+  // ✅正确写法
   @TableId(value="ID",type=IdType.AUTO)
   private Long id;
   ```
 
+- 技术说明（建表时不加双引号时,字段默认强制转成大写）
   
+  ```sql
+  CREATE TABLE my_table (field_name VARCHAR(255),"field_name2" varchar(255)); 
+  -- 在默认大写字段名情况下，实现列名为FIELD_NAME,field_name2
+  ```
+  
+  ```sql
+  -- ✅
+  SELECT field_name,"field_name2" FROM my_table; -- 肯定工作正常
+  SELECT FIELD_NAME,"field_name2" FROM my_table; -- 可能工作正常(列名默认转成大写)
+  -- 查询时也必须使用相同的大小写和双引号 
+  ```
+  
+- 3、~~now()~~修改成CURRENT_TIMESTAMP
+
+- - SQL中now()带有时区，CURRENT_TIMESTAMP不带时区，update_datetime和create_datetime都是无时区的，所以使用CURRENT_TIMESTAMP来获得当前时间戳
+
+  ```sql
+  -- ❌错误写法
+  update my_table set update_datetime=now() where id=1;   -- 在tdsql下运行会报错
+  ```
+
+  修改成
+
+  ```sql
+  -- ✅ [增加与修改]语句要修改，删除与查询暂时不作要求
+  update my_table set update_datetime=CURRENT_TIMESTAMP where id=1;
+  ```
+
+- 4、`select`语句查询count(`*`)，sum(`*`)，int类型字段，bigint字段时，返回列值默认为`bigdecimal`类型
+
+- - 4.1 返回类型转成int来解决兼容性
+
+  ```xml
+  <!-- ✅ 正确写法 resultType="int" -->
+  <select id='mybatisMethod' resultType="int">
+      select count(*) from my_table where userid=#{userid}
+  </select>
+  ```
+
+- - 4.2 查询不固定列得到map对象后，转换类型兼容性
+  - 现假设my_table表有amount字段，类型为 int8
+
+  ```xml
+  <select id="getPriority" resultType="java.util.HashMap">
+   SELECT amount, display_name as "caption" FROM my_table
+   where activity = true and (end_date >= now() or end_date is null)
+  </select>
+  ```
+
+  - java中获取`数量`值写法
+
+    ```java
+    // ❌错误写法, 兼容性差
+    Long amount = myMap.get("amount");  // TDSQL下报错，因为BigDecimal类型转成Long报错
+    ```
+
+  - 修改成
+
+  - ```java
+    // ✅正确写法
+    Object value = myMap.get("amount"); // TDSQL下value为BigDecimal类型,人大金仓下为Long
+    Long amount = 0L;
+    if (value instanceof BigDecimal) {
+        amount = ((BigDecimal) value).longValueExact();
+    }else{
+        amount = (Long)value;
+    }
+    ```
+
+  - 或
+
+  - ```java
+    // ✅正确写法
+    import cn.hutool.core.convert.Convert; // 引入hutool的类
+    Long amount = Convert.toLong(myMap.get("amount"),0L);
+    ```
 
 #### 2025-05-02
 
@@ -45,18 +124,19 @@
   explain analyze
       select p.name from cf_bsp_test_patient t 
       left join pa_pat_mast p on p.id=CAST(t.patient_id as bigint) -- 0.09ms
-  或    
+  或
+  -- ✅正确方式, 要连表的字段的类型与原表字段保持一致
   alter table cf_bsp_test_patient modify patient_id bigint null;  
   explain analyze
       select p.name from cf_bsp_test_patient t 
       left join pa_pat_mast p on p.id=CAST(t.patient_id as bigint) -- 0.07ms
   ```
-
+  
   
 
 #### 2025-04-07
 
-- 微服务下，SQL语句中`::text`转字符串会报错，应使用TOCHAR()
+- 微服务下，SQL语句中~~`::text`~~转字符串会报错，应使用TOCHAR()✅
 - 不使用外键功能，在微服务下调用事务未提交，此时如果被调用方法中插入子记录时，关联字段对应记录数据库中并不能找到。
 
 #### 2025-04-01
@@ -65,17 +145,19 @@
 
 #### 2025-03-29
 
-- 切换数据库大小写敏感方式，修改like功能
+- 切换数据库大小写敏感方式后，like匹配是大小写敏感的，修改like功能
 
   如果别名中有大小写字符时，使用双引号包裹处，以防数据库把列名转成全小写
 
   ```sql
+  -- ✅正确写法,别名使用双引号包裹
   select locId as "ctLocId" from ct_org_location
   ```
-
+  
   如果使用模糊查询功能可以使用`ilike`功能，来忽略大小查询
-
+  
   ```sql
+  -- ✅正确写法, like修改成ilike，以便忽略大小查询
   (code ilike concat('%', #{dto.code}, '%') or description ilike concat('%',#{dto.code},'%'))
   ```
 
@@ -103,7 +185,7 @@
 
 #### 2025-03-01
 
-- 查询his内数据时，`mapper`文件中不写死数据库schema名称`ho_his`
+- 查询his内数据时，`mapper`文件中**不写死**数据库schema名称`ho_his`
 
 - feign类与controller类的路径要一致
 
@@ -183,7 +265,7 @@
 
 - 在`高斯`数据库中关于 `field=''`问题
 
-- 如果表字段非varchar类型，高斯不允许使用`field=''`, 应该使用`field is null`
+- 如果表字段**非varchar**类型，高斯不允许使用`field=''`, 应该使用`field is null`
 
   ```sql
   select field1 from t_test where field_varchar=''   -- 可以运行
@@ -195,6 +277,7 @@
   ```
   应使用以下方式
   ```sql
+  -- ✅正确写法，非varchar字段不会存入''值
   select field1 from t_test where field_varchar is null or field_varchar=''
   select field1 from t_test where field_amount is null
   select field1 from t_test where start_date is null
@@ -207,17 +290,20 @@
 - 关于`count(*)`与`order by` 使用
 
   ```sql
-  select count(*) as total from oe_ord_exec order by ex_stdatetime desc  -- 兼容性差
+  -- ❌兼容性差，高斯数据库下报错
+  select count(*) as total from oe_ord_exec order by ex_stdatetime desc
   ```
-
+  
   以上代码可以在`人大金仓`上运行，在`高斯`数据库下报错，**正确**的写法应该如下：
-
+  
   ```sql
+  -- ✅正确写法
   select count(*) as total from oe_ord_exec
   ```
   存在`group by`时，`count`与`order by`可以同时存在
-
+  
   ```sql
+  -- ✅正确写法
   select count(*) as total, rule_alias from bsp_cache_tables where 1=1
   group by rule_alias order by rule_alias;
   ```
@@ -236,12 +322,14 @@
 - 关于`LISTAGG`方法兼容性问题
 
   ```sql
-  SELECT LISTAGG(doc.id,",") FROM mr_emrdb0_docdata doc     -- 兼容性差
+  -- ❌兼容性差，高斯数据库下报错
+  SELECT LISTAGG(doc.id,",") FROM mr_emrdb0_docdata doc
   ```
   
   以上SQL在KingBase下可以执行，但在GaussDB下会报`missing WITHIN keyword`，应该使用以下兼容写法
   
   ```sql
+  -- ✅正确写法
   SELECT LISTAGG(doc.id,",") WITHIN GROUP (ORDER BY doc.id ASC)
   FROM mr_emrdb0_docdata doc
   ```
@@ -268,6 +356,7 @@
 - 因为`高斯`数据库中没有current_date()函数，所以要检查sql语句中是否使用了~~current_date()~~函数，如果有都修改成current_date
 
   ```sql
+  -- ✅正确写法 使用current_date，不使用current_date()
   where end_date>=current_date or end_date is null
   ```
 
@@ -280,12 +369,14 @@
 - 因为`高斯`数据库中~~日期字段名=''~~写法不被允许，需要删除相关代码
 
   ```sql
+  -- ❌兼容性差
   start_date is null or start_date='' or start_date>=current_date    -- start_date=''兼容性差
   ```
-
+  
   删除~~start_date=''~~，修改成
-
+  
   ```sql
+  --  ✅正确写法 删除start_date=''
   start_date is null or start_date>=current_date
   ```
 
