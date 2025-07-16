@@ -1,5 +1,13 @@
 ## 信创版-开发备忘录
 
+#### 2025-07-11
+
+新增【标准配置】时提示:*null value in column "ID" violates not-null constrain*，运行以下语句设置默认值
+
+```sql
+ALTER TABLE bsp_standardtype ALTER COLUMN "ID" SET DEFAULT nextval('BSP_STANDARDTYPE_ID_SEQ');
+```
+
 #### 2025-06-30
 
 - 为兼容TDSQL数据库，约定以下修改
