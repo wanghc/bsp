@@ -1,5 +1,28 @@
 ## 信创版-开发备忘录
 
+#### 2025-07-18
+
+- 在5个字段上创建唯一索引
+
+- ```sql
+  CREATE UNIQUE INDEX IDX_APP_KEY_TYPE_REF_INDEXDATA
+      ON BSP_PREFERENCES
+      USING btree (ST_CODE, ST_ITEM_CODE, OBJECT_TYPE, OBJECT_REF, INDEX_DATA)
+  ```
+
+- 插入（前4个字段一样，第5个字段(INDEX_DATA)为NULL值）的二条记录时，`TDSQL`数据库上报唯一性约束不通过，`人大金仓`可以成功插入
+
+- ```sql
+  -- ✅正确写法，创建索引时增加WHERE条件
+  DROP INDEX IF EXISTS IDX_APP_KEY_TYPE_REF_INDEXDATA;
+  CREATE UNIQUE INDEX IDX_APP_KEY_TYPE_REF_INDEXDATA
+      ON BSP_PREFERENCES
+      USING btree (ST_CODE, ST_ITEM_CODE, OBJECT_TYPE, OBJECT_REF, INDEX_DATA)
+      WHERE INDEX_DATA IS NOT NULL;
+  ```
+
+> 猜测原因：`人大金仓`数据库在字段为NULL时，不生成索引，从而索引不重复，主动增加生成索引条件来保证兼容性
+
 #### 2025-07-11
 
 新增【标准配置】时提示:*null value in column "ID" violates not-null constrain*，运行以下语句设置默认值
