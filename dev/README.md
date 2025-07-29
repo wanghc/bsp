@@ -1,5 +1,47 @@
 ## 信创版-开发备忘录
 
+#### 2025-07-25
+
+- 在`TDSQL`下运行以下代码，查询不出记录，但`人大金仓`下可以查询出记录
+
+  ```java
+  String buId = "41b2dd0c9fa41c384bc014abf2bd62a";
+  LocHospWardOrgVO locVo = hosPostBusinessUnitMapper.getLocHospWardOrgByLoc(buId);
+  ```
+
+  原因分析：
+
+  > 1、业务单元表id字段的类型为CHAR(32)，如果id值为`41b2dd0c9fa41c384bc014abf2bd62a`时，因id值为31位长度，CHAR(32)字段会自动补全长度，表记录的id字段值会在最后面补了一个空格字符，即为'41b2dd0c9fa41c384bc014abf2bd62a '，此时TDSQL下使用`mybatis`的方法查询不出记录，使用sql语句单独运行是可以查询到数据的。
+  >
+  > 2、直接带值运行sql与使用有占位参数运行，实际行为不一样的。
+  >
+  > 有占位参数SQL运行示例如下，也是查询不出结果的
+  >
+  > ```java
+  > String sql = "SELECT * FROM xxx WHERE id = ?";
+  > Connection connection = jdbcTemplate.getDataSource().getConnection();
+  > PreparedStatement ps = connection.prepareStatement(sql);
+  > ps.setString(1, "41b2dd0c9fa41c384bc014abf2bd62a"); // 实际值是'41b...62a '，多一个空格
+  > try (ResultSet rs = ps.executeQuery()) {
+  >     if (rs.next()) {
+  >        System.out.println("查到了");
+  >     } else {
+  >         System.out.println("查不到");  // 结果是查询不到
+  >     }
+  > }
+  > ```
+
+  修改成
+
+  ```java
+  -- ✅正确写法，对于CHAR(n)的字段，手动补全值长度再查询
+  String buId = "41b2dd0c9fa41c384bc014abf2bd62a";
+  buId = String.format("%-32s",buId);
+  LocHospWardOrgVO locVo = hosPostBusinessUnitMapper.getLocHospWardOrgByLoc(buId);
+  ```
+
+  
+
 #### 2025-07-18
 
 - 在5个字段上创建唯一索引
