@@ -35,6 +35,7 @@ table td:first-of-type {
   - [SendFreq](#sendfreq)
   - [SendCron](#sendcron)
 - [调用流程](#调用流程)
+- [使用JSON对象或字符串发送](#使用json对象或字符串发送)
 
 
 
@@ -373,3 +374,68 @@ s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
 ```
 
 
+
+### 使用JSON对象或字符串发送 ###
+
+工具类提供了一系列的成员方法进行消息发送，但是需要多次调用不同的方法设置不同的参数，某些场景下产品组可能想自己构造好参数，只调用一次方法发送消息，此时可以使用JSON对象或字符串进行发送。
+
+```vb
+    s data={......}  //自己构造参数
+    s ret=##class(BSP.MSG.SRV.SendHelper).SendByJson(data)
+```
+
+##### 参数说明 ######
+
+| *参数名* | *说明*      |  *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| data  | 参数    | 可以为JSON对象（`%Library.DynamicObject`、`BSP.SYS.COM.ProxyObject`）或JSON字符串 |
+
+###### data结构 #######
+
+| *参数名* | *说明*      | *类型*      |  *备注*                                                 |
+| -------------- | ----------------- | ----------------- | ------------------------------------------------------------ |
+| context  | 消息内容或模板代码   | string |         |
+| actionTypeCode |  消息动作类型代码      | string | 代码参见[动作类型清单](MSGActionType)，如无对应代码请通过BOS提交需求增加       |
+| createUser |  发送消息的用户Id       | string | 如果获取不到HIS用户Id, 可以传入"^姓名"            |
+| createLoc |  发送人科室Id      | string | 如果没有科室Id，可传"＾科室描述"               |
+| effectiveDays |  消息有效天数      | string | 此有效天数级别高于动作类型所配置              |
+| episodeId  | 就诊ID    | string | 就诊ID |
+| ordItemId | 医嘱ID      | string | 多个医嘱ID 用英文逗号分隔 |
+| patientId | 患者ID    | string | 患者ID |
+| bizObjId |  关联业务ID    | string | 如果需要做需要处理的消息，此参数需要传<br>标本拒收记录ID、处方点评记录、危急值报告ID、申请单ID、申请单ID-审核阶段、会诊申请子表ID等 |
+| link  | 业务链接    | string | 可以是his内相对路径如 `criticalvalue.trans.hisui.csp?ReportId=1000001\|\|1&RepType=1` <br> 也可以是其它完整的url路径 如 `https://www.baidu.com/s?ie=UTF-8&wd=a&usercode=${LOGON.USERCODE}` |
+| linkParam | 链接参数      | string | 用于和消息类型上配置的链接 共同拼接成业务链接 <br>如配置成`criticalvalue.trans.hisui.csp`，linkParam为`ReportId=1000001\|\|1&RepType=1`   <br> 拼接后为`criticalvalue.trans.hisui.csp?ReportId=1000001\|\|1&RepType=1` |
+| dialogWidth | 窗口宽度    | string | 打开处理(查看)界面时界面宽度。数字或百分比 |
+| dialogHeight |  窗口高度   | string | 打开处理(查看)界面时界面高度。数字或百分比 |
+| target |  目标窗口  | string | 如果为_blank 采用window.open新窗口方式打开，否则为顶层界面弹出hisui(easyui)模态框，内嵌iframe形式打开 |
+| multiContext |  多发送方式消息内容  | object | 当不同发送方式需要指定不同的内容或模板时使用，一般可以不传 <br>对象的属性为发送方式代码，属性值为对应发送方式的内容或模板 |
+| &ensp;&ensp;&#124;─I |  HIS消息内容或模板  | string | HIS消息内容或模板  |
+| &ensp;&ensp;&#124;─S |  短信内容或模板  | string | 短信内容或模板  |
+| &ensp;&ensp;&#124;─... |  其他  | string |   |
+| receivers |  消息接收者  | array | 消息接收者数组，支持按照用户、科室、安全组、预定义的消息接收对象 |
+| &ensp;&ensp;&ensp;&ensp;&#124;─ |  | object |  |
+| &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&#124;─type  | 类型    | string | L登录科室,LCP科室人员,LCPD科室医生,LCPN科室护士,<br>G安全组,LG科室安全组,<br>U用户,UC用户工号,CP人员,MU诊疗组,<br>M消息平台接收对象,PAT患者,CPTT人员类型,<br>H院区用户,HCP院区医护人员,HCPD院区医生,HCPN院区护士 |
+| &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&#124;─key | 对应类型类型的数据标识     | string | 如U对应key应是用户ID，G对应key是安全组ID... |
+| &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&#124;─role | 目标角色    | string | Auto自动,AdmLoc就诊科室,OrdLoc下医嘱科室,Any任何,Lx某科室,Gx某安全组,LxGx某科室某安全组 |
+| &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&#124;─mode |  发送方式   | string | I信息系统即HIS，S短信，E邮箱，TEL电话，HCCS医呼通 |
+| &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&#124;─tmpl |  模板代码  | string | 使用的消息模板代码  <br> <span style="color:red">只有某些发送方式才支持在接收对象上设置模板：短信</span> |
+| tmplData |  模板变量数据  | object | 当使用消息模板组织内容数据时，有些变量需要产品组传进来<br>对象的属性为变量的名称，属性值为对应变量的值  |
+| &ensp;&ensp;&#124;─var1 | 变量1  | string |   |
+| &ensp;&ensp;&#124;─varA |  变量A  | string |   |
+| &ensp;&ensp;&#124;─... |  其他  | string |   |
+| ingoreReceiveCfg | 是否忽略消息配置的接收者 | string |  忽略掉消息动作类型维护上的接收者（接收对象、抄送人、高级接收对象） |
+| sendAt | 在什么时间发送 | string |  指定发消息的时间点，支持指定多个，多个用单竖线分割，如`2025-07-29 18:00`  |
+| intervalMinutes | 每隔几分钟发一次 | string |  从`startDatetime`起，每隔`intervalMinutes`分钟发一次，直到`stopDateTime`，最多发送`maxSendTimes`次   |
+| cronExp | cron表达式 | string |    从`startDatetime`起，按cron表达式`cronExp`发送，直到`stopDateTime`，最多发送`maxSendTimes`次    |
+| startDatetime | 开始时间 | string |    |
+| stopDateTime | 结束时间 | string |    |
+| maxSendTimes | 最大发送次数 | string |    |
+
+
+
+##### 返回值 ######
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+|大于0|成功||
+|-100^ErrorMsg|表示失败|如:-100^动作类型不存在|
