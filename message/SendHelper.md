@@ -427,11 +427,11 @@ s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
 | sendAt | 在什么时间发送 | string |  指定发消息的时间点，支持指定多个，多个用单竖线分割，如`2025-07-29 18:00`  |
 | intervalMinutes | 每隔几分钟发一次 | string |  从`startDatetime`起，每隔`intervalMinutes`分钟发一次，直到`stopDateTime`，最多发送`maxSendTimes`次   |
 | cronExp | cron表达式 | string |    从`startDatetime`起，按cron表达式`cronExp`发送，直到`stopDateTime`，最多发送`maxSendTimes`次    |
-| startDatetime | 开始时间 | string |    |
-| stopDateTime | 结束时间 | string |    |
-| maxSendTimes | 最大发送次数 | string |    |
+| startDatetime | 开始时间 | string |  如`2025-07-29 18:00`  |
+| stopDateTime | 结束时间 | string |  如`2025-07-31 18:00`  |
+| maxSendTimes | 最大发送次数 | string |  如`5`  |
 
-
+*** `sendAt`、`intervalMinutes`、`cronExp` 为需要使用消息定时发送时才需要的参数，如果只是正常的立即发消息，不需要指定 ***
 
 ##### 返回值 ######
 
