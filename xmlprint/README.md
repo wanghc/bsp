@@ -70,6 +70,8 @@ XML打印功能包含XML设计器与XML打印二部分，设计器设计好模�
      	  <tr><td>rowHeightExpand: false</td><td>默认false 是否推动表格后面元素位置</td></tr>
      	  <tr><td>listAfterCallback:function</td><td>默认null,当表格打印完成后，回调此函数 20230224</td></tr>
      	  <tr><td>onPrintEnd</td><td>打印完成时回调方法</td></tr>
+     	  <tr><td>PFlag</td><td>XML模板代码,打印方法自动加载XML模板内容。一次打印多个模板的时候，必传此配置值，避免模板覆盖的风险 <code>20250805</code></td></tr>
+     	  <tr><td>langCode</td><td>现PFlag一起使用，指定XML模板对应的语言代码。如果未定义对应语种模板时，使用原模板打印。如：EN<code>20250805</code></td></tr>
      	  </table>
      </li></ul></pre>
      </details>
