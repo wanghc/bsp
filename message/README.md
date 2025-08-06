@@ -673,7 +673,7 @@ d ##class(%ResultSet).RunQuery("websys.DHCMessageDetailsMgr","FindInfo",UserId, 
 | ReadFlag    | 处理状态标志    | N未处理或有新回复 Y已处理 必须 |
 | SendDateStart   | 开始日期    | 消息发送日期开始日期 HIS配置日期格式 |
 | SendDateEnd   | 结束日期    | 消息发送日期结束日期 HIS配置日期格式 |
-| ActionTypeArg   | 消息类型代码    | 如果为空 不限制消息类型 |
+| ActionTypeArg   | 消息类型代码    | 如果为空 不限制消息类型，多个消息类型代码用英文`,`分隔 |
 | LevelType   | 消息重要性   | D紧急、V非常重要、I重要、G一般，为空不限制，也可传多个英文`,`分隔 |
 | MarqueeShow   | 是否仅查跑马灯显示的消息    | Y是 |
 | OtherParams   | 扩展参数    | 暂为内部使用，传空 |
