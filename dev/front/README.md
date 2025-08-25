@@ -23,11 +23,11 @@
 
 引入hisui.js后，会同步获取后台HISUI版本、语言、字体大小等配置，引入对应的js，相关样式的css；引入界面定义相关js，来自动获得界面元素定义及表格定义。
 
-如果不希望自动引入界面定义相关文件，可以在引入hisui.js前，把变量$pageOptionsDisable设置为true即可。
+如果不希望自动引入【界面定义】相关文件，可以设置属性pageOptionsDisable为true即可。
 
 ```html
-<script type="text/javascript" >window.$pageOptionsDisable = true;</script>
-<script type="text/javascript" src="../../../base/scripts/hisui.js"></script>
+<!--<script type="text/javascript" >window.$pageOptionsDisable = true;</script>-->
+<script type="text/javascript" pageOptionsDisable="true" src="../../../base/scripts/hisui.js"></script>
 ```
 
 
