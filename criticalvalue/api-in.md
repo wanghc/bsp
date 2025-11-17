@@ -62,6 +62,7 @@ table td:first-of-type {
   - [2.36 保存第三方系统接收信息(不知HIS危急值报告ID)](#236-保存第三方系统接收信息不知his危急值报告id)
   - [2.37 保存第三方系统处理信息(不知HIS危急值报告ID)](#237-保存第三方系统处理信息不知his危急值报告id)
   - [2.38 获取一段时间危急值各状态数量](#238-获取一段时间危急值各状态数量)
+  - [2.39 根据检验检验号获取危急值报告的备注信息](#239-根据检验检验号获取危急值报告的备注信息)
   
   
 
@@ -397,7 +398,7 @@ table td:first-of-type {
 `HIS8.4`
 
 ```vb
-##class(%ResultSet).RunQuery("web.DHCAntService","QryCVByAdm",Adm,Status,DateFrom,DateTo,UseType,ReportType)
+##class(%ResultSet).RunQuery("web.DHCAntService","QryCVByAdm",Adm,Status,DateFrom,DateTo,UseType,ReportType,TimeFrom,TimeTo)
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
@@ -1131,3 +1132,26 @@ s ret= ##class(BSP.CV.SRV.Interface).GetStatisticsCount("2025-07-01","2025-07-31
 | 16 | 已超过k分钟还未写病历数 |  |
 | 17 | 还未写病历未超k分钟数 |  |
 | 18 | 当日处理数 | 危急值报告当日处理完成的数量 |
+
+
+
+#### 2.39 根据检验检验号获取危急值报告的备注信息 ####
+
+适应于根据检验检验号获取危急值报告的备注信息   如果存在多条报告，多条备注信息使用Delimiter进行字符串拼接   `2025-09-10` `HIS9.2.0`
+
+
+```vb
+##class(BSP.CV.SRV.Interface).GetCVCommentByExamNo(ExamNo, RepTypeFilter, Delimiter)  
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| ExamNo   | 检验(检验)号    |  |
+| RepTypeFilter   | 报告类型过滤   |  医技系统间的检查号标本号可能重复，增加类型过滤  如1检验 2病理 3心电 4超声 5内镜 6放射   3,4,5,6 心电或超声或内镜或放射   |
+| Delimiter   | 分隔符    | 结果字符串拼接分隔符 默认英文逗号  |
+
+
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 空 | 无危急值或备注信息 |  |
+| 其他 | 危急值备注信息 |  |
