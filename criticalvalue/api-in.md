@@ -408,6 +408,8 @@ table td:first-of-type {
 | DateTo   | 结束日期    |  |
 | UseType  | 用途    | NURSE-TODO 护士待处理(不同项目护士待处理条件不一样，接口内部去判断)<br>NURSE-DONE 护士已处理(不同项目护士待处理条件不一样，接口内部去判断) <br>（2022-04-22增加）|
 | ReportType   | 危急值报告类型    | 1检验、2病理、3心电、4超声、5内镜、6放射  多个以,分割<br> （2023-02-10） |
+| TimeFrom   | 开始时间    | 与开始日期组合成开始日期时间 `2025-11-17` |
+| TimeTo   | 结束时间    | 与结束日期组合成结束日期时间 `2025-11-17` |
 
 
 |*输出列* |*说明*|*备注*|
@@ -431,6 +433,8 @@ table td:first-of-type {
 | recAdvice | 接收备注 |  | 
 | recDate | 接收日期 |  | 
 | recTime | 接收时间 |  | 
+
+如果要是觉得使用Query有点麻烦，可以使用类方法`##class(web.DHCAntCVService).GetCVByAdm`,入参和上Query相同，返回值为两层%List形式，即$lb($lb(reportID,examno,ordItem,...),$lb(reportID,examno,ordItem,...))
 
 
 #### 2.14 危急值与会诊申请关联 ####
