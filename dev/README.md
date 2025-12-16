@@ -1,5 +1,28 @@
 ## 信创版-开发备忘录
 
+#### 2025-12-16
+
+- ```xml
+  <!-- ❌ 如果type是字符串类型,错误写法 type=='H', 单引号表示字符,导致type强转成字符，转换报错 -->
+  <select id='mybatisMethod' resultType="int">
+      select name from my_table t where userid=#{dto.userid}
+      <if test="dto.type!=null and dto.type=='H'">
+          and t.attribute='G'
+      </if>
+  </select>
+  -- ✅正确写法
+  <if test="dto.type!=null and dto.type=='H'.toString()">
+  </if>
+  -- ✅正确写法
+  <if test='dto.type!=null and dto.type=="H"'>
+  </if>
+  -- ✅正确写法
+  <if test='dto.type!=null and "H".equals(dto.type)'>
+  </if>
+  ```
+
+- 
+
 #### 2025-09-30
 
 - 将87环境的数据库名称由ho_his改成db_his， schema名字由ho_his改为sm_his，hm改成sm_hm， ho_hai改成sm_hai
