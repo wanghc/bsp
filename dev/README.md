@@ -1,5 +1,32 @@
 ## 信创版-开发备忘录
 
+#### 2025-12-24
+
+- sql查询某日期范围内数据
+
+```sql
+-- ❌ 错误写法
+and to_char(myorder.order_stdatetime, 'YYYY-MM-DD HH24:MI:SS') >= CONCAT($3,' ',$4)
+```
+```sql
+-- ✅正确写法,先转日期再对比
+and myorder.order_stdatetime >= to_date( $3||' '||$4, 'YYYY-MM-DD HH24:MI:SS')
+```
+
+- sql中不使用`::text`  
+```sql
+-- ❌ 错误写法 seata不支持::text
+LEFT JOIN mytbl As c1 ON (c1.id::text = ANY(STRING_TO_ARRAY(app.an_method, ',')))
+```
+```sql
+-- ✅正确写法
+LEFT JOIN mytbl As c1 ON (CAST(c1.id AS text) = ANY(STRING_TO_ARRAY(app.an_method, ',')))
+```
+
+  
+
+  
+
 #### 2025-12-16
 
 - ```xml
