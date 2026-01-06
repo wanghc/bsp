@@ -63,6 +63,7 @@ table td:first-of-type {
   - [2.37 保存第三方系统处理信息(不知HIS危急值报告ID)](#237-保存第三方系统处理信息不知his危急值报告id)
   - [2.38 获取一段时间危急值各状态数量](#238-获取一段时间危急值各状态数量)
   - [2.39 根据检验检验号获取危急值报告的备注信息](#239-根据检验检验号获取危急值报告的备注信息)
+  - [2.40 获取一段时间危急值不同状态明细](#240-获取一段时间危急值不同状态明细)
   
   
 
@@ -70,7 +71,7 @@ table td:first-of-type {
 ## 危急值管理平台 内部接口 ##
 
 ### 1. 前言 ###
-档描述了危急值管理平台为其他产品组提供的标准接口，接口通过类方法或Query提供。
+文档描述了危急值管理平台为其他产品组提供的标准接口，接口通过类方法或Query提供。
 
 ### 2. 接口列表 ###
 
@@ -1155,3 +1156,98 @@ s ret= ##class(BSP.CV.SRV.Interface).GetStatisticsCount("2025-07-01","2025-07-31
 | --- | -- | -- |
 | 空 | 无危急值或备注信息 |  |
 | 其他 | 危急值备注信息 |  |
+
+
+
+#### 2.40 获取一段时间危急值不同状态明细 ####
+
+获取一段时间危急值不同状态明细  `2026-01-06` `HIS9.2.1`
+
+与[2.38 获取一段时间危急值各状态数量](#238-获取一段时间危急值各状态数量)对应，前者获取不同状态数量，此query获取对应状态详情
+
+
+```
+如获取2025年7月院区ID为2，门诊患者危急值的数量，且要30分钟内处理数量 
+s ret= ##class(BSP.CV.SRV.Interface).GetStatisticsCount("2025-07-01","2025-07-31","","2","O","","","","",30,"")
+返回值$p(ret,"^",1)为总数，$p(ret,"^",10)为30分钟内处理数
+
+获取总数明细 d ##class(%ResultSet).RunQuery("web.DHCAntCVRunqian","GetStatisticsCountDet","2025-07-01","2025-07-31","","2","O","","","","",30,"","")
+
+获取30分钟内处理数明细 d ##class(%ResultSet).RunQuery("web.DHCAntCVRunqian","GetStatisticsCountDet","2025-07-01","2025-07-31","","2","O","","","","",30,"","^1^^^")
+
+```
+
+
+```vb
+##class(%ResultSet).RunQuery("web.DHCAntCVRunqian","Statistics",SDate, EDate, ReportType, HospId, AdmType, LocId , LocArgType , ReadTimeLimit , RecTimeLimit , ExecTimeLimit , EmrTimeLimit , pStatus)  
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| SDate   | 开始日期    | yyyy-MM-dd |
+| EDate   | 结束日期    | yyyy-MM-dd |
+| ReportType   | 危急值类型    | 1检验,2病理,3心电,4超声,5内镜,6放射 ...   多个可以,分隔  空表示全部   |
+| HospId   | 院区ID    | 为空表示所有院区 |
+| AdmType   | 就诊类型   | O门诊 E急诊 I住院 H体检  多个可以,分隔 空表示全部 |
+| LocId   | 科室ID   | 空表示全部   不统计某具体科室数量时不用传 |
+| LocArgType   | 统计时科室条件类型     |  AdmLoc当前就诊科室  OrdLoc开医嘱科室  OglLoc报告时患者所在科室  与LocId参数配合使用的   |
+| ReadTimeLimit   | 查阅时间线(分钟)   | 统计的数量有 在x分钟内查阅数 超过x分钟内查阅数  已超过x分钟还未查阅数  还未阅读未超x分钟数 |
+| RecTimeLimit   | 接收时间线(分钟)   | 统计的数量有 在y分钟内接收数 超过y分钟内接收数  已超过y分钟还未接收数  还未接收未超y分钟数 |
+| ExecTimeLimit   | 处理时间线(分钟)    |  统计的数量有 在z分钟内处理数 超过z分钟内处理数  已超过z分钟还未处理数  还未处理未超z分钟数 |
+| EmrTimeLimit   |  写病历时间线(分钟)   |  统计的数量有 在k分钟内写病历数 超过k分钟内写病历数  已超过k分钟还未写病历数  还未写病历未超k分钟数 |
+| pStatus   |  状态条件   |  为`^`分隔形式  pRecStatus^pExecStatus^pEmrStatus^pReadStatus^pSameDayExec <br> 1-pRecStatus:接收状态  及时接收1 超时接收2  未接收但未超时3 超时未接收4<br>2-pExecStatus:处理状态  及时处理1 超时处理2  未处理但未超时3 超时未处理4  <br>3-pEmrStatus 及时书写1 超时书写2  未书写但未超时3 未书写已超时4<br>4-pReadStatus 及时查阅1 超时查阅2  未查阅但未超时3 未查阅已超时4<br>5-pSameDayExec 1当日处理 2非当日处理（含未处理） |
+
+
+
+|*输出列* |*说明*|*备注*|
+| --- | -- | -- |
+| reportID | 报告ID | 危急值报告表RowId |
+| adm | 就诊ID |  |
+| patientID | 患者ID |  |
+| ordItem | 医嘱ID |  |
+| examNo | 检验检查号 |  |
+| repDT | 报告时间 |  |
+| repUserName | 报告人姓名 |  |
+| admLocDesc | 就诊科室 |  |
+| admDocName | 就诊医生姓名 |  |
+| patName | 患者姓名 |  |
+| patNo | 患者登记号 |  |
+| mrNo | 病案号 |  |
+| age | 年龄 |  |
+| sex | 性别 |  |
+| dob | 出生日期 |  |
+| ordDesc | 医嘱描述 |  |
+| ordLocDesc | 开单科室 |  |
+| ordDoc | 开单医生 |  |
+| repResult | 报告结果 |  |
+| recDT | 接收时间 |  |
+| recUserName | 接收人姓名 |  |
+| recStatus | 接收状态 |  |
+| recStatusDesc | 接收状态描述 |  |
+| recTimeUsedAlias | 接收耗时 |  |
+| execDT | 处理时间 |  |
+| execUserName | 处理人姓名 |  |
+| execStatus | 处理状态 |  |
+| execStatusDesc | 处理状态描述 |  |
+| execTimeUsedAlias | 处理耗时 |  |
+| emrDT | 病历记录时间 |  |
+| emrUserName | 病历记录人 |  |
+| emrStatus | 病历状态 |  |
+| emrStatusDesc | 病历状态描述 |  |
+| emrTimeUsedAlias | 病历耗时 |  |
+| readDT | 查阅时间 |  |
+| readUserName | 查阅人姓名 |  |
+| readStatus | 查阅状态 |  |
+| readStatusDesc | 查阅状态描述 |  |
+| readTimeUsedAlias | 查阅耗时 |  |
+| oglLocDesc | 报告时患者科室 |  |
+| oglWardDesc | 报告时患者病区 |  |
+| recContact | 接收时联系人 |  |
+| recContactTel | 接收时联系电话 |  |
+| recAdvice | 接收时备注 |  |
+| recConResutDesc | 接收时联系结果描述 |  |
+| execContact | 处理时联系人 |  |
+| execContactTel | 处理时联系电话 |  |
+| execAdvice | 处理意见措施 |  |
+| execConResutDesc | 处理时联系结果描述 |  |
+| sameDayExec | 是否当日处理 | 同一天(非24小时) |
