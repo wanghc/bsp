@@ -81,8 +81,8 @@ table td:first-of-type {
 `HIS8.0.2`
 
 ```vb
-##Class(web.DHCAntService).SaveCVResult(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems,MTS2DocInfo,MTS2PatInfo )
-##Class(web.DHCAntCVResult).Save(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems,MTS2DocInfo,MTS2PatInfo) //检验调的可能是这个
+##Class(web.DHCAntService).SaveCVResult(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems,MTS2DocInfo,MTS2PatInfo,OriginalReportId )
+##Class(web.DHCAntCVResult).Save(ReportType,ExamNo,Adm,OEOrdId,ReportInfo,Result,LisRowid,OrderInfo,TestItems,MTS2DocInfo,MTS2PatInfo,OriginalReportId ) //检验调的可能是这个
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
@@ -98,6 +98,7 @@ table td:first-of-type {
 | TestItems   | 检验项目结果    | $lb($lb(项目代码,项目名称,缩写,结果,单位,结果异常标志,范围,仪器,备注),$lb(项目代码,项目名称,缩写,结果,单位,结果异常标志,范围,仪器,备注)) `HIS8.4.2` |
 | MTS2DocInfo   | 医技系统电话通知医生信息   | 日期(yyyy-MM-dd)1^时间(hh:mm:ss)2^结果3(1成功-1失败)^结果备注(失败原因等)4^通知人姓名5^通知人电话6^沟通内容7^医生姓名8^医生电话9 `HIS9.0.1` |
 | MTS2PatInfo   | 医技系统电话通知患者信息   | 日期(yyyy-MM-dd)1^时间(hh:mm:ss)2^结果3(1成功-1失败)^结果备注(失败原因等)4^通知人姓名5^通知人电话6^沟通内容7^患者姓名8^患者电话9 `HIS9.0.1` |
+| OriginalReportId   | 原始报告ID   | 医技系统原始报告ID（指的是对应检验检查报告的） `HIS9.2.1` |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
@@ -149,13 +150,14 @@ table td:first-of-type {
 `HIS8.3`
 
 ```vb
-##Class(web.DHCAntService).IsCVReport(ExamNo,OEOrdId)
+##Class(web.DHCAntService).IsCVReport(ExamNo,OEOrdId,OriginalReportId)
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | ExamNo   | 检查(检验)号    |  |
 | OEOrdId   | 医嘱ID    |  |
+| OriginalReportId   | 原始报告ID    | 用于区分判断多报告情况下哪个是危急值 `HIS9.2.1` <br> 传空不判断原始报告ID <br> 如果传了则会判断危急值报告关联的原始报告ID是否和传的匹配 <br> 特别的如果传了但是危急值报告没有原始报告ID也视作匹配 |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
