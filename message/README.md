@@ -3,7 +3,6 @@
 table td:first-of-type {
     word-break:keep-all;
 }
-
 /*超过1600 侧边显示目录*/
 @media screen and (min-width: 1600px) {
     .markdown-body>ul:first-of-type{
@@ -56,6 +55,7 @@ table td:first-of-type {
 w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowId, EpisodeId, OrdItemId, 
         ToUserRowId, OtherInfoJson, ToLocRowId, EffectiveDays , CreateLoc)
 ```
+如果是信创版本的HIS可以查看<a href='https://share.note.youdao.com/s/JJjB8jMp' target='_blank'>信创JAVA版本文档</a>
 
 | *参数名* | *说明*      | *备注*                                                 |
 | -------------- | ----------------- | ------------------------------------------------------------ |
