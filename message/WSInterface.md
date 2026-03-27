@@ -224,7 +224,6 @@ FuncCode=Cancel
 ```
 
 
-
 #### 常见问题 ####
 
 1.Cache2016开始，web应用程序配置禁止了匿名访问，所以通过链接获取wsdl时需带上用户名密码
@@ -236,4 +235,15 @@ FuncCode=Cancel
 4.IRIS版本webservice放在了一个单独的web应用程序 /imedical/webservice
 
 5.使用https协议的，HIS端的https证书可能会有问题，有可能需要忽略掉验证服务器和证书是否匹配
+
+
+#### soapui测试示例 ####
+
+因为HIS直接发布的webservice有种种限制，对接方未必好处理，我们更建议通过平台（服务总线）将接口提供给对接方。
+
+如果特殊原因只能通过直接调用HIS发布的webservice，对接方也愿意努力尝试，那么可以看下下面的soapui测试示例，希望对对接方有所帮助。
+
+见 <a href="https://share.note.youdao.com/s/Z5qh3eWK" target="_blank">【有道云笔记】soapui 测试 imedical 发布的 webservice</a>
+
+
 
