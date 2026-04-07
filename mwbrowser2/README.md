@@ -64,6 +64,10 @@
 > [下载MSVBCRT.AIO安装包](http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)(http://bsp.hisui.cn/static/MedBrowser_MSVBCRT.AIO.2019.10.19.X86X64.rar)
 
 ## 更新说明
+### 2026-03-25（V2.0.33）
+- :lipstick: 医为浏览器下载保存时文件名自动补全后缀 [6735395]
+#### 2026-03-09(V2.0.32)
+- :sparkles: 不同进程缓存目录不同 [6715993]
 #### 2026-03-05 (V2.0.31)
 
 - 界面请求取消息时不提示网络超错界面 [6711300]
