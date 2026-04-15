@@ -44,9 +44,9 @@ table td:first-of-type {
 		- [4.9 消息查询接口](#49-消息查询接口)
 		- [4.10 用户消息列表接口](#410-用户消息列表接口)
 		- [4.11 根据就诊获取消息数量](#411-根据就诊获取消息数量)
+		- [4.12 消息回复接口](#412-消息回复接口)
 	- [5. 常见问题](#5-常见问题)
 		- [5.1 消息变为已处理的几种方式](#51-消息变为已处理的几种方式)
-
 
 
 
@@ -742,6 +742,32 @@ w ##class(BSP.MSG.SRV.QryInterface).GeCountByAdm(1192,1,"1006","N")
 | 0 | 没有符合的消息 | |
 | 1 | 数量为1/存在符合的消息 | 当pFlagOnly=1时，只要存在一条就返回1 |
 | 其它 | 具体消息数量 | |
+
+#### 4.12 消息回复接口 ####
+
+用于业务组针对此前已经发送的消息进行回复
+`HIS9.2.2`
+
+```vb
+w ##class(websys.DHCMessageInterface).Reply(ActionType , EpisodeId , OEOrdItemId , ObjectId , ReplyContent , ReplyUserId , ReplyTo , ReplyStyle )
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ActionType   | 消息动作类型代码    |  必须 |
+| EpisodeId    | 病人就诊ID    | 和发送时对应  |
+| OEOrdItemId   | 医嘱ID    | 和发送时对应  |
+| ObjectId   | 业务ID    |  如果发送消息的OtherInfoJson有BizObjId属性,请传BizObjId属性值;<br> 如果没有建议传OtherInfoJson的部分值用于确定哪条消息；<br>如果根据就诊或医嘱已经能唯一确定消息可以传空 |
+| ReplyContent   | 回复内容    |  必须 |
+| ReplyUserId   | 回复人ID    |  为空取session |
+| ReplyTo   | 回复对象    | S=仅消息发出人；A=消息相关人  |
+| ReplyStyle   | 回复样式    |  斜体font-style:italic;  加粗font-weight:bold; |
+
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 大于0 | 成功 |  |
+| -1^失败信息 |  |
 
 
 ### 5. 常见问题 ###
