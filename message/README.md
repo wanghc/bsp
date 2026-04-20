@@ -54,7 +54,7 @@ table td:first-of-type {
 ### 1. 发送消息接口 ###
 ```vb
 w ##class(websys.DHCMessageInterface).Send(Context, ActionTypeCode, FromUserRowId, EpisodeId, OrdItemId, 
-        ToUserRowId, OtherInfoJson, ToLocRowId, EffectiveDays , CreateLoc)
+        ToUserRowId, OtherInfoJson, ToLocRowId, EffectiveDays , CreateLoc, TaskSchedule)
 ```
 如果是信创版本的HIS可以查看<a href='https://share.note.youdao.com/s/JJjB8jMp' target='_blank'>信创JAVA版本文档</a>
 
