@@ -59,8 +59,8 @@ s helper=##class(BSP.MSG.SRV.SendHelper).%New(context , actionTypeCode , createU
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | context  | 消息内容或模板代码   |        |
 | actionTypeCode |  消息动作类型代码      | 代码参见[动作类型清单](MSGActionType)，如无对应代码请通过BOS提交需求增加       |
-| createUser |  发送消息的用户Id       | 如果获取不到HIS用户Id, 可以传入"^姓名"            |
-| createLoc |  发送人科室Id      | 如果没有科室Id，可传"＾科室描述"               |
+| createUser |  发送消息的用户Id       | 如果获取不到HIS用户Id, 可以传入"<span style="color:red;font-weight:bold">^</span>姓名"            |
+| createLoc |  发送人科室Id      | 如果没有科室Id，可传"<span style="color:red;font-weight:bold">^</span>科室描述"               |
 | effectiveDays |  消息有效天数      | 此有效天数级别高于动作类型所配置              |
 
 ##### 返回值 ######
@@ -396,8 +396,8 @@ s ret=helper.SendCron(startDatetime, stopDateTime, maxTimes, cronExp)
 | -------------- | ----------------- | ----------------- | ------------------------------------------------------------ |
 | context  | 消息内容或模板代码   | string |         |
 | actionTypeCode |  消息动作类型代码      | string | 代码参见[动作类型清单](MSGActionType)，如无对应代码请通过BOS提交需求增加       |
-| createUser |  发送消息的用户Id       | string | 如果获取不到HIS用户Id, 可以传入"^姓名"            |
-| createLoc |  发送人科室Id      | string | 如果没有科室Id，可传"＾科室描述"               |
+| createUser |  发送消息的用户Id       | string | 如果获取不到HIS用户Id, 可以传入"<span style="color:red;font-weight:bold">^</span>姓名"            |
+| createLoc |  发送人科室Id      | string | 如果没有科室Id，可传"<span style="color:red;font-weight:bold">^</span>科室描述"               |
 | effectiveDays |  消息有效天数      | string | 此有效天数级别高于动作类型所配置              |
 | episodeId  | 就诊ID    | string | 就诊ID |
 | ordItemId | 医嘱ID      | string | 多个医嘱ID 用英文逗号分隔 |
