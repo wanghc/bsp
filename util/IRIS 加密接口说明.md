@@ -1,3 +1,149 @@
+
+
+<style>
+table td:first-of-type {
+    word-break:keep-all;
+}
+
+/*超过1600 侧边显示目录*/
+@media screen and (min-width: 1600px) {
+    .markdown-body>ul:first-of-type{
+        position: fixed;
+		right: calc(50% - 800px) ; 
+		width: 300px;
+		height: 90%;
+		top: 5%;
+        overflow: auto;
+        list-style-type:none;
+    }
+     .markdown-body>ul:first-of-type ul{
+        list-style-type:none;
+     }
+
+}
+
+</style>
+
+
+- [IRIS加密接口说明](#iris加密接口说明)
+  - [文档简介](#文档简介)
+  - [文档说明](#文档说明)
+  - [参数约定与填写说明](#参数约定与填写说明)
+    - [1. `outputType` / `outputFormat`（摘要、HMAC、对称加密的输出或 Java 接口的格式）](#1-outputtype--outputformat摘要hmac对称加密的输出或-java-接口的格式)
+    - [2. `keyType` / `ivType`（密钥、IV 如何解码）](#2-keytype--ivtype密钥iv-如何解码)
+    - [3. `cipherType` 与 AES 解密里的 `outputType`](#3-ciphertype-与-aes-解密里的-outputtype)
+    - [4. AES（IRIS 原生）](#4-aesiris-原生)
+    - [5. SM4（`SM4Encrypt` / `SM4Decrypt`）](#5-sm4sm4encrypt--sm4decrypt)
+    - [6. 原生 RSA（`RSAEncrypt` / `RSADecrypt`）](#6-原生-rsarsaencrypt--rsadecrypt)
+    - [7. Java 网关加密（方法名以 `Java` 开头）](#7-java-网关加密方法名以-java-开头)
+    - [8. 编码类 `Util.EncodingUtils`](#8-编码类-utilencodingutils)
+- [一、加密方法](#一加密方法)
+- [IRIS 原生加密](#iris-原生加密)
+  - [1. MD5](#1-md5)
+    - [MD5Encrypt](#md5encrypt)
+    - [HMACMD5Encrypt](#hmacmd5encrypt)
+  - [2. SHA](#2-sha)
+    - [SHA1Encrypt](#sha1encrypt)
+    - [SHA224Encrypt](#sha224encrypt)
+    - [SHA256Encrypt](#sha256encrypt)
+    - [SHA384Encrypt](#sha384encrypt)
+    - [SHA512Encrypt](#sha512encrypt)
+    - [HMACSHA1Encrypt](#hmacsha1encrypt)
+    - [HMACSHA224Encrypt](#hmacsha224encrypt)
+    - [HMACSHA256Encrypt](#hmacsha256encrypt)
+    - [HMACSHA384Encrypt](#hmacsha384encrypt)
+    - [HMACSHA512Encrypt](#hmacsha512encrypt)
+  - [3. AES](#3-aes)
+    - [AESECBZeroPaddingEncrypt](#aesecbzeropaddingencrypt)
+    - [AESECBZeroPaddingDecrypt](#aesecbzeropaddingdecrypt)
+    - [AESCBCPKCS7PaddingEncrypt](#aescbcpkcs7paddingencrypt)
+    - [AESCBCPKCS7PaddingDecrypt](#aescbcpkcs7paddingdecrypt)
+    - [AESCBCPKCS5PaddingEncrypt](#aescbcpkcs5paddingencrypt)
+    - [AESCBCPKCS5PaddingDecrypt](#aescbcpkcs5paddingdecrypt)
+    - [AESECBPKCS5PaddingEncrypt](#aesecbpkcs5paddingencrypt)
+    - [AESECBPKCS5PaddingDecrypt](#aesecbpkcs5paddingdecrypt)
+    - [AESECBPKCS7PaddingEncrypt](#aesecbpkcs7paddingencrypt)
+    - [AESECBPKCS7PaddingDecrypt](#aesecbpkcs7paddingdecrypt)
+    - [AESECBPKCS5PaddingEncryptStream](#aesecbpkcs5paddingencryptstream)
+    - [AESECBPKCS5PaddingDecryptStream](#aesecbpkcs5paddingdecryptstream)
+  - [4. SM3](#4-sm3)
+    - [SM3Encrypt](#sm3encrypt)
+    - [HMACSM3Encrypt](#hmacsm3encrypt)
+  - [5. SM4](#5-sm4)
+    - [SM4Encrypt](#sm4encrypt)
+    - [SM4Decrypt](#sm4decrypt)
+  - [6. RSA](#6-rsa)
+    - [RSAEncrypt](#rsaencrypt)
+    - [RSADecrypt](#rsadecrypt)
+  - [7. DES](#7-des)
+    - [DESEncrypt](#desencrypt)
+    - [DESDecrypt](#desdecrypt)
+  - [8. 3DES](#8-3des)
+    - [3DESEncrypt](#3desencrypt)
+    - [3DESDecrypt](#3desdecrypt)
+  - [9. 奇偶加密](#9-奇偶加密)
+    - [OddEvenEncrypt](#oddevenencrypt)
+    - [OddEvenDecrypt](#oddevendecrypt)
+- [JAVA 加密服务 - 标准加密](#java-加密服务---标准加密)
+  - [1. SM2](#1-sm2)
+    - [JavaSm2Sign](#javasm2sign)
+    - [JavaSm2Verify](#javasm2verify)
+    - [JavaSm2Encrypt](#javasm2encrypt)
+    - [JavaSm2Encrypt4PKCS8](#javasm2encrypt4pkcs8)
+    - [JavaSm2Decrypt](#javasm2decrypt)
+  - [2. SM3](#2-sm3)
+    - [JavaSm3Encrypt](#javasm3encrypt)
+    - [JavaSm3Hmac](#javasm3hmac)
+    - [JavaSm3VerifyHmac](#javasm3verifyhmac)
+  - [3. SM4](#3-sm4)
+    - [JavaSm4CbcZeroEncrypt](#javasm4cbczeroencrypt)
+    - [JavaSm4CbcZeroDecrypt](#javasm4cbczerodecrypt)
+    - [JavaSm4EcbPkcs5Encrypt](#javasm4ecbpkcs5encrypt)
+    - [JavaSm4EcbPkcs5Decrypt](#javasm4ecbpkcs5decrypt)
+    - [JavaSm4EcbPkcs7Encrypt](#javasm4ecbpkcs7encrypt)
+    - [JavaSm4EcbPkcs7Decrypt](#javasm4ecbpkcs7decrypt)
+  - [4. RSA](#4-rsa)
+    - [JavaRsaEncryptByPublicKey](#javarsaencryptbypublickey)
+    - [JavaRsaDecryptByPrivateKey](#javarsadecryptbyprivatekey)
+    - [JavaSignByha256WithRsa](#javasignbyha256withrsa)
+    - [JavaSignBySha1WithRsa](#javasignbysha1withrsa)
+    - [JavaVerifyBySha1WithRsa](#javaverifybysha1withrsa)
+  - [5. DES](#5-des)
+    - [JavaDesEcbPkcs5Encrypt](#javadesecbpkcs5encrypt)
+    - [JavaDesEcbPkcs5Decrypt](#javadesecbpkcs5decrypt)
+  - [6. 3DES](#6-3des)
+    - [JavaDesedeEcbPkcs5Encrypt](#javadesedeecbpkcs5encrypt)
+    - [JavaDesedeEcbPkcs5Decrypt](#javadesedeecbpkcs5decrypt)
+    - [JavaDesedeCbcPkcs7Encrypt](#javadesedecbcpkcs7encrypt)
+    - [JavaDesedeCbcPkcs7Decrypt](#javadesedecbcpkcs7decrypt)
+- [JAVA 加密服务 - 非标准加密](#java-加密服务---非标准加密)
+    - [SignSm3WithSm2](#signsm3withsm2)
+    - [SignSm3WithSm2Stream](#signsm3withsm2stream)
+    - [SignSm3WithSm2StreamV2](#signsm3withsm2streamv2)
+    - [JavaNonstandardYlswgdEncrypt](#javanonstandardylswgdencrypt)
+    - [JavaNonstandardYlswgdDecrypt](#javanonstandardylswgddecrypt)
+- [二、编码方法](#二编码方法)
+  - [1. Base64](#1-base64)
+    - [Base64Encode](#base64encode)
+    - [Base64URLEncode](#base64urlencode)
+    - [Base64Decode](#base64decode)
+    - [Base32Encode](#base32encode)
+    - [Base32Decode](#base32decode)
+  - [2. HEX](#2-hex)
+    - [Hex2ByteEncode](#hex2byteencode)
+    - [Hex2ByteDecode](#hex2bytedecode)
+    - [HexEncode](#hexencode)
+    - [HexDecode](#hexdecode)
+  - [3. UTF8](#3-utf8)
+    - [UTF8Encode](#utf8encode)
+    - [UTF8Decode](#utf8decode)
+  - [4. Unicode](#4-unicode)
+    - [UnicodeEncode](#unicodeencode)
+    - [UnicodeDecode](#unicodedecode)
+  - [5. URL](#5-url)
+    - [URLEncode](#urlencode)
+    - [URLDecode](#urldecode)
+
 # IRIS加密接口说明
 
 ## 文档简介

@@ -1,3 +1,43 @@
+
+<style>
+table td:first-of-type {
+    word-break:keep-all;
+}
+
+/*超过1600 侧边显示目录*/
+@media screen and (min-width: 1600px) {
+    .markdown-body>ul:first-of-type{
+        position: fixed;
+		right: calc(50% - 800px) ; 
+		width: 300px;
+		height: 90%;
+		top: 5%;
+        overflow: auto;
+        list-style-type:none;
+    }
+     .markdown-body>ul:first-of-type ul{
+        list-style-type:none;
+     }
+
+}
+
+</style>
+
+
+- [IRIS License 机制说明、 JOB 工具优化方案、常见问题说明](#iris-license-机制说明-job-工具优化方案常见问题说明)
+  - [1. 背景说明：License 并发限制带来的风险](#1-背景说明license-并发限制带来的风险)
+  - [2. 优化方案：使用 JOB 工具统一调度](#2-优化方案使用-job-工具统一调度)
+  - [3. 任务记录与失败补偿机制](#3-任务记录与失败补偿机制)
+    - [3.1 任务补偿执行逻辑](#31-任务补偿执行逻辑)
+- [4. 常见问题与根因分析](#4-常见问题与根因分析)
+  - [4.1 常见根因：接口超时导致 License 长时间不释放](#41-常见根因接口超时导致-license-长时间不释放)
+  - [4.2 排查方式：检查 InternalJob 执行耗时](#42-排查方式检查-internaljob-执行耗时)
+- [5. FAQ 常见问题说明](#5-faq-常见问题说明)
+  - [Q1：HIS 调用平台接口返回 “License 超过 80%”，但实际监控发现 License 只有 70%，为什么？](#q1his-调用平台接口返回-license-超过-80但实际监控发现-license-只有-70为什么)
+  - [Q2：发现存在较多消息未正常插入接口表，排查发现 ExternalJob 表中存在大量失败提示 “超过当前license最大数量80%”（高峰每天约 1-2w），DBA 优化负载后仍未解决？](#q2发现存在较多消息未正常插入接口表排查发现-externaljob-表中存在大量失败提示-超过当前license最大数量80高峰每天约-1-2wdba-优化负载后仍未解决)
+  - [Q3：部分门诊患者缴费后未调用平台接口给 PACS 推送申请单信息，导致科室无法检查。项目组认为高峰期 JOB 占用 License 超过 80% 导致堵塞，需要协助排查。](#q3部分门诊患者缴费后未调用平台接口给-pacs-推送申请单信息导致科室无法检查项目组认为高峰期-job-占用-license-超过-80-导致堵塞需要协助排查)
+- [6. 总结](#6-总结)
+
 # IRIS License 机制说明、 JOB 工具优化方案、常见问题说明
 
 ## 1. 背景说明：License 并发限制带来的风险
