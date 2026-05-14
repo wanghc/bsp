@@ -62,18 +62,18 @@ table td:first-of-type {
 ### 3.1 Windows 部署
 
 1. 将 `cryptographic-service-0.0.1-SNAPSHOT.jar` 放到 `D:\` 根目录。  
-![](http://hisui.cn/wp-content/uploads/2026/04/image1.png)
+	![](http://hisui.cn/wp-content/uploads/2026/04/image1.png)
 
 2. 进入 JDK 的 `bin` 目录，打开 `CMD`。  
-![](http://hisui.cn/wp-content/uploads/2026/04/image2.png)
+	![](http://hisui.cn/wp-content/uploads/2026/04/image2.png)
 3. 执行启动命令：
 
-```bash
-java -jar d:\cryptographic-service-0.0.1-SNAPSHOT.jar
-```
+    ```bash
+    java -jar d:\cryptographic-service-0.0.1-SNAPSHOT.jar
+    ```
 
 4. 启动成功后可看到类似如下输出：  
-![](http://hisui.cn/wp-content/uploads/2026/04/image3.png)
+	![](http://hisui.cn/wp-content/uploads/2026/04/image3.png)
 
 > 注意：直接在命令行启动时，关闭窗口后服务会终止。
 
