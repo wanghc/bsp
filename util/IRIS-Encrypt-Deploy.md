@@ -81,45 +81,45 @@ java -jar d:\cryptographic-service-0.0.1-SNAPSHOT.jar
 
 1. 上传 `cryptographic-service-0.0.1-SNAPSHOT.jar` 到：
 
-```text
-/dthealth/app/dthis/web/hisbase/bsp
-```
+    ```text
+    /dthealth/app/dthis/web/hisbase/bsp
+    ```
 
-若目录不存在请先创建。
+	若目录不存在请先创建。
 
 2. 确认已安装 JDK 1.8（可使用附件 `jdk-8u271-linux-x64.tar`）。
 
 3. 前台启动（用于首次验证）：
 
-```bash
-java -jar /dthealth/app/dthis/web/hisbase/bsp/cryptographic-service-0.0.1-SNAPSHOT.jar
-```
+    ```bash
+    java -jar /dthealth/app/dthis/web/hisbase/bsp/cryptographic-service-0.0.1-SNAPSHOT.jar
+    ```
 
 4. （可选）后台启动（建议接口验证通过后再做）：
 
-```bash
-nohup java -jar /dthealth/app/dthis/web/hisbase/bsp/cryptographic-service-0.0.1-SNAPSHOT.jar > /tmp/javalog.txt 2>&1 &
-```
+    ```bash
+    nohup java -jar /dthealth/app/dthis/web/hisbase/bsp/cryptographic-service-0.0.1-SNAPSHOT.jar > /tmp/javalog.txt 2>&1 &
+    ```
 
-可通过 `/tmp/javalog.txt` 确认服务启动状态。若系统重启，需重新启动服务。
+	可通过 `/tmp/javalog.txt` 确认服务启动状态。若系统重启，需重新启动服务。
 
 5. （可选）配置开机自启（建议接口验证通过后再做）：
 
-- 将附件中的 `myjavaapp` 放到 `/etc/init.d/`  
-![](http://hisui.cn/wp-content/uploads/2026/04/image4.png)
-- 依次执行：
+    - 将附件中的 `myjavaapp` 放到 `/etc/init.d/`  
+    ![](http://hisui.cn/wp-content/uploads/2026/04/image4.png)
+    - 依次执行：
 
-```bash
-sudo chmod +x /etc/init.d/myjavaapp
-sudo chkconfig --add myjavaapp
-sudo service myjavaapp start
-sudo chkconfig myjavaapp on
-```
+        ```bash
+        sudo chmod +x /etc/init.d/myjavaapp
+        sudo chkconfig --add myjavaapp
+        sudo service myjavaapp start
+        sudo chkconfig myjavaapp on
+        ```
 
-- 查看 `/tmp/javalog.txt`，确认启动成功：  
-![](http://hisui.cn/wp-content/uploads/2026/04/image5.png)
+    - 查看 `/tmp/javalog.txt`，确认启动成功：  
+    ![](http://hisui.cn/wp-content/uploads/2026/04/image5.png)
 
-> 注意：服务发布成功后，请勿停止该进程，否则接口调用会失败。
+    > 注意：服务发布成功后，请勿停止该进程，否则接口调用会失败。
 
 ## 4. Cache/IRIS 导入与配置
 
