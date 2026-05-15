@@ -44,7 +44,7 @@ table td:first-of-type {
 
 - **硬件要求**：无特殊要求，可部署在 ECP 服务器或其他内网可访问服务器。
 - **JDK 要求**：JDK 1.8
-- **服务端口**：`18086`、`18087`（确保服务器端口已打开）
+- **服务端口**：`28086`、`28087`（确保服务器端口已打开）
 
 ### 2.1 Windows
 
@@ -144,15 +144,15 @@ table td:first-of-type {
 4. 导入完成后，打开 `Util.Impl.EncryptionUtils`，修改服务地址参数：
 
 ```objectscript
-Parameter NonStandardAlgUrl = "http://localhost:18086";
-Parameter StandardAlgUrl = "http://localhost:18087";
+Parameter NonStandardAlgUrl = "http://localhost:28086";
+Parameter StandardAlgUrl = "http://localhost:28087";
 ```
 
 将 `localhost` 改为 JAR 所在服务器 IP，例如：
 
 ```objectscript
-Parameter NonStandardAlgUrl = "http://192.168.1.1:18086";
-Parameter StandardAlgUrl = "http://192.168.1.1:18087";
+Parameter NonStandardAlgUrl = "http://192.168.1.1:28086";
+Parameter StandardAlgUrl = "http://192.168.1.1:28087";
 ```
 
 ![image-20260515095754680](http://hisui.cn/wp-content/uploads/2026/05/image-20260515095754680.png)
