@@ -38,13 +38,13 @@ table td:first-of-type {
 
 ## 1. 说明
 
-本文用于指导部署 Java 加密服务（`cryptographic-service-0.0.1-SNAPSHOT.jar`），并在 Cache/IRIS 中完成调用配置。
+本文用于指导部署 Java 加密服务（`cryptographic-service-0.0.1-SNAPSHOT.jar`、`service-0.0.1-SNAPSHOT.jar`），并在 Cache/IRIS 中完成调用配置。
 
 ## 2. 部署环境要求
 
 - **硬件要求**：无特殊要求，可部署在 ECP 服务器或其他内网可访问服务器。
 - **JDK 要求**：JDK 1.8
-- **服务端口**：`8087`
+- **服务端口**：`18086`、`18087`（确保服务器端口已打开）
 
 ### 2.1 Windows
 
@@ -61,15 +61,16 @@ table td:first-of-type {
 
 ### 3.1 Windows 部署
 
-1. 将 `cryptographic-service-0.0.1-SNAPSHOT.jar` 放到 `D:\` 根目录。  
+1. 将 `cryptographic-service-0.0.1-SNAPSHOT.jar`、`service-0.0.1-SNAPSHOT.jar`放到 `D:\` 根目录。  
 	![](http://hisui.cn/wp-content/uploads/2026/04/image1.png)
 
 2. 进入 JDK 的 `bin` 目录，打开 `CMD`。  
 	![](http://hisui.cn/wp-content/uploads/2026/04/image2.png)
-3. 执行启动命令：
+3. 分别执行启动命令：
 
-    ```bash
+    ```shell
     java -jar d:\cryptographic-service-0.0.1-SNAPSHOT.jar
+    java -jar d:\service-0.0.1-SNAPSHOT.jar
     ```
 
 4. 启动成功后可看到类似如下输出：  
@@ -79,9 +80,9 @@ table td:first-of-type {
 
 ### 3.2 Linux 部署
 
-1. 上传 `cryptographic-service-0.0.1-SNAPSHOT.jar` 到：
+1. 上传 `cryptographic-service-0.0.1-SNAPSHOT.jar`、`service-0.0.1-SNAPSHOT.jar`到：
 
-    ```text
+    ```shell
     /dthealth/app/dthis/web/hisbase/bsp
     ```
 
@@ -91,19 +92,25 @@ table td:first-of-type {
 
 3. 前台启动（用于首次验证）：
 
-    ```bash
+    ```shell
     java -jar /dthealth/app/dthis/web/hisbase/bsp/cryptographic-service-0.0.1-SNAPSHOT.jar
+    java -jar /dthealth/app/dthis/web/hisbase/bsp/service-0.0.1-SNAPSHOT.jar
     ```
 
-4. （可选）后台启动（建议接口验证通过后再做）：
+4. 启动成功后可看到类似如下输出：  
+
+	![image-20260515095351434](http://hisui.cn/wp-content/uploads/2026/05/image-20260515095351434.png)
+
+5. （可选）后台启动（建议接口验证通过后再做）：
 
     ```bash
     nohup java -jar /dthealth/app/dthis/web/hisbase/bsp/cryptographic-service-0.0.1-SNAPSHOT.jar > /tmp/javalog.txt 2>&1 &
+    nohup java -jar /dthealth/app/dthis/web/hisbase/bsp/service-0.0.1-SNAPSHOT.jar > /tmp/javalog.txt 2>&1 &
     ```
 
-	可通过 `/tmp/javalog.txt` 确认服务启动状态。若系统重启，需重新启动服务。
+    可通过 `/tmp/javalog.txt` 确认服务启动状态。若系统重启，需重新启动服务。
 
-5. （可选）配置开机自启（建议接口验证通过后再做）：
+6. （可选）配置开机自启（建议接口验证通过后再做）：
 
     - 将附件中的 `myjavaapp` 放到 `/etc/init.d/`  
     ![](http://hisui.cn/wp-content/uploads/2026/04/image4.png)
@@ -137,16 +144,18 @@ table td:first-of-type {
 4. 导入完成后，打开 `Util.Impl.EncryptionUtils`，修改服务地址参数：
 
 ```objectscript
-Parameter StandardAlgUrl = "http://localhost:8087";
+Parameter NonStandardAlgUrl = "http://localhost:18086";
+Parameter StandardAlgUrl = "http://localhost:18087";
 ```
 
 将 `localhost` 改为 JAR 所在服务器 IP，例如：
 
 ```objectscript
-Parameter StandardAlgUrl = "http://192.168.1.1:8087";
+Parameter NonStandardAlgUrl = "http://192.168.1.1:18086";
+Parameter StandardAlgUrl = "http://192.168.1.1:18087";
 ```
 
-![](http://hisui.cn/wp-content/uploads/2026/04/image8.png)
+![image-20260515095754680](http://hisui.cn/wp-content/uploads/2026/05/image-20260515095754680.png)
 
 ## 5. 常见问题
 
