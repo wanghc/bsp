@@ -59,6 +59,9 @@ table td:first-of-type {
 
 ## 3. 部署 JAR 服务
 
+- `cryptographic-service-0.0.1-SNAPSHOT.jar` 该jar包为JAVA标准加密 发布的端口为`28087`
+- `service-0.0.1-SNAPSHOT.jar` 该jar包为JAVA非标准加密 发布的端口为`28086`
+
 ### 3.1 Windows 部署
 
 1. 将 `cryptographic-service-0.0.1-SNAPSHOT.jar`、`service-0.0.1-SNAPSHOT.jar`放到 `D:\` 根目录。  
@@ -157,7 +160,12 @@ Parameter StandardAlgUrl = "http://192.168.1.1:28087";
 
 ![image-20260515095754680](http://hisui.cn/wp-content/uploads/2026/05/image-20260515095754680.png)
 
-## 5. 常见问题
+## 5. 验证方法
+
+- 验证JAVA标准加密 选择该链接内任意方法有返回值即可 [JAVA 加密服务 - 标准加密](http://hisui.cn/bsp/util/IRIS-Encrypt#java-加密服务---标准加密) 
+- 验证JAVA非标准加密 选择该链接内任意方法有返回值即可[JAVA 加密服务 - 非标准加密](http://hisui.cn/bsp/util/IRIS-Encrypt#java-加密服务---非标准加密)
+
+## 6. 常见问题
 
 - **从 Word 复制后出现语法异常**  
   原因通常是复制带入了特殊字符。建议手动输入关键命令或代码。  
