@@ -719,7 +719,7 @@ j3RAU1w8iVQiH0vtPV+/uM/tBL4iPRtBSp6qoOwDWH4=
 ### SM4Encrypt
 
 - 描述：SM4 加密。
-- 参数：`str`,`key`,`retType`,`keyType`,`padding`，`mode`,`iv`（各参数取值与组合见文档开头 **「参数约定与填写说明」→ 5. SM4**）
+- 参数：`str`,`key`,`retType`,`keyType`,`padding`,`mode`,`iv`,`ivType`（各参数取值见 **「参数约定与填写说明」→ 5. SM4**）
 - 返回值：密文
 ```objectscript
 ClassMethod SM4Encrypt(str As %String, key As %String, retType As %String = "BASE64", keyType As %String = "TEXT", padding = "PKCS7", mode As %String = "ECB", iv As %String = "") As %String
@@ -777,7 +777,7 @@ ACBC8301E0964705A55EA3E077B8EC8A
 
 ### SM4Decrypt
 - 描述：SM4 解密。
-- 参数：`str`（密文）,`key`,`textType`（密文编码）,`keyType`,`padding`,`mode`,`iv`（同上节 SM4 表；`textType` 对应加密侧 `retType`）
+- 参数：`str`（密文）,`key`,`textType`（密文编码）,`keyType`,`padding`,`mode`,`iv`,`ivType`（同上节；`textType` 对应加密侧 `retType`）
 - 返回值：明文
 ```objectscript
 ClassMethod SM4Decrypt(str As %String, key As %String, textType As %String = "BASE64", keyType As %String = "TEXT", padding = "PKCS7", mode As %String = "ECB", iv As %String = "") As %String
