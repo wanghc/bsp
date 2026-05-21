@@ -44,7 +44,11 @@ table td:first-of-type {
 
 - **硬件要求**：无特殊要求，可部署在 ECP 服务器或其他内网可访问服务器。
 - **JDK 要求**：JDK 1.8
-- **服务端口**：`28086`、`28087`（确保服务器端口已打开）
+- **服务端口**：`28086`、`28087`
+  - **确保服务器端口已开放**：请联系项目对接的信息科协助完成端口开放操作。
+  - **访问权限说明**：该端口仅限于内部通信，不涉及任何第三方外部访问。
+  - **开放必要性**：开放此端口旨在发布 Java 服务。若未开放，IRIS 系统将无法成功调用该 Java 服务。
+
 
 ### 2.1 Windows
 
@@ -69,6 +73,7 @@ table td:first-of-type {
 
 2. 进入 JDK 的 `bin` 目录，打开 `CMD`。  
 	![](http://hisui.cn/wp-content/uploads/2026/04/image2.png)
+	
 3. 分别执行启动命令：
 
     ```shell
@@ -77,7 +82,8 @@ table td:first-of-type {
     ```
 
 4. 启动成功后可看到类似如下输出：  
-	![](http://hisui.cn/wp-content/uploads/2026/04/image3.png)
+	![](http://hisui.cn/wp-content/uploads/2026/05/4A9DEDCAD37CB6AD1931DBC792915B16.png)
+	![](http://hisui.cn/wp-content/uploads/2026/05/A2516D40A98AEF6F241C7DD2CB6B45B6.png)
 
 > 注意：直接在命令行启动时，关闭窗口后服务会终止。
 
