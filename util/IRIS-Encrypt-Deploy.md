@@ -165,6 +165,40 @@ Parameter StandardAlgUrl = "http://192.168.1.1:28087";
 - 验证JAVA标准加密 选择该链接内任意方法有返回值即可 [JAVA 加密服务 - 标准加密](http://hisui.cn/bsp/util/IRIS-Encrypt#java-加密服务---标准加密) 
 - 验证JAVA非标准加密 选择该链接内任意方法有返回值即可[JAVA 加密服务 - 非标准加密](http://hisui.cn/bsp/util/IRIS-Encrypt#java-加密服务---非标准加密)
 
+验证成功后在Terminal中执行以该方法用于部署程序：
+
+```java
+w ##class(Util.EncryptionUtils).Deploy()
+```
+
+运行后提示该内容即可：
+
+```java
+DHC-APP>w ##class(Util.EncryptionUtils).Deploy()
+
+Compilation started on 05/21/2026 11:03:06 with qualifiers 'cuk'
+Removed deployed classes from compile list
+Class Util.EncodingUtils is up-to-date.
+Class Util.Encryption.BigIntBytes is up-to-date.
+Class Util.Encryption.DES is up-to-date.
+Class Util.Encryption.MD5 is up-to-date.
+Class Util.Encryption.Primitives is up-to-date.
+Class Util.Encryption.RSA is up-to-date.
+Class Util.Encryption.RSAPrimitives is up-to-date.
+Class Util.Encryption.SM2 is up-to-date.
+Class Util.Encryption.SM2Callout is up-to-date.
+Class Util.Encryption.SM2EmbeddedPython is up-to-date.
+Class Util.Encryption.SM2Shell is up-to-date.
+Class Util.Encryption.SM3 is up-to-date.
+Class Util.Encryption.SM4 is up-to-date.
+Class Util.Encryption.TripleDES is up-to-date.
+Class Util.EncryptionUtils is up-to-date.
+Class Util.Impl.EncodingUtils is up-to-date.
+Class Util.Impl.EncryptionUtils is up-to-date.
+Compilation finished successfully in 0.154s.
+1
+```
+
 ## 6. 常见问题
 
 - **从 Word 复制后出现语法异常**  
