@@ -99,7 +99,7 @@ table td:first-of-type {
 
 2. 确认已安装 JDK 1.8（可使用附件 `jdk-8u271-linux-x64.tar`）。
 
-3. 前台启动（用于首次验证）：
+3. JDK1.8安装成功后，在Linux 的shell执行如下代码：（前台启动，用于首次验证）：
 
     ```shell
     java -jar /dthealth/app/dthis/web/hisbase/bsp/cryptographic-service-0.0.1-SNAPSHOT.jar
@@ -215,6 +215,13 @@ Compilation finished successfully in 0.154s.
   请确认第 4 节中的 URL 配置正确，并在命令行使用 `telnet` 测试目标 IP 与端口连通性。  
   ![](http://hisui.cn/wp-content/uploads/2026/04/image10.png)
 
+  联系信息科放开防火墙的28086，28087端口，可运行以下命令查看防火墙。
+  
+  1. 运行查看端口命令：`firewall-cmd --list-ports `
+  2. 运行永久放行（重启生效）命令：`firewall-cmd --permanent --add-port=28086/tcp `，`firewall-cmd --permanent --add-port=28087/tcp `
+  3. 运行重载生效命令：`firewall-cmd --reload`  
+  4. 然后在运行查看端口命令，看看有没有放开8086端口：`firewall-cmd --list-ports`
+  
 - **调用失败，疑似服务未启动**  
   请先确认 Java 服务进程是否正常运行。  
   ![](http://hisui.cn/wp-content/uploads/2026/04/image11.png)
@@ -230,3 +237,5 @@ Compilation finished successfully in 0.154s.
 - **Q：方法返回与文档示例不一致？**  
   A：请在 `Terminal` 中执行示例命令，再对比结果。  
   ![](http://hisui.cn/wp-content/uploads/2026/04/image13.png)
+
+- 
