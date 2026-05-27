@@ -139,7 +139,7 @@ table td:first-of-type {
 
 ## 4. Cache/IRIS 导入与配置
 
-1. 将附件中的加密工具类导入目标 Cache/IRIS 数据库。  
+1. 将附件中的加密工具类导入目标 Cache/IRIS 数据库，要部署哪个命名空间就导入哪个命名空间。  
 ![](http://hisui.cn/wp-content/uploads/2026/04/image6.png)
 
 2. 导入时选择：
