@@ -164,7 +164,7 @@ Parameter NonStandardAlgUrl = "http://192.168.1.1:28086";
 Parameter StandardAlgUrl = "http://192.168.1.1:28087";
 ```
 
-![image-20260515095754680](http://hisui.cn/wp-content/uploads/2026/05/image-20260515095754680.png)
+![image-20260515095754680](http://hisui.cn/wp-content/uploads/2026/05/7939c1fc-c45f-44b4-a64b-d985e6bd00ea.png)
 
 ## 5. 验证方法
 
