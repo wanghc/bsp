@@ -81,7 +81,7 @@ table td:first-of-type {
     java -jar d:\service-0.0.1-SNAPSHOT.jar
     ```
 
-4. 启动成功后可看到类似如下输出：  
+4. 启动成功后，出现 Started ServiceApplication in x.xxx seconds 表明已经启动成功。类似如下输出：  
 	![](http://hisui.cn/wp-content/uploads/2026/05/4A9DEDCAD37CB6AD1931DBC792915B16.png)
 	![](http://hisui.cn/wp-content/uploads/2026/05/A2516D40A98AEF6F241C7DD2CB6B45B6.png)
 
@@ -95,7 +95,8 @@ table td:first-of-type {
     /dthealth/app/dthis/web/hisbase/bsp
     ```
 
-	若目录不存在请先创建。
+    - 若目录不存在请先创建。
+    - 若存在且有这两个jar包，则覆盖更新。
 
 2. 确认已安装 JDK 1.8（可使用附件 `jdk-8u271-linux-x64.tar`）。
 
@@ -106,7 +107,7 @@ table td:first-of-type {
     java -jar /dthealth/app/dthis/web/hisbase/bsp/service-0.0.1-SNAPSHOT.jar
     ```
 
-4. 启动成功后可看到类似如下输出：  
+4. 启动成功后，出现 Started ServiceApplication in x.xxx seconds 表明已经启动成功。类似如下输出：  
 
 	![image-20260515095351434](http://hisui.cn/wp-content/uploads/2026/05/image-20260515095351434.png)
 
