@@ -53,6 +53,9 @@ table td:first-of-type {
 ### 2.1 Windows
 
 - **JDK 安装**：可使用附件中的 `jdk1.8.0_251.zip`。
+  - `jdk1.8.0_251.zip`解压后到 `D:\` 根目录
+  - 如果没有 `D` 盘 可以解压到任意路径。
+
 
 ### 2.2 Linux
 
@@ -71,10 +74,9 @@ table td:first-of-type {
 1. 将 `cryptographic-service-0.0.1-SNAPSHOT.jar`、`service-0.0.1-SNAPSHOT.jar`放到 `D:\` 根目录。  
 	![](http://hisui.cn/wp-content/uploads/2026/04/image1.png)
 
-2. 进入 JDK 的 `bin` 目录，打开 `CMD`。  
-	![](http://hisui.cn/wp-content/uploads/2026/04/image2.png)
+2. 进入 JDK 的 bin 目录，清除文件路径信息后，输入cmd，运行java命令。  ![](http://hisui.cn/wp-content/uploads/2026/04/image2.png)
 	
-3. 分别执行启动命令：
+3. 分别执行`java`启动命令：
 
     ```shell
     java -jar d:\cryptographic-service-0.0.1-SNAPSHOT.jar
