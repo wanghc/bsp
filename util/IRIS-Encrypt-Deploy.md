@@ -44,11 +44,18 @@ table td:first-of-type {
 
 - **硬件要求**：无特殊要求，可部署在 ECP 服务器或其他内网可访问服务器。
 - **JDK 要求**：JDK 1.8
-- **服务端口**：`28086`、`28087`（确保服务器端口已打开）
+- **服务端口**：`28086`、`28087`
+  - **确保服务器端口已开放**：请联系项目对接的信息科协助完成端口开放操作。
+  - **访问权限说明**：该端口仅限于内部通信，不涉及任何第三方外部访问。
+  - **开放必要性**：开放此端口旨在发布 Java 服务。若未开放，IRIS 系统将无法成功调用该 Java 服务。
+
 
 ### 2.1 Windows
 
 - **JDK 安装**：可使用附件中的 `jdk1.8.0_251.zip`。
+  - `jdk1.8.0_251.zip`解压后到 `D:\` 根目录
+  - 如果没有 `D` 盘 可以解压到任意路径。
+
 
 ### 2.2 Linux
 
@@ -67,17 +74,18 @@ table td:first-of-type {
 1. 将 `cryptographic-service-0.0.1-SNAPSHOT.jar`、`service-0.0.1-SNAPSHOT.jar`放到 `D:\` 根目录。  
 	![](http://hisui.cn/wp-content/uploads/2026/04/image1.png)
 
-2. 进入 JDK 的 `bin` 目录，打开 `CMD`。  
-	![](http://hisui.cn/wp-content/uploads/2026/04/image2.png)
-3. 分别执行启动命令：
+2. 进入 JDK 的 bin 目录，清除文件路径信息后，输入cmd，运行java命令。  ![](http://hisui.cn/wp-content/uploads/2026/04/image2.png)
+	
+3. 分别执行`java`启动命令：
 
     ```shell
     java -jar d:\cryptographic-service-0.0.1-SNAPSHOT.jar
     java -jar d:\service-0.0.1-SNAPSHOT.jar
     ```
 
-4. 启动成功后可看到类似如下输出：  
-	![](http://hisui.cn/wp-content/uploads/2026/04/image3.png)
+4. 启动成功后，出现 Started ServiceApplication in x.xxx seconds 表明已经启动成功。类似如下输出：  
+	![](http://hisui.cn/wp-content/uploads/2026/05/4A9DEDCAD37CB6AD1931DBC792915B16.png)
+	![](http://hisui.cn/wp-content/uploads/2026/05/A2516D40A98AEF6F241C7DD2CB6B45B6.png)
 
 > 注意：直接在命令行启动时，关闭窗口后服务会终止。
 
@@ -89,18 +97,19 @@ table td:first-of-type {
     /dthealth/app/dthis/web/hisbase/bsp
     ```
 
-	若目录不存在请先创建。
+    - 若目录不存在请先创建。
+    - 若存在且有这两个jar包，则覆盖更新。
 
 2. 确认已安装 JDK 1.8（可使用附件 `jdk-8u271-linux-x64.tar`）。
 
-3. 前台启动（用于首次验证）：
+3. JDK1.8安装成功后，在Linux 的shell执行如下代码：（前台启动，用于首次验证）：
 
     ```shell
     java -jar /dthealth/app/dthis/web/hisbase/bsp/cryptographic-service-0.0.1-SNAPSHOT.jar
     java -jar /dthealth/app/dthis/web/hisbase/bsp/service-0.0.1-SNAPSHOT.jar
     ```
 
-4. 启动成功后可看到类似如下输出：  
+4. 启动成功后，出现 Started ServiceApplication in x.xxx seconds 表明已经启动成功。类似如下输出：  
 
 	![image-20260515095351434](http://hisui.cn/wp-content/uploads/2026/05/image-20260515095351434.png)
 
@@ -133,7 +142,7 @@ table td:first-of-type {
 
 ## 4. Cache/IRIS 导入与配置
 
-1. 将附件中的加密工具类导入目标 Cache/IRIS 数据库。  
+1. 将附件中的加密工具类导入目标 Cache/IRIS 数据库，要部署哪个命名空间就导入哪个命名空间。  
 ![](http://hisui.cn/wp-content/uploads/2026/04/image6.png)
 
 2. 导入时选择：
@@ -158,12 +167,46 @@ Parameter NonStandardAlgUrl = "http://192.168.1.1:28086";
 Parameter StandardAlgUrl = "http://192.168.1.1:28087";
 ```
 
-![image-20260515095754680](http://hisui.cn/wp-content/uploads/2026/05/image-20260515095754680.png)
+![image-20260515095754680](http://hisui.cn/wp-content/uploads/2026/05/7939c1fc-c45f-44b4-a64b-d985e6bd00ea.png)
 
 ## 5. 验证方法
 
 - 验证JAVA标准加密 选择该链接内任意方法有返回值即可 [JAVA 加密服务 - 标准加密](http://hisui.cn/bsp/util/IRIS-Encrypt#java-加密服务---标准加密) 
 - 验证JAVA非标准加密 选择该链接内任意方法有返回值即可[JAVA 加密服务 - 非标准加密](http://hisui.cn/bsp/util/IRIS-Encrypt#java-加密服务---非标准加密)
+
+验证成功后在Terminal中执行以该方法用于部署程序：
+
+```java
+w ##class(Util.EncryptionUtils).Deploy()
+```
+
+运行后提示该内容即可：
+
+```java
+DHC-APP>w ##class(Util.EncryptionUtils).Deploy()
+
+Compilation started on 05/21/2026 11:03:06 with qualifiers 'cuk'
+Removed deployed classes from compile list
+Class Util.EncodingUtils is up-to-date.
+Class Util.Encryption.BigIntBytes is up-to-date.
+Class Util.Encryption.DES is up-to-date.
+Class Util.Encryption.MD5 is up-to-date.
+Class Util.Encryption.Primitives is up-to-date.
+Class Util.Encryption.RSA is up-to-date.
+Class Util.Encryption.RSAPrimitives is up-to-date.
+Class Util.Encryption.SM2 is up-to-date.
+Class Util.Encryption.SM2Callout is up-to-date.
+Class Util.Encryption.SM2EmbeddedPython is up-to-date.
+Class Util.Encryption.SM2Shell is up-to-date.
+Class Util.Encryption.SM3 is up-to-date.
+Class Util.Encryption.SM4 is up-to-date.
+Class Util.Encryption.TripleDES is up-to-date.
+Class Util.EncryptionUtils is up-to-date.
+Class Util.Impl.EncodingUtils is up-to-date.
+Class Util.Impl.EncryptionUtils is up-to-date.
+Compilation finished successfully in 0.154s.
+1
+```
 
 ## 6. 常见问题
 
@@ -175,6 +218,13 @@ Parameter StandardAlgUrl = "http://192.168.1.1:28087";
   请确认第 4 节中的 URL 配置正确，并在命令行使用 `telnet` 测试目标 IP 与端口连通性。  
   ![](http://hisui.cn/wp-content/uploads/2026/04/image10.png)
 
+  联系信息科放开防火墙的28086，28087端口，可运行以下命令查看防火墙。
+  
+  1. 运行查看端口命令：`firewall-cmd --list-ports `
+  2. 运行永久放行（重启生效）命令：`firewall-cmd --permanent --add-port=28086/tcp `，`firewall-cmd --permanent --add-port=28087/tcp `
+  3. 运行重载生效命令：`firewall-cmd --reload`  
+  4. 然后在运行查看端口命令，看看有没有放开8086端口：`firewall-cmd --list-ports`
+  
 - **调用失败，疑似服务未启动**  
   请先确认 Java 服务进程是否正常运行。  
   ![](http://hisui.cn/wp-content/uploads/2026/04/image11.png)
@@ -190,3 +240,5 @@ Parameter StandardAlgUrl = "http://192.168.1.1:28087";
 - **Q：方法返回与文档示例不一致？**  
   A：请在 `Terminal` 中执行示例命令，再对比结果。  
   ![](http://hisui.cn/wp-content/uploads/2026/04/image13.png)
+
+- 
