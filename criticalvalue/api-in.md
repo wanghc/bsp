@@ -247,8 +247,8 @@ table td:first-of-type {
 `HIS8.4`
 
 ```vb
-##Class(BSP.CV.SRV.Interface).SaveTransEMR(reportID,OEOrdItemIds,UserID)   //实际未使用此
-##class(web.DHCAntCVReportLink).SaveTransEMR(reportID,OEOrdItemIds,UserID)
+##Class(BSP.CV.SRV.Interface).SaveTransEMR(reportID,InstanceIDs,UserID)   //实际未使用此
+##class(web.DHCAntCVReportLink).SaveTransEMR(reportID,InstanceIDs,UserID)
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
