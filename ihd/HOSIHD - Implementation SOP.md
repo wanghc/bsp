@@ -34,7 +34,7 @@
 
 进入 **数据迁移** 菜单后，顶部 Tab：
 
-![image-20260721100420514](HOS数据迁移 - 实施操作手册 - 图片\image-20260721100420514.png)
+![image-20260721100420514](HOSIHD - Implementation SOP - Img\image-20260721100420514.png)
 
 | Tab | 页面 | 作用 |
 |-----|------|------|
@@ -75,7 +75,7 @@ flowchart TD
 
 **入口**：数据迁移 → **基础配置**
 
-![image-20260721100607530](HOS数据迁移 - 实施操作手册 - 图片\image-20260721100607530.png)
+![image-20260721100607530](HOSIHD - Implementation SOP - Img\image-20260721100607530.png)
 
 ### 4.1 维护四条 JDBC 配置（均需「有效」）
 
@@ -114,14 +114,14 @@ flowchart TD
 
 **入口**：数据迁移 → **导入任务配置**
 
-![image-20260721100927135](HOS数据迁移 - 实施操作手册 - 图片\image-20260721100927135.png)
+![image-20260721100927135](HOSIHD - Implementation SOP - Img\image-20260721100927135.png)
 
 ### 5.1 新建 / 修改任务
 
 1. 选择 **院区**、**产品组**（如有）。
 2. **新增** 一条业务任务，重点字段：
 
-![image-20260721101351564](HOS数据迁移 - 实施操作手册 - 图片\image-20260721101351564.png)
+![image-20260721101351564](HOSIHD - Implementation SOP - Img\image-20260721101351564.png)
 
 | 字段 | 说明 | 示例 |
 |------|------|------|
@@ -137,7 +137,7 @@ flowchart TD
 
 3. 保存后，列表中可通过链接进入：
    - **参数**：业务参数配置
-   - ![image-20260721101702858](HOS数据迁移 - 实施操作手册 - 图片\image-20260721101702858.png)
+   - ![image-20260721101702858](HOSIHD - Implementation SOP - Img\image-20260721101702858.png)
    - **字段对照**：临时表字段对照（`table-map.html`）
 
 ---
@@ -146,7 +146,7 @@ flowchart TD
 
 **入口**：导入任务配置 → 任务行上的 **字段对照**（或打开 `table-map.html`）
 
-![image-20260721101835476](HOS数据迁移 - 实施操作手册 - 图片\image-20260721101835476.png)
+![image-20260721101835476](HOSIHD - Implementation SOP - Img\image-20260721101835476.png)
 
 临时导入时：源 SQL 结果列名（`map_field`）必须能对照到中间表字段（`source_field`）。缺对照会直接失败。
 
@@ -182,20 +182,20 @@ flowchart TD
 
 - **通用字典**：维护新系统侧字典树。
 
-![image-20260721102840742](HOS数据迁移 - 实施操作手册 - 图片\image-20260721102840742.png)
+![image-20260721102840742](HOSIHD - Implementation SOP - Img\image-20260721102840742.png)
 
 在维护老系统字典时，维护上老系统的获取字典视图，然后点击**同步数据**即可将老系统字典同步过来。（前提：JDBC链接测试通过）
 
-![image-20260721103001226](HOS数据迁移 - 实施操作手册 - 图片\image-20260721103001226.png)
+![image-20260721103001226](HOSIHD - Implementation SOP - Img\image-20260721103001226.png)
 
 ## 8. 步骤五：字典对照
 
 - **字典对照**：维护「旧系统码值 → 新系统码值」。
-- ![image-20260721135925148](HOS数据迁移 - 实施操作手册 - 图片\image-20260721135925148.png)
+- ![image-20260721135925148](HOSIHD - Implementation SOP - Img\image-20260721135925148.png)
 
 **原则**：先有字典与对照，再大批量正式导入，减少失败与脏数据。
 
-![image-20260721135856928](HOS数据迁移 - 实施操作手册 - 图片\image-20260721135856928.png)
+![image-20260721135856928](HOSIHD - Implementation SOP - Img\image-20260721135856928.png)
 
 ---
 
@@ -211,7 +211,7 @@ flowchart TD
    - **View（ODBC/JDBC 视图）**：在下方大文本框写 SQL；
    - **File（本地文件）**：选择 Excel（xls/xlsx）。
 
-![image-20260721140055873](HOS数据迁移 - 实施操作手册 - 图片\image-20260721140055873.png)
+![image-20260721140055873](HOSIHD - Implementation SOP - Img\image-20260721140055873.png)
 
 ### 9.2 JDBC 方式（常用）
 
@@ -277,7 +277,7 @@ SELECT ... FROM old_pat WHERE id BETWEEN 200001 AND 300000
 
 当前实现支持 **批量插入**；若整批失败会回退逐行并记录每条错误，便于排查。
 
-![image-20260721140146781](HOS数据迁移 - 实施操作手册 - 图片\image-20260721140146781.png)
+![image-20260721140146781](HOSIHD - Implementation SOP - Img\image-20260721140146781.png)
 
 ---
 
@@ -295,7 +295,7 @@ SELECT ... FROM old_pat WHERE id BETWEEN 200001 AND 300000
 
 > 正式导入依赖任务上配置的 **导入类、导入方法**；未配置或类不存在会失败。
 
-![image-20260721140406068](HOS数据迁移 - 实施操作手册 - 图片\image-20260721140406068.png)
+![image-20260721140406068](HOSIHD - Implementation SOP - Img\image-20260721140406068.png)
 
 ---
 
