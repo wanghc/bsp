@@ -69,6 +69,8 @@ flowchart TD
     H --> I[9.查正式进度与验收]
 ```
 
+![image-20260721100420514](HOSIHD - Implementation SOP - Img\数据迁移流程图.png)
+
 ---
 
 ## 4. 步骤一：基础配置（JDBC）
