@@ -667,6 +667,41 @@ ClassMethod AESECBPKCS5PaddingDecryptStream(stream As %Stream.GlobalBinary, key 
 DHC-APP>w ##class(Util.EncryptionUtils).AESECBPKCS5PaddingDecryptStream(##class(Util.EncryptionUtils).AESECBPKCS5PaddingEncryptStream("1ab姚鑫@#！","J#y9sJesv*512345"),"J#y9sJesv*512345")
 1ab姚鑫@#！
 ```
+### AESGCMEncrypt
+
+- 校验网站：https://toolgen.cn/password/aes
+
+- desc：AES-GCM 加密。wireFormat：tag-ct（IRIS）/ iv-tag-ct / iv-ct-tag（校验网站）；ivLen 默认 12，网站若选 16 则传 16
+- params：str,key,iv,keyType,ivType,aad,aadType,outputType,includeIv,ivLen,wireFormat
+- return：字符串
+```objectscript
+ClassMethod AESGCMEncrypt(str As %String, key As %String, iv As %String = "", keyType As %String = "text", ivType As %String = "text", aad As %String = "", aadType As %String = "text", outputType As %String = "base64", includeIv As %Boolean = 0, ivLen As %Integer = 12, wireFormat As %String = "", prefixLen As %Integer = 0) As %String
+
+```
+- 调试示例：
+
+```objectscript
+DHC-APP>w ##class(Util.EncryptionUtils).AESGCMEncrypt("1ab姚鑫@#！","0123456789abcdef0123456789abcdef","","text","text","","text","base64",0,16,"iv-tag-ct",64)
+nVnYmMA4/i8M8Bs/PUI4S/tpkUM+E5doXH9KYJHJVWK/NiWXXbsGJWReYQdCk7GDISPPSH48oAoB
+KbTN5Fippcc315Xnp1ooRFAl2Sdf1KYRLzYa9LBPOv0PTroSui9cdAs+Ct/ypNI3kYPqTuU=
+```
+
+
+### AESGCMDecrypt
+- desc：AES-GCM 解密（校验网站：prefixLen=64, ivLen=16, wireFormat=iv-tag-ct）
+- params：str,key,iv,keyType,ivType,aad,aadType,outputType,cipherType,includeIv,ivLen,wireFormat,prefixLen
+- return：明文
+```objectscript
+ClassMethod AESGCMDecrypt(str As %String, key As %String, iv As %String = "", keyType As %String = "text", ivType As %String = "text", aad As %String = "", aadType As %String = "text", outputType As %String = "base64", cipherType As %String = "", includeIv As %Boolean = 0, ivLen As %Integer = 12, wireFormat As %String = "", prefixLen As %Integer = 0) As %String
+
+```
+- 调试示例：
+
+```objectscript
+DHC-APP>w ##class(Util.EncryptionUtils).AESGCMDecrypt("nVnYmMA4/i8M8Bs/PUI4S/tpkUM+E5doXH9KYJHJVWK/NiWXXbsGJWReYQdCk7GDISPPSH48oAoBKbTN5Fippcc315Xnp1ooRFAl2Sdf1KYRLzYa9LBPOv0PTroSui9cdAs+Ct/ypNI3kYPqTuU=","0123456789abcdef0123456789abcdef","","text","text","","text","base64","",0,16,"iv-tag-ct",64)
+1ab姚鑫@#！！
+```
+
 
 ## 4. SM3
 
