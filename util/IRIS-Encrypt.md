@@ -66,6 +66,8 @@ table td:first-of-type {
     - [AESECBPKCS7PaddingDecrypt](#aesecbpkcs7paddingdecrypt)
     - [AESECBPKCS5PaddingEncryptStream](#aesecbpkcs5paddingencryptstream)
     - [AESECBPKCS5PaddingDecryptStream](#aesecbpkcs5paddingdecryptstream)
+    - [AESGCMEncrypt](#aesgcmencrypt)
+    - [AESGCMDecrypt](#aesgcmdecrypt)
   - [4. SM3](#4-sm3)
     - [SM3Encrypt](#sm3encrypt)
     - [HMACSM3Encrypt](#hmacsm3encrypt)
