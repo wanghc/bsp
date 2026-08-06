@@ -53,7 +53,7 @@ var session = websys_getSession();
 | EpisodeID          | 就诊ID<BR/>就诊唯一标识，因医嘱录入界面同时需要admType，所以传此值时admType也需要传入 |
 | PatientID          | 患者ID                                                       |
 | mradm              |                                                              |
-| DoingSth           | 正在做某事的说明。表示正在做某事，为空值时才允许切换菜单。不为空时，切换菜单会弹出窗口提示。<br/>`frm.DoingSth.value="病历文书正在编辑中，是否保存"` |
+| DoingSth           | 正在做某事的说明。表示正在做某事，为空值时才允许切换菜单。不为空时，切换菜单会弹出窗口提示。<br/>`frm.DoingSth.value="病历文书正在编辑中，是否保存"`<br />1、值非空时，切换头菜单会alert窗口，提示。<br />2、值非空且有menuWin.DoingSthSureCallback或menuWin.DoingSthCancelCallback方法时，会弹三选(保存/不存/取消)提示，点击保存时调用menuWin.DoingSthSureCallback方法，点击不存时会调用menuWin.DoingSthCancelCallback，点击取消时关闭提示窗口。<br />3、如果在自己业务界面也要做上述逻辑判断，可调用menuWin.doingSthConfirm(cb,param,okBtnTip,noBtnTip)方法来确保，举例：menuWin.doingSthConfirm(function(obj){ //obj为{adm:1}对象  },{adm:1},"保存","不存") |
 | canGiveBirth       | 是否可以分娩，是否满足分娩条件，如：床位图选中大于18岁女性时<br/>`websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I',canGiveBirth:1});`，canGiveBirth为0时，进入分娩界面会提示 |
 | admType            | 用于患者信息条和诊断录入界面，区分患者就诊类型。`websys_setMenuForm({EpisodeID:2,PatientID:1,admType:'I'});` |
 | PACSApplyNo        | 医技申请单号                                                 |
