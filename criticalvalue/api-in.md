@@ -402,7 +402,7 @@ table td:first-of-type {
 `HIS8.4`
 
 ```vb
-##class(%ResultSet).RunQuery("web.DHCAntService","QryCVByAdm",Adm,Status,DateFrom,DateTo,UseType,ReportType,TimeFrom,TimeTo)
+##class(%ResultSet).RunQuery("web.DHCAntService","QryCVByAdm",Adm,Status,DateFrom,DateTo,UseType,ReportType,TimeFrom,TimeTo,DivideByTestItem)
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
@@ -415,29 +415,39 @@ table td:first-of-type {
 | ReportType   | 危急值报告类型    | 1检验、2病理、3心电、4超声、5内镜、6放射  多个以,分割<br> （2023-02-10） |
 | TimeFrom   | 开始时间    | 与开始日期组合成开始日期时间 `2025-11-17` |
 | TimeTo   | 结束时间    | 与结束日期组合成结束日期时间 `2025-11-17` |
+| DivideByTestItem   | 按项目拆分    | 如果为1则按项目拆分，一个危急值报告多个项目会拆分为多条，且项目相关列会有值 `2026-08-06` |
 
 
-|*输出列* |*说明*|*备注*|
-| --- | -- | -- |
-| reportID | 报告ID | 危急值报告表RowId | 
-| examno | 检查(检验)号 |  | 
-| ordItem | 医嘱ID |  | 
-| repStatus | 危急值报告状态 |  | 
-| repTypeDesc | 报告类型 |  | 
-| repLoc | 报告科室 |  | 
-| repDate | 报告日期 |  | 
-| repTime | 报告时间 |  | 
-| repResult | 报告结果 |  | 
-| trUser | 处理人 |  | 
-| trAdvice | 处理意见 |  | 
-| ordItemDesc | 医嘱名称 |  | 
-| trDate | 处理日期 | `HIS8.5` | 
-| trTime | 处理时间 | `HIS8.5` | 
-| nurseDoneStatus | 护士是否处理完成（1/0） | 一般指危急值是否已接收,个别项目也为护士处理  | 
-| recUser | 接收人 | `HIS8.5.3` | 
-| recAdvice | 接收备注 |  | 
-| recDate | 接收日期 |  | 
-| recTime | 接收时间 |  | 
+
+|*序号* |*输出列* |*说明*|*备注*|
+| --- | --- | -- | -- |
+|1 | reportID | 报告ID | 危急值报告表RowId | 
+|2 | examno | 检查(检验)号 |  | 
+|3 | ordItem | 医嘱ID |  | 
+|4 | repStatus | 危急值报告状态 |  | 
+|5 | repTypeDesc | 报告类型 |  | 
+|6 | repLoc | 报告科室 |  | 
+|7 | repDate | 报告日期 |  | 
+|8 | repTime | 报告时间 |  | 
+|9 | repResult | 报告结果 |  | 
+|10 | trUser | 处理人 |  | 
+|11 | trAdvice | 处理意见 |  | 
+|12 | ordItemDesc | 医嘱名称 |  | 
+|13 | trDate | 处理日期 | `HIS8.5` | 
+|14 | trTime | 处理时间 | `HIS8.5` | 
+|15 | nurseDoneStatus | 护士是否处理完成（1/0） | 一般指危急值是否已接收,个别项目也为护士处理  | 
+|16 | recUser | 接收人 | `HIS8.5.3` | 
+|17 | recAdvice | 接收备注 |  | 
+|18 | recDate | 接收日期 |  | 
+|19 | recTime | 接收时间 |  | 
+|20 | repUserCode | 报告人工号 | `2024-12-09` |
+|21 | repUserName | 报告人姓名 | `2024-12-09` |
+|22 | itemCode | 项目代码 | DivideByTestItem为1时，才可能有值 `2026-08-06` |
+|23 | itemName | 项目名称 | `2026-08-06` |
+|24 | itemResult | 项目结果 | `2026-08-06` |
+|25 | itemUnit | 项目单位 | `2026-08-06` |
+|26 | itemRange | 项目范围 | `2026-08-06` |
+|27 | itemFlag | 项目标志 | `2026-08-06` |
 
 如果要是觉得使用Query有点麻烦，可以使用类方法`##class(web.DHCAntCVService).GetCVByAdm`,入参和上Query相同，返回值为两层%List形式，即$lb($lb(reportID,examno,ordItem,...),$lb(reportID,examno,ordItem,...))
 
