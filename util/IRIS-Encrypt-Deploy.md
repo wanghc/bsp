@@ -82,7 +82,7 @@ table td:first-of-type {
 
 2. 进入 JDK 的 bin 目录，清除文件路径信息后，输入cmd，运行java命令。  ![](http://hisui.cn/wp-content/uploads/2026/04/image2.png)
 	
-3. 分别执行`java`启动命令：
+3. 需要启动两个`cmd`窗口，分别执行如下`java`启动命令（一个窗口执行一个命令，窗口关闭服务即结束）：
 
     ```shell
     java -jar d:\cryptographic-service-0.0.1-SNAPSHOT.jar
@@ -108,7 +108,7 @@ table td:first-of-type {
 
 2. 确认已安装 JDK 1.8（可使用附件 `jdk-8u271-linux-x64.tar`）。
 
-3. JDK1.8安装成功后，在Linux 的shell执行如下代码：（前台启动，用于首次验证）：
+3. JDK1.8安装成功后，启动两个shell窗口。在Linux 的shell分别执行如下代码：（前台启动，用于首次验证，一个窗口执行一个命令，窗口关闭服务即结束）：
 
     ```shell
     java -jar /dthealth/app/dthis/web/hisbase/bsp/cryptographic-service-0.0.1-SNAPSHOT.jar
