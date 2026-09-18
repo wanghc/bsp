@@ -8,9 +8,9 @@
 
 # 使用介绍
 ## 下载与更新
-#### 1.下载[WebsysServerSetup.zip](//bsp.hisui.cn/static/WebsysServerSetup.zip)放到web\addins\plugin\WebsysServerSetup\目录下,最终文件路径为web\addins\plugin\WebsysServerSetup\WebsysServerSetup.zip
+#### 1.下载[WebsysServerSetup.zip](//hisui.cn/wp-content/uploads/2026/09/WebsysServerSetup.zip)（V1.5.5）放到web\addins\plugin\WebsysServerSetup\目录下,最终文件路径为web\addins\plugin\WebsysServerSetup\WebsysServerSetup.zip
 #### 2.把下载的zip包解压出的msi文件放到web\addins\plugin\目录下，最终文件路径为web\addins\plugin\WebsysServerSetup.msi
-#### 3. iMedical8.4项目发送web\scripts\dhc.logon.js文件给基础平台组修改, 9.0不用修改
+#### 3. 需要登录界面自动下载更新插件功能，iMedical8.4项目发送web\scripts\dhc.logon.js文件给基础平台组修改, 9.0不用修改
 #### 4. 为了客户端能自动更新，需要进入demo - 头菜单 - 开发工具 - 插件管理界面找到CMgr记录并选中
 - 4.1、修改版本号，最后一位增加1即可，如：当前是1.1.3.6，则修改成1.1.3.7（此版本号与msi文件版本号无关）
 - 4.2、DLL文件路径框内容写入WebsysServerSetup/WebsysServerSetup.zip
@@ -73,6 +73,70 @@ function Fun(){
 - 安装时提示安装无效，检查是否被杀毒软件隔离，或被操作系统防火墙隔离
 
 ## 更新日志 ##
+
+#### 2026-09-15
+
+#### 版本1.5.5
+
+- 计算机名为纯数字时属于高危命名,微软 NetBIOS/AD命名规范明确不推荐纯数字名会导致报错 [7420755]
+
+#### 2026-08-20
+
+#### 版本 1.5.4
+
+- 增加管理业务服务功能
+
+- - 管理界面增加服务状态，启动，停止，配置，删除列信息
+  - 开机启动服务
+
+| 脚本名        | 功能                                                         |      |
+| ------------- | ------------------------------------------------------------ | ---- |
+| mwstart.bat   | 启动服务，1、管理界面启动服务时调用此脚本。2、医为客户端启动时自动运行最高版本下的此脚本，达到开机自动启动最新版功能 | 必填 |
+| mwstop.bat    | 停止服务，1、管理界面停止服务时调用此脚本。                  | 必填 |
+| mwstatus.bat  | 获取当前服务状态，返回值包含[OK]表示正常使用中。1、管理界面判断服务状态时使用此脚本。 | 必填 |
+| mwconfig.html | 业务服务示例或自定义配置界面                                 | 可选 |
+
+  
+
+#### 2026-08-19
+
+#### 版本 1.5.3
+
+- 使用业务插件对应的cmd方法运行bat文件时，也能获得bat的返回值
+
+```js
+MyPlugin.clear();
+MyPlugin.notReturn = 1; // 异步调用
+MyPlugin.cmd("ensure.bat",function(jsonRtn){ // 能获得返回值
+    if ( jsonRtn.rtn.indexOf("[OK]") > -1 ){
+        // :TODO
+    }
+)
+```
+
+
+
+#### 2026-06-16
+
+#### 版本1.5.2
+
+- 解决`CmdShell.Run`/`EvalJs`/`CurrentUserEvalJs`方法在插件中总是同步打开exe或程序问题
+
+- - 通过医为客户端管理打开`医为浏览器2`或`1`版本时，请求一直pendding问题
+
+- - 为请求报头Notreturn-Type属性扩展配置值2
+
+- ```js
+  // 0同步调用，1异步调用，2异步调用且后台直接返回空
+  CmdShell.notReturn = 2; // ajax异步发请求，且调用插件后直接返回空
+  CmdShell.Run('"D:\\DHCWebBrowser110.exe" "https://172.18.18.138:1443/imedical/web/form.htm"');
+  ```
+
+- 
+
+#### 版本1.4.9
+
+- 支持服务器RD授权多用户登录使用
 
 #### 2025-8-18
 
