@@ -47,6 +47,13 @@ table td:first-of-type {
 		- [4.12 消息回复接口](#412-消息回复接口)
 	- [5. 常见问题](#5-常见问题)
 		- [5.1 消息变为已处理的几种方式](#51-消息变为已处理的几种方式)
+	- [6. 消息平台调用业务方接口](#6-消息平台调用业务方接口)
+		- [6.1 消息阅读事件](#61-消息阅读事件)
+		- [6.2 执行按钮处理消息前事件](#62-执行按钮处理消息前事件)
+		- [6.3 执行按钮处理消息事件](#63-执行按钮处理消息事件)
+		- [6.4 通用处理界面处理消息事件](#64-通用处理界面处理消息事件)
+
+
 
 
 
@@ -888,3 +895,160 @@ w ##class(websys.DHCMessageInterface).Reply(ActionType , EpisodeId , OEOrdItemId
 
 相关配置：消息动作类型维护【有效天数】
 
+
+### 6. 消息平台调用业务方接口 ###
+
+#### 6.1 消息阅读事件 ####
+
+消息首次(个人首次 如果发给多个人存在多次)阅读后，调用业务组方法，去变更业务组相应状态。
+
+需要在DHC-APP命名空间下，实现一类方法，类方法的入参需要按照如下顺序；
+
+然后将FullClassName.MethodName配置在【消息动作类型维护-读后回调方法】。
+
+```vb
+w ##class(FullClassName).MethodName(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,ReadDate,ReadTime)
+```
+如
+```vb
+/// 消息阅读事件方法示例 用户首次点开自己的消息明细阅读时调用
+/// 配置路径：消息动作类型维护-读后回调方法
+/// BSP.MSG.BL.EventDemo.OnRead
+ClassMethod OnRead(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,ReadDate,ReadTime){
+    s ^BSP.MSG.BL.EventDemo("OnRead")=$lb(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,ReadDate,ReadTime)
+    q 1
+}
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| EpisodeId   | 就诊ID    | 发送时的就诊ID |
+| OrdItemId   | 医嘱ID    | 发送时的医嘱ID |
+| BizObjId   | 业务ID    | 发送时的业务ID，`OtherInfoJson.BizObjId` |
+| ReadUserRowId   | 消息阅读人ID    | 消息阅读人ID |
+| ReadDate   | 阅读日期    | 数字格式 |
+| ReadTime   | 阅读时间    | 数字格式 |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 1 | 成功 | |
+| 其它 | 失败 | 实际消息处不关注失败与否 |
+
+
+#### 6.2 执行按钮处理消息前事件 ####
+
+如果消息配置了工具按钮-执行按钮去处理消息，执行按钮点击保存前，调用业务组方法，判断是否可以置为已处理。
+
+需要在DHC-APP命名空间下，实现一类方法，类方法的入参需要按照如下顺序；
+
+然后将FullClassName.MethodName配置在【消息动作类型维护-工具按钮属性-ExecBtnBizValidMethod】。
+
+```vb
+w ##class(FullClassName).MethodName(EpisodeId,OrdItemId,BizObjId,ExecUserRowId,ExecDate,ExecTime)
+```
+如
+```vb
+/// 执行按钮处理消息前事件方法示例 用户使用消息工具按钮-执行按钮处理消息前调用，返回不是1不允许执行
+/// 配置路径：消息动作类型维护-工具按钮属性-ExecBtnBizValidMethod
+/// BSP.MSG.BL.EventDemo.OnBeforeBtnExec
+ClassMethod OnBeforeBtnExec(EpisodeId,OrdItemId,BizObjId,ExecUserRowId,ExecDate,ExecTime){
+    s ^BSP.MSG.BL.EventDemo("OnBeforeBtnExec")=$lb(EpisodeId,OrdItemId,BizObjId,ExecUserRowId,ExecDate,ExecTime)
+    if $r(2)>0 {
+        q 1
+    }else{
+        q "随机失败"
+    }
+}
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| EpisodeId   | 就诊ID    | 发送时的就诊ID |
+| OrdItemId   | 医嘱ID    | 发送时的医嘱ID |
+| BizObjId   | 业务ID    | 发送时的业务ID，`OtherInfoJson.BizObjId` |
+| ExecUserRowId   | 消息处理人ID    | 消息处理人ID |
+| ExecDate   | 处理日期    | 数字格式 |
+| ExecTime   | 处理时间    | 数字格式 |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 1 | 允许处理 | |
+| 其它 | 不允许处理 | 返回不允许提示信息 |
+
+#### 6.3 执行按钮处理消息事件 ####
+
+如果消息配置了工具按钮-执行按钮去处理消息，执行按钮点击保存成功后，调用业务组方法，去变更业务组相应状态。
+
+需要在DHC-APP命名空间下，实现一类方法，类方法的入参需要按照如下顺序；
+
+然后将FullClassName.MethodName配置在【消息动作类型维护-工具按钮属性-ExecBtnCallbackMethod】。
+
+```vb
+w ##class(FullClassName).MethodName(EpisodeId,OrdItemId,BizObjId,ExecUserRowId,ExecDate,ExecTime)
+```
+如
+```vb
+/// 执行按钮处理消息事件方法示例 用户使用消息工具按钮-执行按钮处理消息后调用
+/// 配置路径：消息动作类型维护-工具按钮属性-ExecBtnCallbackMethod
+/// BSP.MSG.BL.EventDemo.OnBtnExec
+ClassMethod OnBtnExec(EpisodeId,OrdItemId,BizObjId,ExecUserRowId,ExecDate,ExecTime){
+    s ^BSP.MSG.BL.EventDemo("OnBtnExec")=$lb(EpisodeId,OrdItemId,BizObjId,ExecUserRowId,ExecDate,ExecTime)
+    q 1
+}
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| EpisodeId   | 就诊ID    | 发送时的就诊ID |
+| OrdItemId   | 医嘱ID    | 发送时的医嘱ID |
+| BizObjId   | 业务ID    | 发送时的业务ID，`OtherInfoJson.BizObjId` |
+| ExecUserRowId   | 消息处理人ID    | 消息处理人ID |
+| ExecDate   | 处理日期    | 数字格式 |
+| ExecTime   | 处理时间    | 数字格式 |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 1 | 成功 | |
+| 其它 | 失败 | 实际消息处不关注失败与否 |
+
+#### 6.4 通用处理界面处理消息事件 ####
+
+当使用消息平台提供的通用处理界面处理消息时，如果需要将处理结果再传回给相应业务系统，需要实现。
+
+需要在DHC-APP命名空间下，实现一类方法，类方法的入参需要按照如下顺序；
+
+然后将FullClassName.MethodName配置在【消息动作类型维护-通用处理界面设置-】。
+
+
+```vb
+w ##class(FullClassName).MethodName(ExecId, EpisodeID, OEOrdItemID, BizObjId, ExecNote, ExecAuditFlag, ExecUserId, ExecDate, ExecTime, ExecResultCode, ExecResultDesc)
+```
+如
+```vb
+/// 通用处理界面处理消息事件方法示例 消息使用通用处理界面处理消息后调用
+/// 配置路径：消息动作类型维护-通用处理界面设置-处理后调用方法/医生处理后调用方法/非医生处理后调用方法
+/// BSP.MSG.BL.EventDemo.OnCommExec
+ClassMethod OnCommExec(ExecId, EpisodeID, OEOrdItemID, BizObjId, ExecNote, ExecAuditFlag, ExecUserId, ExecDate, ExecTime, ExecResultCode, ExecResultDesc){
+    s ^BSP.MSG.BL.EventDemo("OnCommExec")=$lb(ExecId, EpisodeID, OEOrdItemID, BizObjId, ExecNote, ExecAuditFlag, ExecUserId, ExecDate, ExecTime, ExecResultCode, ExecResultDesc)
+    q 1
+}
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| ExecId   | 处理记录ID    |  |
+| EpisodeID   | 就诊ID    | 发送时的就诊ID |
+| OEOrdItemID   | 医嘱ID    | 发送时的医嘱ID |
+| BizObjId   | 业务ID    | 发送时的业务ID，`OtherInfoJson.BizObjId` |
+| ExecNote   | 处理备注    | 通用处理界面处理备注信息 |
+| ExecAuditFlag   | 处理审核标识    | （暂无用） |
+| ExecUserId   | 消息处理人ID    | 消息处理人ID |
+| ExecDate   | 处理日期    | 数字格式 |
+| ExecTime   | 处理时间    | 数字格式 |
+| ExecResultCode   | 处理结果代码    | 通用处理界面处理结果下拉选项选择的代码 |
+| ExecResultDesc   | 处理结果描述    | 通用处理界面处理结果下拉选项选择的描述 |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 1 | 成功 | |
+| 其它 | 失败 | 实际消息处不关注失败与否 |
