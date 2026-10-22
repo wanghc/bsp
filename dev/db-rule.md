@@ -221,7 +221,4 @@ SELECT DBMS_METADATA.GET_DDL('TABLE', 'my_table');
 
 ###### 7.`drop`操作改成`alter ... rename to...`最后单独登记`drop`重名或的对象相关`sql`
 
-
-
-
-
+8。`DATE_FORMAT`是`mysql`语法函数，应该使用通用的函数`to_char`或`extract`
