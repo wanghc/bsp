@@ -52,6 +52,7 @@ table td:first-of-type {
 		- [6.2 执行按钮处理消息前事件](#62-执行按钮处理消息前事件)
 		- [6.3 执行按钮处理消息事件](#63-执行按钮处理消息事件)
 		- [6.4 通用处理界面处理消息事件](#64-通用处理界面处理消息事件)
+		- [6.5 用户回复消息事件](#65-用户回复消息事件)
 
 
 
@@ -900,7 +901,7 @@ w ##class(websys.DHCMessageInterface).Reply(ActionType , EpisodeId , OEOrdItemId
 
 #### 6.1 消息阅读事件 ####
 
-消息首次(个人首次 如果发给多个人存在多次)阅读后，调用业务组方法，去变更业务组相应状态。
+消息首次(个人首次 如果发给多个人存在多次)阅读后，调用业务组方法，去变更业务组相应状态。`HIS8.1`
 
 需要在DHC-APP命名空间下，实现一类方法，类方法的入参需要按照如下顺序；
 
@@ -937,7 +938,7 @@ ClassMethod OnRead(EpisodeId,OrdItemId,BizObjId,ReadUserRowId,ReadDate,ReadTime)
 
 #### 6.2 执行按钮处理消息前事件 ####
 
-如果消息配置了工具按钮-执行按钮去处理消息，执行按钮点击保存前，调用业务组方法，判断是否可以置为已处理。
+如果消息配置了工具按钮-执行按钮去处理消息，执行按钮点击保存前，调用业务组方法，判断是否可以置为已处理。`HIS9.2.3`
 
 需要在DHC-APP命名空间下，实现一类方法，类方法的入参需要按照如下顺序；
 
@@ -977,7 +978,7 @@ ClassMethod OnBeforeBtnExec(EpisodeId,OrdItemId,BizObjId,ExecUserRowId,ExecDate,
 
 #### 6.3 执行按钮处理消息事件 ####
 
-如果消息配置了工具按钮-执行按钮去处理消息，执行按钮点击保存成功后，调用业务组方法，去变更业务组相应状态。
+如果消息配置了工具按钮-执行按钮去处理消息，执行按钮点击保存成功后，调用业务组方法，去变更业务组相应状态。`HIS9.1.1`
 
 需要在DHC-APP命名空间下，实现一类方法，类方法的入参需要按照如下顺序；
 
@@ -1013,11 +1014,11 @@ ClassMethod OnBtnExec(EpisodeId,OrdItemId,BizObjId,ExecUserRowId,ExecDate,ExecTi
 
 #### 6.4 通用处理界面处理消息事件 ####
 
-当使用消息平台提供的通用处理界面处理消息时，如果需要将处理结果再传回给相应业务系统，需要实现。
+当使用消息平台提供的通用处理界面处理消息时，如果需要将处理结果再传回给相应业务系统，需要实现。`HIS9.0.1`
 
 需要在DHC-APP命名空间下，实现一类方法，类方法的入参需要按照如下顺序；
 
-然后将FullClassName.MethodName配置在【消息动作类型维护-通用处理界面设置-】。
+然后将FullClassName.MethodName配置在【消息动作类型维护-通用处理界面设置-处理后调用方法】。
 
 
 ```vb
@@ -1047,6 +1048,50 @@ ClassMethod OnCommExec(ExecId, EpisodeID, OEOrdItemID, BizObjId, ExecNote, ExecA
 | ExecTime   | 处理时间    | 数字格式 |
 | ExecResultCode   | 处理结果代码    | 通用处理界面处理结果下拉选项选择的代码 |
 | ExecResultDesc   | 处理结果描述    | 通用处理界面处理结果下拉选项选择的描述 |
+
+|*返回值* |*说明*|*备注*|
+| --- | -- | -- |
+| 1 | 成功 | |
+| 其它 | 失败 | 实际消息处不关注失败与否 |
+
+
+
+#### 6.5 用户回复消息事件 ####
+
+当用户在消息列表回复消息时，如果需要将回复信息传给业务方时，需要实现。`HIS9.2.3`
+
+需要在DHC-APP命名空间下，实现一类方法，类方法的入参需要按照如下顺序；
+
+然后将FullClassName.MethodName配置在【消息动作类型维护-回复设置-回复后调用方法】。
+
+
+```vb
+w ##class(FullClassName).MethodName(EpisodeId, OEOrdItemId, BizObjId, ReplyContent, ReplyUserId, ReplyTo, ReplyStyle, ReplyDate, ReplyTime)
+```
+如
+```vb
+/// 消息回复事件方法示例 用户在消息列表回复消息后调用
+/// 配置路径：消息动作类型维护-回复设置-回复后调用方法
+/// BSP.MSG.BL.EventDemo.OnReply
+ClassMethod OnReply(EpisodeId, OEOrdItemId, BizObjId, ReplyContent, ReplyUserId, ReplyTo, ReplyStyle, ReplyDate, ReplyTime)
+{
+
+    s ^BSP.MSG.BL.EventDemo("OnReply")=$lb(EpisodeId, OEOrdItemId, BizObjId, ReplyContent, ReplyUserId, ReplyTo, ReplyStyle, ReplyDate, ReplyTime)
+    q 1
+}
+```
+
+| *参数名* | *说明*      | *备注*                                                 |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| EpisodeId   | 就诊ID    | 发送时的就诊ID |
+| OEOrdItemId   | 医嘱ID    | 发送时的医嘱ID |
+| BizObjId   | 业务ID    | 发送时的业务ID，`OtherInfoJson.BizObjId` |
+| ReplyContent   | 回复内容    | 用户回复的内容 |
+| ReplyUserId   | 回复用户ID    |  |
+| ReplyTo   | 回复对象    | S=仅消息发出人；A=消息相关人  |
+| ReplyStyle   | 回复样式    |  斜体font-style:italic;  加粗font-weight:bold; |
+| ReplyDate   | 回复日期    | 数字格式 |
+| ReplyTime   | 回复时间    | 数字格式 |
 
 |*返回值* |*说明*|*备注*|
 | --- | -- | -- |
