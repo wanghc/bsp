@@ -1299,7 +1299,7 @@ s ret= ##class(BSP.CV.SRV.Interface).GetStatisticsCount("2025-07-01","2025-07-31
 只会根据条件查到最后一条危急值，ReportType,ExamNo,OEOrdId,LisRowid 都对应危急值保存时的参数。
 
 ```vb
-##Class(##class(BSP.CV.SRV.Interface).GetReportID4MTS(ReportType, ExamNo, OEOrdId, LisRowid)  
+##Class(BSP.CV.SRV.Interface).GetReportID4MTS(ReportType, ExamNo, OEOrdId, LisRowid)  
 ```
 
 | *参数名* | *说明*      | *备注*                                                 |
