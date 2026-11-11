@@ -453,7 +453,7 @@ table td:first-of-type {
 |28 | recUserCode | 接收人工号 | `2026-11-11` |
 |29 | trUserCode | 处理人工号 | `2026-11-11` |
 
-如果要是觉得使用Query有点麻烦，可以使用类方法`##class(web.DHCAntCVService).GetCVByAdm`,入参和上Query相同，返回值为两层%List形式，即$lb($lb(reportID,examno,ordItem,...),$lb(reportID,examno,ordItem,...))
+如果要是觉得使用Query有点麻烦，可以使用类方法`##class(web.DHCAntCVService).GetCVByAdm`,入参和上Query相同，返回值为两层%List形式，即$lb($lb(reportID,examno,ordItem,...),$lb(reportID,examno,ordItem,...))，顺序为上表中的序号
 
 
 #### 2.14 危急值与会诊申请关联 ####
