@@ -1,5 +1,26 @@
 ## 信创版-开发备忘录
 
+#### 2026-11-23
+
+- `ilike`不兼容崖山与达梦数据库
+
+```sql
+-- ❌ 不兼容的写法
+SELECT * FROM cf_bsp_sys_counter WHERE code ilike concat('%', #{dto.code}, '%');
+-- ✅正确写法,先转小写再like
+SELECT * FROM cf_bsp_sys_counter WHERE lower(code) LIKE lower(concat('%', #{dto.code}, '%'));
+```
+
+#### 2026-11-13
+
+- `string_to_array`不兼容崖山数据库
+
+```sql
+-- ❌ string_to_array不兼容崖山数据库
+LEFT JOIN mytbl As c1 ON (c1.id = ANY(STRING_TO_ARRAY(app.an_method, ',')))
+```
+
+
 #### 2025-12-24
 
 - sql查询某日期范围内数据
@@ -23,13 +44,9 @@ LEFT JOIN mytbl As c1 ON (c1.id::text = ANY(STRING_TO_ARRAY(app.an_method, ','))
 LEFT JOIN mytbl As c1 ON (CAST(c1.id AS text) = ANY(STRING_TO_ARRAY(app.an_method, ',')))
 ```
 
-  
-
-  
-
 #### 2025-12-16
 
-- ```xml
+```xml
   <!-- ❌ 如果type是字符串类型,错误写法 type=='H', 单引号表示字符,导致type强转成字符，转换报错 -->
   <select id='mybatisMethod' resultType="int">
       select name from my_table t where userid=#{dto.userid}
@@ -46,7 +63,7 @@ LEFT JOIN mytbl As c1 ON (CAST(c1.id AS text) = ANY(STRING_TO_ARRAY(app.an_metho
   -- ✅正确写法
   <if test='dto.type!=null and "H".equals(dto.type)'>
   </if>
-  ```
+```
 
 - 
 
